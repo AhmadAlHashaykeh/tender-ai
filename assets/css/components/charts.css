@@ -1,0 +1,520 @@
+/* Charts Section */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .charts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.chart-card {
+    background-color: white;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.card-glow {
+    position: relative;
+}
+
+/* .card-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(to bottom right, var(--primary), var(--secondary), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+    pointer-events: none;
+} */
+
+.card-header {
+    padding: 1.5rem 1.5rem 0.5rem;
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 0.375rem;
+    align-items: start;
+}
+.card-title { font-size: 1.125rem; font-weight: 600; margin: 0; line-height: 1; }
+.card-description { font-size: 0.875rem; color: var(--muted-foreground); margin: 0; }
+
+/* Chart Animations */
+.animate-draw {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    opacity: 0;
+    /* Animation is handled by JS for precision, but fallback can be added here if needed */
+}
+
+@keyframes drawLine {
+    to { stroke-dashoffset: 0; }
+}
+
+.animate-grow-bar {
+    transform-origin: bottom;
+    transform-box: fill-box;
+    animation: growBar 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform: scaleY(0);
+}
+
+@keyframes growBar {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+.chart-dot {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+.chart-dot:hover, .chart-item-hover {
+    transform: scale(1.3);
+    filter: brightness(1.2);
+    stroke-width: 3;
+}
+
+.animate-donut {
+    animation: growDonut 1.5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes growDonut {
+    from { stroke-dashoffset: 471; }
+    /* The final offset is set individually in the SVG style */
+}
+
+@keyframes growBar {
+    to { transform: scaleY(1); }
+}
+
+.chart-dot {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-dot:hover {
+    r: 6;
+    stroke-width: 4;
+}
+
+.recharts-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.recharts-cartesian-axis-tick-value {
+    fill: #64748B; /* slate-500 */
+}
+
+/* Trends Chart Animation Support */
+[data-chart-type="trends"] .recharts-line path {
+    opacity: 0;
+}
+
+[data-chart-type="trends"] .recharts-line g {
+    opacity: 0;
+    transform-box: fill-box;
+}
+
+.recharts-responsive-container {
+    width: 100%;
+    height: 300px;
+}
+
+.recharts-wrapper {
+    margin: 0 auto;
+}
+
+.recharts-default-legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recharts-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.recharts-legend-item-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+}
+
+.recharts-legend-icon {
+    flex-shrink: 0;
+}
+.section-header{
+    padding-bottom: 1.5rem;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Tooltip Styles */
+.chart-tooltip {
+    position: fixed;
+    background: white;
+    border: 1px solid #E2E8F0;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+    z-index: 1000;
+    min-width: 140px;
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.tooltip-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.tooltip-value {
+    font-size: 0.875rem;
+    color: var(--primary);
+    font-weight: 600;
+    display: block;
+}
+
+.chart-cursor {
+    transition: all 0.1s ease;
+}
+
+.chart-dot, .chart-bar {
+    cursor: crosshair;
+    transition: all 0.2s ease;
+}
+
+.chart-dot:hover {
+    r: 8;
+}
+
+.recharts-cartesian-axis-tick-value {
+    fill: #475569 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+/* Chart Tooltips */
+.chart-tooltip {
+    position: fixed;
+    background: #ffffff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #1e293b;
+    z-index: 10000;
+    pointer-events: none !important; /* Critical to prevent twitching */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    min-width: 140px;
+    transform: translate(20px, 20px); /* Larger initial offset */
+}
+
+.chart-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.tooltip-title {
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+    font-size: 13px;
+}
+
+.tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.tooltip-row.won { color: #10B981; }
+.tooltip-row.lost { color: #EF4444; }
+.tooltip-row.trend { color: #7C3AED; }
+
+/* Axis Lines */
+.chart-axis-line {
+    stroke: #64748b;
+    stroke-width: 1;
+}
+
+/* Chart Interaction */
+.hover-column {
+    pointer-events: all;
+    cursor: crosshair;
+}
+
+.chart-item-hover {
+    filter: brightness(1.05);
+    cursor: default;
+}
+
+.chart-data-group {
+    pointer-events: none; /* Let the hover-columns handle interaction */
+}
+
+.hover-column {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/* Chart Interactivity */
+.chart-highlight-rect {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+
+.chart-item-hover {
+    filter: brightness(1.1) drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.4));
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+circle.chart-dot.chart-item-hover {
+    r: 8 !important;
+}
+
+.hover-column {
+    cursor: pointer;
+    transition: fill 0.2s ease;
+}
+
+.hover-column:hover {
+    fill: rgba(0, 0, 0, 0.02);
+}
+
+.chart-tooltip {
+    pointer-events: none !important;
+}
+
+.tooltip-row {
+    line-height: 1.5;
+}
+
+/* Sparkline Styles */
+.stat-sparkline {
+    width: 100%;
+    height: 40px;
+    margin-top: 1rem;
+}
+
+.sparkline-path {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sparkline-path.blue { stroke: #0D85E6; }
+.sparkline-path.purple { stroke: #7C3AED; }
+.sparkline-path.green { stroke: var(--success); }
+.sparkline-path.orange { stroke: var(--warning); }
+
+.chart-animate-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: drawPath 2s ease forwards;
+}
+
+@keyframes drawPath {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.recharts-text {
+    font-family: var(--font-sans);
+    font-weight: 500;
+}
+
+.winning-companies-card {
+    padding: 1.5rem;
+}
+
+.companies-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .companies-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.company-item-glow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05), rgba(var(--secondary-rgb), 0.05));
+    border: 1px solid rgba(var(--primary-rgb), 0.1);
+    transition: transform 0.2s;
+}
+
+.company-item-glow:hover {
+    transform: translateY(-2px);
+}
+
+.company-icon-box {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.company-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.company-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.company-meta {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+}
+
+/* Chart Tooltip */
+.reports-chart-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 12px 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    display: none;
+    min-width: 140px;
+    transition: opacity 0.2s ease;
+}
+
+.tooltip-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+}
+
+/* Reports & Analytics View */
+.reports-view {
+    padding: 1.5rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Reports Chart Interactivity */
+.reports-chart-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 12px 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    display: none;
+    min-width: 140px;
+    transition: opacity 0.2s ease;
+}
+
+.tooltip-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.4rem;
+}
+
+.tooltip-item {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.chart-highlight-rect {
+    transition: x 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-bar {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.chart-bar:hover {
+    opacity: 0.8;
+}
+
+.pie-sector {
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    transform-origin: 163px 130px;
+    animation: scaleInPie 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.pie-sector:hover {
+    opacity: 0.9;
+}
+
+.sector-0:hover { transform: translate(12px, -12px); }
+.sector-1:hover { transform: translate(-12px, -12px); }
+.sector-2:hover { transform: translate(-15px, 4px); }
+.sector-3:hover { transform: translate(0px, 15px); }
+.sector-4:hover { transform: translate(12px, 8px); }
+
+@keyframes scaleInPie {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaCorp International - TenderAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div class="app-layout">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-decor-top float-decoration"></div>
+                <div class="sidebar-decor-bottom float-decoration"></div>
+
+                <header class="sidebar-header">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <div class="logo-shine"></div>
+                            <i data-lucide="zap" class="logo-icon"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="brand-name">TenderAI</h1>
+                            <p class="brand-tagline">Pricing Intelligence</p>
+                        </div>
+                    </div>
+                </header>
+
+                <nav class="sidebar-nav custom-scrollbar">
+                    <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="upload.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                        <span class="nav-label">Upload Data</span>
+                    </a>
+                    <a class="nav-link" href="management.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                        <span class="nav-label">Data Management</span>
+                    </a>
+                    <a class="nav-link active" href="companies.html" aria-current="page">
+                        <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                        <span class="nav-label">Companies</span>
+                    </a>
+                    <a class="nav-link" href="tenders.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                        <span class="nav-label">Tenders</span>
+                    </a>
+                    <a class="nav-link" href="drugs.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                        <span class="nav-label">Drugs</span>
+                    </a>
+                    <a class="nav-link" href="drug-standardization.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                        <span class="nav-label">Standardization</span>
+                    </a>
+                    <a class="nav-link ai-link" href="ai-recommendations.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                        <span class="nav-label">AI Recommendation</span>
+                    </a>
+                    <a class="nav-link" href="prediction-history.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                        <span class="nav-label">Prediction History</span>
+                    </a>
+                    <a class="nav-link" href="reports.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                    <a class="nav-link" href="settings.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </nav>
+
+                <footer class="sidebar-footer">
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-container">
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="user" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="settings" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Settings</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout" href="../index.html">
+                                <i data-lucide="log-out" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="profileBtn" class="user-profile-btn">
+                        <div class="user-avatar">
+                            <div class="avatar-shine"></div>
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-name">John Doe</p>
+                            <p class="user-role">System Admin</p>
+                        </div>
+                        <i data-lucide="chevron-up" class="chevron-up"></i>
+                    </button>
+                </footer>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="main-content">
+                <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                    <div class="header-inner">
+                        <div class="header-left">
+                            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                <i data-lucide="menu"></i>
+                            </button>
+                            <div class="search-container">
+                                <i data-lucide="search" class="search-icon-header"></i>
+                                <input type="text" class="search-input" placeholder="Search tenders, drugs, reports...">
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <a href="ai-recommendations.html" class="no-underline">
+                                <button class="btn-ai">
+                                    <i data-lucide="sparkles" class="icon-xs"></i>
+                                    New AI Prediction
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <style>
+                    .chart-bar-animate {
+                        transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), y 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    }
+                </style>
+                <!-- COMPONENT: Page Content -->
+                <main class="p-6 min-h-screen">
+                    <div style="opacity: 1; transform: none;">
+                        <div class="space-y-7 max-w-6xl mx-auto">
+                            <div style="opacity: 1; transform: none;">
+                                <a href="companies.html" data-discover="true">
+                                    <button data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-9 px-4 py-2 has-[&gt;svg]:px-3 mb-4 -ml-2 text-muted-foreground hover:text-foreground hover:bg-white/60">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left w-4 h-4 mr-2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>Back to Companies
+                                    </button>
+                                </a>
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-6">
+                                    <div class="flex items-start justify-between gap-4 flex-wrap">
+                                        <div class="flex items-start gap-4">
+                                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl shrink-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building2 w-8 h-8 text-white"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                                            </div>
+                                            <div>
+                                                <div class="flex items-center gap-3 flex-wrap mb-1">
+                                                    <h1 class="text-2xl font-bold text-foreground">MediSupply Global</h1>
+                                                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Active</span>
+                                                </div>
+                                                <div class="flex items-center gap-3 text-sm text-muted-foreground flex-wrap">
+                                                    <span class="flex items-center gap-1.5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>Jordan
+                                                    </span>
+                                                    <span class="text-border">·</span>
+                                                    <span class="flex items-center gap-1.5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth w-3.5 h-3.5"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><circle cx="12" cy="12" r="10"></circle></svg>Levant
+                                                    </span>
+                                                    <span class="text-border">·</span>
+                                                    <span class="flex items-center gap-1.5">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pill w-3.5 h-3.5"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><path d="m8.5 8.5 7 7"></path></svg>Cardiology
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-6">
+                                            <div class="text-center">
+                                                <div class="flex items-center gap-1.5 justify-center mb-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy w-4 h-4 text-amber-500"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                                                    <span class="text-xs text-muted-foreground font-medium uppercase tracking-wide font-semibold">Tenders Won</span>
+                                                </div>
+                                                <p class="text-3xl font-bold text-foreground">198</p>
+                                                <p class="text-xs text-muted-foreground">of 268 entered</p>
+                                            </div>
+                                            <div class="w-px h-12 bg-border/40"></div>
+                                            <div>
+                                                <p class="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-1">Last Drug Won</p>
+                                                <p class="font-bold text-foreground text-sm">Atorvastatin 20mg</p>
+                                                <p class="text-xs text-muted-foreground">MOH Tender #2026-JOR-044</p>
+                                                <p class="text-xs text-muted-foreground flex items-center gap-1 mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-3 h-3"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>2026-04-15</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="opacity: 1; transform: none;">
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl border-2 border-emerald-100 p-5 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pill w-4 h-4 text-emerald-600"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"></path><path d="m8.5 8.5 7 7"></path></svg></div>
+                                        <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wide">Last Drug Won</span>
+                                    </div>
+                                    <p class="font-bold text-foreground text-sm mb-1">Atorvastatin 20mg</p>
+                                    <p class="text-xs text-muted-foreground mb-2">MOH Tender #2026-JOR-044</p>
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Country</span><span class="font-medium text-foreground">Jordan</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Quantity</span><span class="font-medium text-foreground">120,000</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Awarded Price</span><span class="font-semibold text-emerald-600">$275</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Date</span><span class="font-medium text-foreground">2026-04-15</span></div>
+                                    </div>
+                                </div>
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-5 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-8 h-8 rounded-xl bg-primary/8 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-4 h-4 text-primary"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg></div>
+                                        <span class="text-xs font-semibold text-primary uppercase tracking-wide">Last Tender</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-4 h-4 text-emerald-500 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Won</span>
+                                    </div>
+                                    <p class="font-bold text-foreground text-sm mb-1">MOH Tender #2026-JOR-045</p>
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Product</span><span class="font-medium text-foreground">Metformin 850mg</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Country</span><span class="font-medium text-foreground">Jordan</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Date</span><span class="font-medium text-foreground">2026-05-08</span></div>
+                                    </div>
+                                </div>
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-5 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-8 h-8 rounded-xl bg-violet-50 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-4 h-4 text-violet-600"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg></div>
+                                        <span class="text-xs font-semibold text-violet-600 uppercase tracking-wide">Top Category</span>
+                                    </div>
+                                    <p class="font-bold text-foreground text-lg mb-1">Cardiology</p>
+                                    <p class="text-xs text-muted-foreground mb-3">Most active product segment</p>
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Top Products</span></div>
+                                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div><span class="text-xs font-medium text-foreground">Omeprazole</span></div>
+                                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div><span class="text-xs font-medium text-foreground">Metformin</span></div>
+                                        <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div><span class="text-xs font-medium text-foreground">Atorvastatin</span></div>
+                                    </div>
+                                </div>
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-5 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-8 h-8 rounded-xl bg-amber-50 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4 text-amber-500"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg></div>
+                                        <span class="text-xs font-semibold text-amber-600 uppercase tracking-wide">Strongest Market</span>
+                                    </div>
+                                    <p class="font-bold text-foreground text-lg mb-1">Iraq</p>
+                                    <div class="space-y-1">
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Wins in Market</span><span class="font-bold text-amber-600">89</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Activity Trend</span><span class="font-semibold text-amber-600">Stable</span></div>
+                                        <div class="flex items-center justify-between text-xs"><span class="text-muted-foreground">Share of Total</span><span class="font-medium text-foreground">45%</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent border border-primary/15 rounded-2xl p-6" style="opacity: 1; transform: none;">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md shrink-0 mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-4 h-4 text-white"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg></div>
+                                    <div>
+                                        <h3 class="font-semibold text-foreground mb-0.5">Company Intelligence Summary</h3>
+                                        <p class="text-xs text-muted-foreground mb-3">AI-generated behavioral insights based on tender history</p>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Leading cardiology/metabolic supplier in Levant with consistent 73%+ win rate.</li>
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Iraq is the strongest market — 89 wins driven by Omeprazole and Metformin demand.</li>
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Atorvastatin 20mg is the highest-value product, averaging $275 per unit awarded.</li>
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Recent entry into Oman tenders signals regional expansion strategy.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden" style="opacity: 1; transform: none;">
+                                <div class="flex items-center justify-between p-5 border-b border-border/40">
+                                    <div>
+                                        <h3 class="font-semibold text-foreground">Wins Leaderboard</h3>
+                                        <p class="text-xs text-muted-foreground mt-0.5">Tender awards per company</p>
+                                    </div>
+                                    <div class="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
+                                        <button class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-white shadow-sm text-foreground">Leaderboard</button>
+                                        <button class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 text-muted-foreground hover:text-foreground">Value Share</button>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <div style="opacity: 1; transform: none;">
+                                        <div class="recharts-responsive-container" style="width: 100%; height: 260px; min-width: 0px;">
+                                            <div class="recharts-wrapper" style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 260px;">
+                                                <svg class="recharts-surface" width="100%" height="260" viewBox="0 0 757 260" style="width: 100%; height: 100%;">
+                                                    <title></title>
+                                                    <desc></desc>
+                                                    <defs>
+                                                        <clipPath id="recharts1-clip"><rect x="65" y="5" height="220" width="687"></rect></clipPath>
+                                                    </defs>
+                                                    <g class="recharts-cartesian-grid">
+                                                        <g class="recharts-cartesian-grid-horizontal">
+                                                            <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x="65" y="5" width="687" height="220" x1="65" y1="225" x2="752" y2="225"></line>
+                                                            <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x="65" y="5" width="687" height="220" x1="65" y1="170" x2="752" y2="170"></line>
+                                                            <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x="65" y="5" width="687" height="220" x1="65" y1="115" x2="752" y2="115"></line>
+                                                            <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x="65" y="5" width="687" height="220" x1="65" y1="60" x2="752" y2="60"></line>
+                                                            <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x="65" y="5" width="687" height="220" x1="65" y1="5" x2="752" y2="5"></line>
+                                                        </g>
+                                                    </g>
+                                                    <g class="recharts-cartesian-axis recharts-xAxis xAxis">
+                                                        <g class="recharts-cartesian-axis-ticks">
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="bottom" width="687" height="30" stroke="none" font-size="11" x="122.25" y="233" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="122.25" dy="0.71em">PharmaCorp</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="bottom" width="687" height="30" stroke="none" font-size="11" x="236.75" y="233" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="236.75" dy="0.71em">MediSupply</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="bottom" width="687" height="30" stroke="none" font-size="11" x="351.25" y="233" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="351.25" dy="0.71em">HealthTech</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="bottom" width="687" height="30" stroke="none" font-size="11" x="465.75" y="233" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="465.75" dy="0.71em">Global Pharma</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="bottom" width="687" height="30" stroke="none" font-size="11" x="580.25" y="233" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="580.25" dy="0.71em">ArabPharma</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="bottom" width="687" height="30" stroke="none" font-size="11" x="694.75" y="233" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="694.75" dy="0.71em">Gulf MedSupply</tspan></text></g>
+                                                        </g>
+                                                    </g>
+                                                    <g class="recharts-cartesian-axis recharts-yAxis yAxis">
+                                                        <g class="recharts-cartesian-axis-ticks">
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" width="60" height="220" stroke="none" font-size="11" x="57" y="225" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="57" dy="0.355em">0</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" width="60" height="220" stroke="none" font-size="11" x="57" y="170" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="57" dy="0.355em">65</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" width="60" height="220" stroke="none" font-size="11" x="57" y="115" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="57" dy="0.355em">130</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" width="60" height="220" stroke="none" font-size="11" x="57" y="60" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="57" dy="0.355em">195</tspan></text></g>
+                                                            <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" width="60" height="220" stroke="none" font-size="11" x="57" y="8.25" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="57" dy="0.355em">260</tspan></text></g>
+                                                        </g>
+                                                    </g>
+                                                    
+                                                    <!-- Background hover block -->
+                                                    <rect id="leaderboard-hover-bg" x="0" y="5" width="114.5" height="220" fill="rgba(13, 133, 230, 0.04)" style="display: none; pointer-events: none;" rx="4" ry="4"></rect>
+                                                    
+                                                    <g class="recharts-layer recharts-bar">
+                                                        <g class="recharts-bar-rectangles">
+                                                            <g class="recharts-layer">
+                                                                <g class="recharts-layer recharts-bar-rectangle">
+                                                                    <rect class="chart-bar-animate" x="104" y="225" width="36" height="0" fill="#0D85E6" opacity="0.45" rx="8" ry="8" data-target-y="17.692307692307697" data-target-height="207.3076923076923" data-name="PharmaCorp" data-wins="245"></rect>
+                                                                </g>
+                                                                <g class="recharts-layer recharts-bar-rectangle">
+                                                                    <rect class="chart-bar-animate" x="218.5" y="225" width="36" height="0" fill="#7C3AED" opacity="1" rx="8" ry="8" data-target-y="57.46153846153847" data-target-height="167.53846153846155" data-name="MediSupply" data-wins="198"></rect>
+                                                                </g>
+                                                                <g class="recharts-layer recharts-bar-rectangle">
+                                                                    <rect class="chart-bar-animate" x="333" y="225" width="36" height="0" fill="#0D85E6" opacity="0.45" rx="8" ry="8" data-target-y="83.6923076923077" data-target-height="141.30769230769232" data-name="HealthTech" data-wins="167"></rect>
+                                                                </g>
+                                                                <g class="recharts-layer recharts-bar-rectangle">
+                                                                    <rect class="chart-bar-animate" x="447.5" y="225" width="36" height="0" fill="#0D85E6" opacity="0.45" rx="8" ry="8" data-target-y="111.61538461538463" data-target-height="113.38461538461537" data-name="Global Pharma" data-wins="134"></rect>
+                                                                </g>
+                                                                <g class="recharts-layer recharts-bar-rectangle">
+                                                                    <rect class="chart-bar-animate" x="562" y="225" width="36" height="0" fill="#0D85E6" opacity="0.45" rx="8" ry="8" data-target-y="130.23076923076923" data-target-height="94.76923076923077" data-name="ArabPharma" data-wins="112"></rect>
+                                                                </g>
+                                                                <g class="recharts-layer recharts-bar-rectangle">
+                                                                    <rect class="chart-bar-animate" x="676.5" y="225" width="36" height="0" fill="#0D85E6" opacity="0.45" rx="8" ry="8" data-target-y="150.53846153846152" data-target-height="74.46153846153848" data-name="Gulf MedSupply" data-wins="88"></rect>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                    
+                                                    <!-- Invisible hover column targets covering whole column height -->
+                                                    <g id="chart-hover-columns">
+                                                        <rect class="leaderboard-hover-col" x="65" y="5" width="114.5" height="220" fill="transparent" style="cursor: pointer;" data-index="0" data-name="PharmaCorp" data-wins="245" data-bar-x="104" data-bar-y="17.6923" data-bar-width="36"></rect>
+                                                        <rect class="leaderboard-hover-col" x="179.5" y="5" width="114.5" height="220" fill="transparent" style="cursor: pointer;" data-index="1" data-name="MediSupply" data-wins="198" data-bar-x="218.5" data-bar-y="57.4615" data-bar-width="36"></rect>
+                                                        <rect class="leaderboard-hover-col" x="294" y="5" width="114.5" height="220" fill="transparent" style="cursor: pointer;" data-index="2" data-name="HealthTech" data-wins="167" data-bar-x="333" data-bar-y="83.6923" data-bar-width="36"></rect>
+                                                        <rect class="leaderboard-hover-col" x="408.5" y="5" width="114.5" height="220" fill="transparent" style="cursor: pointer;" data-index="3" data-name="Global Pharma" data-wins="134" data-bar-x="447.5" data-bar-y="111.615" data-bar-width="36"></rect>
+                                                        <rect class="leaderboard-hover-col" x="523" y="5" width="114.5" height="220" fill="transparent" style="cursor: pointer;" data-index="4" data-name="ArabPharma" data-wins="112" data-bar-x="562" data-bar-y="130.2307" data-bar-width="36"></rect>
+                                                        <rect class="leaderboard-hover-col" x="637.5" y="5" width="114.5" height="220" fill="transparent" style="cursor: pointer;" data-index="5" data-name="Gulf MedSupply" data-wins="88" data-bar-x="676.5" data-bar-y="150.538" data-bar-width="36"></rect>
+                                                    </g>
+                                                </svg>
+                                                
+                                                <!-- Dynamic Tooltip -->
+                                                <div id="leaderboard-tooltip" class="absolute hidden bg-white shadow-xl border border-slate-100 rounded-xl px-4 py-2.5 pointer-events-none z-50 transition-all duration-100" style="position: absolute; transform: translate(-50%, -100%); margin-top: -10px;">
+                                                    <p class="text-xs font-bold text-slate-800" id="leaderboard-tooltip-name">ArabPharma</p>
+                                                    <p class="text-xs font-semibold text-primary mt-0.5" id="leaderboard-tooltip-wins">112 wins</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-center text-muted-foreground mt-2"><span class="inline-block w-2.5 h-2.5 rounded-sm bg-violet-600 mr-1.5 align-middle"></span>MediSupply Global highlighted</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden" style="opacity: 1; transform: none;">
+                                <div class="flex items-center justify-between p-5 border-b border-border/40 flex-wrap gap-3">
+                                    <div>
+                                        <h3 class="font-semibold text-foreground">Tender History</h3>
+                                        <p class="text-xs text-muted-foreground mt-0.5">Chronological activity feed</p>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 flex-wrap"><button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-sm">All</button><button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary">Won</button><button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary">Lost</button><button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary">Pending</button></div>
+                                </div>
+                                <div class="divide-y divide-border/20">
+                                    <div>
+                                        <button class="w-full text-left px-5 py-4 hover:bg-muted/20 transition-colors">
+                                            <div class="flex items-center gap-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-4 h-4 text-emerald-500 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-center gap-2 mb-0.5 flex-wrap"><p class="text-sm font-semibold text-foreground">MOH Tender #2026-JOR-045</p><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Won</span></div>
+                                                    <div class="flex items-center gap-3 text-xs text-muted-foreground flex-wrap"><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3 h-3"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>Metformin 850mg</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>Jordan</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-3 h-3"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>2026-05-08</span></div>
+                                                </div>
+                                                <div class="flex items-center gap-3 shrink-0">
+                                                    <div class="text-right">
+                                                        <p class="text-xs text-muted-foreground">Submission</p>
+                                                        <p class="text-sm font-semibold text-foreground">$185</p>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4 text-muted-foreground"><path d="m6 9 6 6 6-6"></path></svg>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="w-full text-left px-5 py-4 hover:bg-muted/20 transition-colors">
+                                            <div class="flex items-center gap-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-4 h-4 text-emerald-500 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-center gap-2 mb-0.5 flex-wrap"><p class="text-sm font-semibold text-foreground">MOH Tender #2026-JOR-044</p><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Won</span></div>
+                                                    <div class="flex items-center gap-3 text-xs text-muted-foreground flex-wrap"><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3 h-3"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>Atorvastatin 20mg</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>Jordan</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-3 h-3"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>2026-04-15</span></div>
+                                                </div>
+                                                <div class="flex items-center gap-3 shrink-0">
+                                                    <div class="text-right">
+                                                        <p class="text-xs text-muted-foreground">Submission</p>
+                                                        <p class="text-sm font-semibold text-foreground">$275</p>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4 text-muted-foreground"><path d="m6 9 6 6 6-6"></path></svg>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button class="w-full text-left px-5 py-4 hover:bg-muted/20 transition-colors"><div class="flex items-center gap-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-4 h-4 text-emerald-500 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-0.5 flex-wrap"><p class="text-sm font-semibold text-foreground">UAE Health Authority Q2</p><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Won</span></div><div class="flex items-center gap-3 text-xs text-muted-foreground flex-wrap"><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3 h-3"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>Omeprazole 20mg</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>UAE</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-3 h-3"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>2026-04-15</span></div></div><div class="flex items-center gap-3 shrink-0"><div class="text-right"><p class="text-xs text-muted-foreground">Submission</p><p class="text-sm font-semibold text-foreground">$310</p></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4 text-muted-foreground"><path d="m6 9 6 6 6-6"></path></svg></div></div></button>
+                                    </div>
+                                    <div>
+                                        <button class="w-full text-left px-5 py-4 hover:bg-muted/20 transition-colors"><div class="flex items-center gap-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-4 h-4 text-emerald-500 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-0.5 flex-wrap"><p class="text-sm font-semibold text-foreground">Iraq MOH Q1 Tender</p><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Won</span></div><div class="flex items-center gap-3 text-xs text-muted-foreground flex-wrap"><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3 h-3"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>Metformin 500mg</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>Iraq</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-3 h-3"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>2026-03-18</span></div></div><div class="flex items-center gap-3 shrink-0"><div class="text-right"><p class="text-xs text-muted-foreground">Submission</p><p class="text-sm font-semibold text-foreground">$168</p></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4 text-muted-foreground"><path d="m6 9 6 6 6-6"></path></svg></div></div></button>
+                                    </div>
+                                    <div>
+                                        <button class="w-full text-left px-5 py-4 hover:bg-muted/20 transition-colors"><div class="flex items-center gap-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x w-4 h-4 text-red-400 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg><div class="flex-1 min-w-0"><div class="flex items-center gap-2 mb-0.5 flex-wrap"><p class="text-sm font-semibold text-foreground">Oman MOH 2026 Q1</p><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-red-50 text-red-600 border-red-200">Lost</span></div><div class="flex items-center gap-3 text-xs text-muted-foreground flex-wrap"><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3 h-3"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>Bisoprolol 5mg</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>Oman</span><span class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-3 h-3"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>2026-02-14</span></div></div><div class="flex items-center gap-3 shrink-0"><div class="text-right"><p class="text-xs text-muted-foreground">Submission</p><p class="text-sm font-semibold text-foreground">$205</p></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4 text-muted-foreground"><path d="m6 9 6 6 6-6"></path></svg></div></div></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/company-detail.js" defer></script>
+    
+</body>
+</html>
+

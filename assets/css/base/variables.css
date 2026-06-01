@@ -1,0 +1,40 @@
+:root {
+    --primary: #0D85E6;
+    --primary-rgb: 13, 133, 230;
+    --secondary: #7C3AED;
+    --secondary-rgb: 124, 58, 237;
+    --border: rgba(0, 0, 0, 0.1);
+    --border-rgb: 226, 232, 240;
+    --bg-card: #ffffff;
+    --foreground-rgb: 15, 23, 42;
+    --muted-foreground: #64748B;
+    --success: #22C55E;
+    --success-rgb: 34, 197, 94;
+    --destructive: #EF4444;
+    --destructive-rgb: 239, 68, 68;
+    --warning: #F59E0B;
+    --warning-rgb: 245, 158, 11;
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --transition: all 0.3s ease-in-out;
+    --muted: #f1f5f9;
+}
+
+::selection {
+    background-color: var(--primary);
+    color: white;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background);
+    color: var(--foreground);
+    min-height: 100vh;
+    margin: 0;
+}
+
+#trend-line-path {
+    fill: none;
+    will-change: stroke-dashoffset;
+    transform: translateZ(0);
+}

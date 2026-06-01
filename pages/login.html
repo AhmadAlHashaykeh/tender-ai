@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - TenderAI</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="../assets/css/pages/login.css">
+  
+  <!-- Scripts -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="login-page">
+    <!-- Background Elements -->
+    <div class="bg-decor decor-1"></div>
+    <div class="bg-decor decor-2"></div>
+    <div class="bg-decor decor-3"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="content-wrapper">
+      <!-- Left Side: Hero Information -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="brand-header animate-fade-up delay-1">
+            <div class="brand-icon">
+              <i data-lucide="zap" style="width: 36px; height: 36px; color: white;"></i>
+            </div>
+            <div class="brand-info">
+              <h1>TenderAI</h1>
+              <p>Pricing Intelligence</p>
+            </div>
+          </div>
+
+          <div class="hero-text animate-fade-up delay-2">
+            <h2>AI-Powered<br><span class="text-gradient">Tender Intelligence</span></h2>
+            <p class="hero-description">Analyze tenders, compare competitors, and generate smarter pricing recommendations with advanced AI-driven insights.</p>
+          </div>
+
+          <div class="metrics-grid animate-fade-up delay-3">
+            <div class="metric-card">
+              <div class="metric-icon-box bg-green">
+                <i data-lucide="check-circle" style="width: 20px; height: 20px; color: white;"></i>
+              </div>
+              <p class="metric-label">Confidence</p>
+              <p class="metric-value"><span class="counter" data-target="94">0</span>%</p>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon-box bg-blue">
+                <i data-lucide="dollar-sign" style="width: 20px; height: 20px; color: white;"></i>
+              </div>
+              <p class="metric-label">Recommended Price</p>
+              <p class="metric-value">$<span class="counter" data-target="403">0</span></p>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon-box bg-purple">
+                <i data-lucide="target" style="width: 20px; height: 20px; color: white;"></i>
+              </div>
+              <p class="metric-label">Records Analyzed</p>
+              <p class="metric-value"><span class="counter" data-target="127">0</span></p>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon-box bg-orange">
+                <i data-lucide="trending-up" style="width: 20px; height: 20px; color: white;"></i>
+              </div>
+              <p class="metric-label">Win Probability</p>
+              <p class="metric-value"><span class="counter" data-target="92">0</span>%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side: Login Form -->
+      <div class="form-section">
+        <div class="form-card animate-fade-right delay-4">
+          <div class="form-header">
+            <h3>Welcome Back</h3>
+            <p>Sign in to access your tender intelligence dashboard</p>
+          </div>
+
+          <form class="login-form" id="loginForm">
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <div class="input-wrapper">
+                <i data-lucide="mail" class="input-icon"></i>
+                <input type="email" id="email" class="form-input" placeholder="you@company.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <div class="input-wrapper">
+                <i data-lucide="lock" class="input-icon"></i>
+                <input type="password" id="password" class="form-input" placeholder="••••••••••" required>
+                <button type="button" class="password-toggle">
+                  <i data-lucide="eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-controls">
+              <label class="remember-me">
+                <input type="checkbox" id="remember" class="checkbox">
+                Remember me
+              </label>
+              <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn-submit">Sign In</button>
+
+            <div class="security-badge">
+              <i data-lucide="shield" class="security-icon"></i>
+              <p class="security-text">Secure access for authorized users only</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+    <script src="../assets/js/pages/login.js" defer></script>
+</body>
+</html>

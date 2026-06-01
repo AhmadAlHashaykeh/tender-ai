@@ -1,0 +1,372 @@
+/* Drug Intelligence Styles */
+.drug-intel-view {
+    padding: 1.5rem;
+    min-height: 100vh;
+}
+
+.drug-intel-container {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.page-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.count-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: linear-gradient(to right, rgba(var(--primary-rgb), 0.1), rgba(var(--secondary-rgb), 0.1));
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.filter-card {
+    padding: 1.5rem;
+}
+
+.filter-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.filter-header h3 {
+    font-weight: 600;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .filter-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .search-col {
+        grid-column: span 2;
+    }
+}
+
+.drug-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.drug-card {
+    padding: 1.5rem;
+    border: 1px solid rgba(0,0,0,0.085);
+    transition: all 0.3s ease;
+    border-radius: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.drug-card:hover {
+    border-color: rgba(var(--primary-rgb), 0.3);
+}
+
+.drug-card-top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.drug-info-main {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+}
+
+.drug-icon-box {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    color: white;
+    flex-shrink: 0;
+}
+
+.drug-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.drug-card:hover .drug-title {
+    color: var(--primary);
+}
+
+.drug-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.drug-stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .drug-stats-row {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.drug-stat-group .flex-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.drug-stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-foreground);
+    font-weight: 500;
+}
+
+.drug-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.drug-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.085);
+}
+
+.footer-section-title {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.5rem;
+}
+
+.badge-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.drug-arrow {
+    color: var(--muted-foreground);
+    transition: all 0.3s ease;
+}
+
+.drug-card:hover .drug-arrow {
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+/* Drug Details View */
+.drug-details-view {
+    padding: 1.5rem;
+}
+
+.drug-details-container {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--foreground);
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.btn-back:hover {
+    background: rgba(var(--primary-rgb), 0.05);
+    color: var(--primary);
+}
+
+.drug-detail-header-flex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.drug-header-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.drug-detail-icon-box {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.3);
+}
+
+.drug-header-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.drug-detail-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.drug-badges-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.stats-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .stats-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.stat-card {
+    padding: 1.5rem;
+}
+
+.stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: var(--muted-foreground);
+}
+
+.stat-icon-wrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.stat-icon-wrapper.blue { background: linear-gradient(135deg, #3b82f6, #06b6d4); }
+.stat-icon-wrapper.purple { background: linear-gradient(135deg, #a855f7, #ec4899); }
+.stat-icon-wrapper.green { background: linear-gradient(135deg, #22c55e, #10b981); }
+.stat-icon-wrapper.orange { background: linear-gradient(135deg, #f97316, #eab308); }
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* .charts-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .charts-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+} */
+
+
+
+.chart-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.chart-wrapper-mock {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-svg {
+    flex: 1;
+    width: 100%;
+}
+
+.trend-path {
+    fill: none;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.trend-path.blue { stroke: #3b82f6; }
+.trend-path.purple { stroke: #a855f7; }
+
+.chart-point {
+    fill: white;
+    stroke-width: 2;
+}
+
+.chart-point.blue { stroke: #3b82f6; }
+.chart-point.purple { stroke: #a855f7; }
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+}
+
+.chart-labels span {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    font-weight: 500;
+}

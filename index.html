@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TenderAI - Tender Intelligence</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+      <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    @keyframes floating {
+      0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(-15px) rotate(var(--rot, 0deg)); }
+    }
+    .animate-float {
+      animation: floating 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="overflow-x-hidden bg-white">
+      <div
+        class="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-cyan to-secondary z-[100] origin-left"
+        style="transform: scaleX(0);"></div>
+      <!-- COMPONENT: Landing Navbar -->
+      <!-- Laravel later: route('home') / route('login') -->
+      <nav id="main-nav" class="fixed top-4 mx-auto  inset-x-0 z-50 transition-all duration-500 w-[98%] lg:w-[95%]"
+        style="transform: none;">
+        <div
+          class="backdrop-blur-xl bg-white/80 border border-border/50 shadow-2xl transition-all duration-500 rounded-3xl py-4">
+          <div class="container mx-auto px-6 flex items-center justify-between"><a class="flex items-center gap-3 group"
+              href="/" data-discover="true">
+              <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-secondary to-primary shadow-lg flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent"></div><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-zap w-6 h-6 text-white relative z-10">
+                  <path
+                    d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+                  </path>
+                </svg>
+              </div>
+              <div>
+                <h1
+                  class="text-xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                  TenderAI</h1>
+              </div>
+            </a>
+            <div class="hidden lg:flex items-center gap-8"><a href="#features" class="relative group"><span
+                  class="text-sm font-medium text-foreground/70 group-hover:text-foreground transition-colors">Features</span>
+                <div
+                  class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full"
+                  style="transform: none; transform-origin: 50% 50% 0px; opacity: 1;"></div>
+                <div
+                  class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+              </a><a href="#ai-intelligence" class="relative group"><span
+                  class="text-sm font-medium text-foreground/70 group-hover:text-foreground transition-colors">AI
+                  Intelligence</span>
+                <div
+                  class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+              </a><a href="#dashboard" class="relative group"><span
+                  class="text-sm font-medium text-foreground/70 group-hover:text-foreground transition-colors">Dashboard</span>
+                <div
+                  class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+              </a><a href="#analytics" class="relative group"><span
+                  class="text-sm font-medium text-foreground/70 group-hover:text-foreground transition-colors">Analytics</span>
+                <div
+                  class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+              </a><a href="#faq" class="relative group"><span
+                  class="text-sm font-medium text-foreground/70 group-hover:text-foreground transition-colors">FAQ</span>
+                <div
+                  class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary to-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                </div>
+              </a></div>
+            <div class="hidden lg:flex items-center gap-3">
+              <div tabindex="0"><button onclick="window.location.href='pages/login.html'" data-slot="button"
+                  class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-9 py-2 has-[>svg]:px-3 bg-gradient-to-r from-primary via-secondary to-primary text-white border-0 rounded-full shadow-lg hover:shadow-2xl hover:shadow-primary/30 transition-all duration-300 px-6">Login<svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-arrow-right w-4 h-4 ml-2">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                  </svg></button></div>
+            </div><button id="mobile-menu-btn" class="lg:hidden p-2 rounded-xl hover:bg-primary/5 transition-colors"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-menu w-6 h-6 text-foreground">
+                <line x1="4" x2="20" y1="12" y2="12"></line>
+                <line x1="4" x2="20" y1="6" y2="6"></line>
+                <line x1="4" x2="20" y1="18" y2="18"></line>
+              </svg></button>
+          </div>
+        </div>
+      </nav>
+      <section
+        class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"
+        style="opacity: 1; transform: none;">
+        <div class="absolute inset-0">
+          <div class="absolute top-20 left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute bottom-20 right-20 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 2s;"></div>
+          <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan/10 rounded-full blur-3xl">
+          </div>
+        </div>
+        <div class="absolute inset-0 opacity-10"
+          style="background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px); background-size: 50px 50px;">
+        </div>
+        <div class="relative z-10 container mx-auto px-6 lg:px-16 py-20">
+          <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8" style="opacity: 1; transform: none;">
+              <div style="opacity: 1; transform: none; margin-top: 3rem;"><span data-slot="badge"
+                  class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-primary/10 text-primary border-primary/20 mb-4"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-sparkles w-3 h-3 mr-1">
+                    <path
+                      d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z">
+                    </path>
+                    <path d="M20 3v4"></path>
+                    <path d="M22 5h-4"></path>
+                    <path d="M4 17v2"></path>
+                    <path d="M5 18H3"></path>
+                  </svg>AI-Powered Platform</span></div>
+              <h1 class="text-5xl lg:text-7xl font-bold leading-tight text-white" style="opacity: 1; transform: none;">
+                AI-Powered<br><span
+                  class="bg-gradient-to-r from-primary via-cyan to-secondary bg-clip-text text-transparent">Tender
+                  Intelligence</span><br>for Smarter Winning Strategies</h1>
+              <p class="text-xl text-gray-300 leading-relaxed" style="opacity: 1; transform: none;">TenderAI analyzes
+                historical tender data, competitor behavior, pricing patterns, and market trends to generate intelligent
+                bid recommendations with high win probability.</p>
+              <div class="flex flex-wrap gap-4" style="opacity: 1; transform: none;"><a href="pages/login.html"
+                  data-discover="true">
+                  <div tabindex="0"><button data-slot="button"
+                      class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-9 has-[>svg]:px-3 bg-gradient-to-r from-primary via-cyan to-secondary text-white border-0 rounded-full px-8 py-6 text-lg shadow-2xl hover:shadow-primary/50 transition-all duration-300"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-rocket w-5 h-5 mr-2">
+                        <path
+                          d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z">
+                        </path>
+                        <path
+                          d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z">
+                        </path>
+                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                      </svg>Get Started Now</button></div>
+                </a>
+                <div tabindex="0"><button data-slot="button"
+                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-9 has-[>svg]:px-3 backdrop-blur-xl bg-white/10 border-2 border-white/20 text-white hover:bg-white/20 hover:border-white/30 rounded-full px-8 py-6 text-lg shadow-lg transition-all duration-300"><svg
+                      xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-arrow-right w-5 h-5 mr-2">
+                      <path d="M5 12h14"></path>
+                      <path d="m12 5 7 7-7 7"></path>
+                    </svg>Explore Platform</button></div>
+              </div>
+              <div class="flex items-center gap-4 pt-4" style="opacity: 1; transform: none;">
+                <div class="flex -space-x-3">
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-slate-900 flex items-center justify-center text-white font-bold text-xs">
+                    A</div>
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-slate-900 flex items-center justify-center text-white font-bold text-xs">
+                    B</div>
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-slate-900 flex items-center justify-center text-white font-bold text-xs">
+                    C</div>
+                  <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary border-2 border-slate-900 flex items-center justify-center text-white font-bold text-xs">
+                    D</div>
+                </div>
+                <div class="text-sm text-gray-400">
+                  <p class="font-semibold text-white">Trusted by pharmaceutical procurement teams</p>
+                  <p>Across 40+ countries</p>
+                </div>
+              </div>
+            </div>
+            <div class="relative hidden lg:block" style="opacity: 1; transform: none;">
+              <div class="relative">
+                <div class="card-glow rounded-3xl p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl animate-float"
+                  style="animation-delay: 0s;">
+                  <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-xl font-bold text-white">AI Recommendation</h3><span data-slot="badge"
+                        class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-green-500/20 text-green-400 border-green-500/30"><svg
+                          xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-circle-check-big w-3 h-3 mr-1">
+                          <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                          <path d="m9 11 3 3L22 4"></path>
+                        </svg>High Confidence</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                      <div class="p-4 rounded-xl bg-gradient-to-br from-primary/20 to-cyan/20 border border-primary/30">
+                        <p class="text-xs text-gray-400 mb-1">Recommended Price</p>
+                        <p class="text-3xl font-bold text-white">$403</p>
+                      </div>
+                      <div
+                        class="p-4 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald/20 border border-green-500/30">
+                        <p class="text-xs text-gray-400 mb-1">Win Probability</p>
+                        <p class="text-3xl font-bold text-green-400">92%</p>
+                      </div>
+                    </div>
+                    <div
+                      class="h-32 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/20 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-chart-column w-16 h-16 text-violet-400 opacity-50">
+                        <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                        <path d="M18 17V9"></path>
+                        <path d="M13 17V5"></path>
+                        <path d="M8 17v-3"></path>
+                      </svg></div>
+                    <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                      <div class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                          height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"
+                          class="lucide lucide-building2 lucide-building-2 w-5 h-5 text-primary">
+                          <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+                          <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                          <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                          <path d="M10 6h4"></path>
+                          <path d="M10 10h4"></path>
+                          <path d="M10 14h4"></path>
+                          <path d="M10 18h4"></path>
+                        </svg>
+                        <div>
+                          <p class="text-sm font-semibold text-white">PharmaCorp Int'l</p>
+                          <p class="text-xs text-gray-400">Based on 127 records</p>
+                        </div>
+                      </div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-gray-400">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="absolute -top-8 -right-8 p-4 rounded-2xl bg-[#0BAEE7] shadow-2xl animate-float"
+                  style="--rot: 3deg; animation-delay: 1s;"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target w-8 h-8 text-white">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="6"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
+                  </svg>
+                  <p class="text-xs font-bold text-white mt-2">94%</p>
+                </div>
+                <div
+                  class="absolute -bottom-6 -left-6 p-4 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 shadow-2xl animate-float"
+                  style="--rot: -1deg; animation-delay: 2s;"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain w-8 h-8 text-white">
+                    <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z">
+                    </path>
+                    <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z">
+                    </path>
+                    <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                    <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                    <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                    <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                    <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                    <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                    <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+                  </svg>
+                  <p class="text-xs font-bold text-white mt-2">AI</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50"
+          style="transform: translateY(4.49904px);">
+          <div class="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
+            <div class="w-1 h-2 bg-white/50 rounded-full"></div>
+          </div>
+        </div>
+      </section>
+      <section class="py-20 bg-white border-b border-border/30">
+        <div class="container mx-auto px-6 lg:px-16">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="text-center" style="opacity: 1; transform: none;">
+              <div
+                class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-target w-8 h-8 text-white">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg></div>
+              <h3
+                class="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                92%</h3>
+              <p class="text-muted-foreground">Win Optimization</p>
+            </div>
+            <div class="text-center" style="opacity: 1; transform: none;">
+              <div
+                class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-database w-8 h-8 text-white">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+                  <path d="M3 12A9 3 0 0 0 21 12"></path>
+                </svg></div>
+              <h3
+                class="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                1M+</h3>
+              <p class="text-muted-foreground">Tender Records</p>
+            </div>
+            <div class="text-center" style="opacity: 1; transform: none;">
+              <div
+                class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-globe w-8 h-8 text-white">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                  <path d="M2 12h20"></path>
+                </svg></div>
+              <h3
+                class="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                40+</h3>
+              <p class="text-muted-foreground">Countries</p>
+            </div>
+            <div class="text-center" style="opacity: 1; transform: none;">
+              <div
+                class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-dollar-sign w-8 h-8 text-white">
+                  <line x1="12" x2="12" y1="2" y2="22"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg></div>
+              <h3
+                class="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                $500M+</h3>
+              <p class="text-muted-foreground">Tender Analysis</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="features" class="py-32 bg-gradient-to-b from-white to-slate-50">
+        <div class="container mx-auto px-6 lg:px-16">
+          <div class="text-center mb-16" style="opacity: 1; transform: none;"><span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-primary/10 text-primary border-primary/20 mb-4"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-cpu w-3 h-3 mr-1">
+                <rect width="16" height="16" x="4" y="4" rx="2"></rect>
+                <rect width="6" height="6" x="9" y="9" rx="1"></rect>
+                <path d="M15 2v2"></path>
+                <path d="M15 20v2"></path>
+                <path d="M2 15h2"></path>
+                <path d="M2 9h2"></path>
+                <path d="M20 15h2"></path>
+                <path d="M20 9h2"></path>
+                <path d="M9 2v2"></path>
+                <path d="M9 20v2"></path>
+              </svg>Intelligent Features</span>
+            <h2 class="text-4xl lg:text-5xl font-bold mb-4">Powered by Advanced<span
+                class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> AI Technology</span>
+            </h2>
+            <p class="text-xl text-muted-foreground max-w-3xl mx-auto">Everything you need to analyze tenders,
+              understand competition, and make intelligent pricing decisions</p>
+          </div>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-400 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-brain w-7 h-7 text-white">
+                    <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z">
+                    </path>
+                    <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z">
+                    </path>
+                    <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                    <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                    <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                    <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                    <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                    <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                    <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">AI Price Prediction</h3>
+                <p class="text-muted-foreground text-sm">Generate intelligent bid recommendations based on historical
+                  data and market trends</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-users w-7 h-7 text-white">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Competitor Intelligence</h3>
+                <p class="text-muted-foreground text-sm">Analyze competitor bidding patterns, win rates, and pricing
+                  strategies</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-chart-column w-7 h-7 text-white">
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                    <path d="M18 17V9"></path>
+                    <path d="M13 17V5"></path>
+                    <path d="M8 17v-3"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Tender Win/Loss Analysis</h3>
+                <p class="text-muted-foreground text-sm">Track performance metrics and identify winning factors across
+                  tenders</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-building2 lucide-building-2 w-7 h-7 text-white">
+                    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+                    <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                    <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                    <path d="M10 6h4"></path>
+                    <path d="M10 10h4"></path>
+                    <path d="M10 14h4"></path>
+                    <path d="M10 18h4"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Company Performance Tracking</h3>
+                <p class="text-muted-foreground text-sm">Monitor company participation, success rates, and market
+                  positioning</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-microscope w-7 h-7 text-white">
+                    <path d="M6 18h8"></path>
+                    <path d="M3 22h18"></path>
+                    <path d="M14 22a7 7 0 1 0 0-14h-1"></path>
+                    <path d="M9 14h2"></path>
+                    <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path>
+                    <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Drug Price Trend Analysis</h3>
+                <p class="text-muted-foreground text-sm">Identify pricing patterns and market dynamics for
+                  pharmaceutical products</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-sparkles w-7 h-7 text-white">
+                    <path
+                      d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z">
+                    </path>
+                    <path d="M20 3v4"></path>
+                    <path d="M22 5h-4"></path>
+                    <path d="M4 17v2"></path>
+                    <path d="M5 18H3"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Smart Tender Recommendations</h3>
+                <p class="text-muted-foreground text-sm">AI-powered suggestions for optimal bidding strategies and
+                  pricing</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-blue-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"
+                    stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-file-spreadsheet w-7 h-7 text-white">
+                    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                    <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                    <path d="M8 13h2"></path>
+                    <path d="M14 13h2"></path>
+                    <path d="M8 17h2"></path>
+                    <path d="M14 17h2"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Excel Import & Data Cleaning</h3>
+                <p class="text-muted-foreground text-sm">Seamlessly upload and standardize tender data with automatic
+                  validation</p>
+              </div>
+            </div>
+            <div class="group" style="opacity: 1; transform: none;">
+              <div
+                class="card-glow rounded-2xl p-6 border border-border/50 h-full bg-white hover:border-primary/30 transition-all duration-300">
+                <div
+                  class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-chart-line w-7 h-7 text-white">
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                    <path d="m19 9-5 5-4-4-3 3"></path>
+                  </svg></div>
+                <h3 class="text-lg font-bold mb-2">Historical Tender Intelligence</h3>
+                <p class="text-muted-foreground text-sm">Access comprehensive tender history with advanced filtering and
+                  insights</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="ai-intelligence"
+        class="py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10"
+          style="background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+        <div class="container mx-auto px-6 lg:px-16 relative z-10">
+          <div class="text-center mb-20" style="opacity: 1; transform: none;"><span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-primary/20 text-primary border-primary/30 mb-4"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-brain w-3 h-3 mr-1">
+                <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path>
+                <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path>
+                <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+              </svg>How It Works</span>
+            <h2 class="text-4xl lg:text-5xl font-bold mb-4 text-white">How TenderAI<span
+                class="bg-gradient-to-r from-primary to-cyan bg-clip-text text-transparent"> Thinks</span></h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">Our AI engine processes millions of data points to
+              deliver intelligent recommendations</p>
+          </div>
+          <div class="max-w-4xl mx-auto">
+            <div class="relative flex gap-6 pb-12 last:pb-0" style="opacity: 1; transform: none;">
+              <div class="absolute left-8 top-16 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-transparent"></div>
+              <div class="relative flex-shrink-0">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl">
+                  <span class="text-2xl font-bold text-white">1</span></div>
+              </div>
+              <div class="flex-1 pt-2">
+                <h3 class="text-2xl font-bold text-white mb-2">Upload Tender Data</h3>
+                <p class="text-gray-400">Import historical tender records via Excel or CSV</p>
+              </div>
+            </div>
+            <div class="relative flex gap-6 pb-12 last:pb-0" style="opacity: 1; transform: none;">
+              <div class="absolute left-8 top-16 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-transparent"></div>
+              <div class="relative flex-shrink-0">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl">
+                  <span class="text-2xl font-bold text-white">2</span></div>
+              </div>
+              <div class="flex-1 pt-2">
+                <h3 class="text-2xl font-bold text-white mb-2">Clean & Standardize</h3>
+                <p class="text-gray-400">AI-powered data validation and normalization</p>
+              </div>
+            </div>
+            <div class="relative flex gap-6 pb-12 last:pb-0" style="opacity: 1; transform: none;">
+              <div class="absolute left-8 top-16 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-transparent"></div>
+              <div class="relative flex-shrink-0">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl">
+                  <span class="text-2xl font-bold text-white">3</span></div>
+              </div>
+              <div class="flex-1 pt-2">
+                <h3 class="text-2xl font-bold text-white mb-2">Analyze Historical Wins/Losses</h3>
+                <p class="text-gray-400">Deep learning analysis of past performance</p>
+              </div>
+            </div>
+            <div class="relative flex gap-6 pb-12 last:pb-0" style="opacity: 1; transform: none;">
+              <div class="absolute left-8 top-16 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-transparent"></div>
+              <div class="relative flex-shrink-0">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl">
+                  <span class="text-2xl font-bold text-white">4</span></div>
+              </div>
+              <div class="flex-1 pt-2">
+                <h3 class="text-2xl font-bold text-white mb-2">Compare Competitors</h3>
+                <p class="text-gray-400">Benchmark against competitor bidding patterns</p>
+              </div>
+            </div>
+            <div class="relative flex gap-6 pb-12 last:pb-0" style="opacity: 1; transform: none;">
+              <div class="absolute left-8 top-16 bottom-0 w-0.5 bg-gradient-to-b from-primary/50 to-transparent"></div>
+              <div class="relative flex-shrink-0">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl">
+                  <span class="text-2xl font-bold text-white">5</span></div>
+              </div>
+              <div class="flex-1 pt-2">
+                <h3 class="text-2xl font-bold text-white mb-2">Generate AI Pricing Recommendation</h3>
+                <p class="text-gray-400">Calculate optimal bid price with confidence scores</p>
+              </div>
+            </div>
+            <div class="relative flex gap-6 pb-12 last:pb-0" style="opacity: 1; transform: none;">
+              <div class="relative flex-shrink-0">
+                <div
+                  class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-2xl">
+                  <span class="text-2xl font-bold text-white">6</span></div>
+              </div>
+              <div class="flex-1 pt-2">
+                <h3 class="text-2xl font-bold text-white mb-2">Optimize Win Probability</h3>
+                <p class="text-gray-400">Fine-tune recommendations for maximum success rate</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="dashboard" class="py-32 bg-gradient-to-b from-slate-50 to-white">
+        <div class="container mx-auto px-6 lg:px-16">
+          <div class="text-center mb-16" style="opacity: 1; transform: none;">
+            <h2 class="text-4xl lg:text-5xl font-bold mb-4">Why<span
+                class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> TenderAI</span></h2>
+            <p class="text-xl text-muted-foreground max-w-3xl mx-auto">Transform your tender strategy with intelligent
+              insights and data-driven decisions</p>
+          </div>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="card-glow rounded-2xl p-8 border bg-white border-border/50"
+              style="opacity: 1; transform: none;">
+              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-target w-6 h-6 text-primary">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <circle cx="12" cy="12" r="6"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                </svg></div>
+              <h3 class="text-xl font-bold mb-3 ">Reduce Pricing Guesswork</h3>
+              <p class="text-muted-foreground">Eliminate uncertainty with data-driven pricing recommendations backed by
+                AI analysis</p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 border bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700"
+              style="opacity: 1; transform: none;">
+              <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-trending-up w-6 h-6 text-white">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                  <polyline points="16 7 22 7 22 13"></polyline>
+                </svg></div>
+              <h3 class="text-xl font-bold mb-3 text-white">Improve Win Rate</h3>
+              <p class="text-gray-300">Increase tender success by leveraging historical patterns and competitive
+                intelligence</p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 border bg-white border-border/50"
+              style="opacity: 1; transform: none;">
+              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-users w-6 h-6 text-primary">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg></div>
+              <h3 class="text-xl font-bold mb-3 ">Understand Competitor Strategies</h3>
+              <p class="text-muted-foreground">Gain insights into competitor behavior, pricing tactics, and market
+                positioning</p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 border bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700"
+              style="opacity: 1; transform: none;">
+              <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-chart-line w-6 h-6 text-white">
+                  <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                  <path d="m19 9-5 5-4-4-3 3"></path>
+                </svg></div>
+              <h3 class="text-xl font-bold mb-3 text-white">Analyze Market Trends</h3>
+              <p class="text-gray-300">Identify emerging patterns, seasonal variations, and regional pricing dynamics
+              </p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 border bg-white border-border/50"
+              style="opacity: 1; transform: none;">
+              <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-database w-6 h-6 text-primary">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+                  <path d="M3 12A9 3 0 0 0 21 12"></path>
+                </svg></div>
+              <h3 class="text-xl font-bold mb-3 ">Centralize Tender Intelligence</h3>
+              <p class="text-muted-foreground">Unified platform for all tender data, analytics, and strategic
+                decision-making</p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 border bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700"
+              style="opacity: 1; transform: none;">
+              <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-brain w-6 h-6 text-white">
+                  <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path>
+                  <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path>
+                  <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                  <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                  <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                  <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                  <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                  <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                  <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+                </svg></div>
+              <h3 class="text-xl font-bold mb-3 text-white">Make Data-Driven Decisions</h3>
+              <p class="text-gray-300">Replace intuition with intelligent insights powered by machine learning</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="analytics"
+        class="py-32 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10"
+          style="background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+        <div class="container mx-auto px-6 lg:px-16 relative z-10">
+          <div class="text-center mb-16" style="opacity: 1; transform: none;"><span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-primary/20 text-primary border-primary/30 mb-4"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-chart-column w-3 h-3 mr-1">
+                <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                <path d="M18 17V9"></path>
+                <path d="M13 17V5"></path>
+                <path d="M8 17v-3"></path>
+              </svg>Analytics</span>
+            <h2 class="text-4xl lg:text-5xl font-bold mb-4 text-white">Comprehensive<span
+                class="bg-gradient-to-r from-primary to-cyan bg-clip-text text-transparent"> Tender Analytics</span>
+            </h2>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">Track performance, analyze trends, and gain actionable
+              insights across all your tender activities</p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div class="card-glow rounded-2xl p-8 bg-white/5 backdrop-blur-sm border border-white/10"
+              style="opacity: 1; transform: none;">
+              <div
+                class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-4 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-trending-up w-7 h-7 text-white">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                  <polyline points="16 7 22 7 22 13"></polyline>
+                </svg></div>
+              <h3 class="text-xl font-bold text-white mb-2">Win Rate Trends</h3>
+              <p class="text-gray-400">Monitor success rates over time</p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 bg-white/5 backdrop-blur-sm border border-white/10"
+              style="opacity: 1; transform: none;">
+              <div
+                class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-4 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-dollar-sign w-7 h-7 text-white">
+                  <line x1="12" x2="12" y1="2" y2="22"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg></div>
+              <h3 class="text-xl font-bold text-white mb-2">Pricing Analytics</h3>
+              <p class="text-gray-400">Understand pricing patterns and margins</p>
+            </div>
+            <div class="card-glow rounded-2xl p-8 bg-white/5 backdrop-blur-sm border border-white/10"
+              style="opacity: 1; transform: none;">
+              <div
+                class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-4 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-building2 lucide-building-2 w-7 h-7 text-white">
+                  <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+                  <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+                  <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
+                  <path d="M10 6h4"></path>
+                  <path d="M10 10h4"></path>
+                  <path d="M10 14h4"></path>
+                  <path d="M10 18h4"></path>
+                </svg></div>
+              <h3 class="text-xl font-bold text-white mb-2">Company Insights</h3>
+              <p class="text-gray-400">Competitive intelligence dashboard</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="faq" class="py-32 bg-gradient-to-b from-white to-slate-50">
+        <div class="container mx-auto px-6 lg:px-16">
+          <div class="text-center mb-16" style="opacity: 1; transform: none;"><span data-slot="badge"
+              class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-primary/10 text-primary border-primary/20 mb-4"><svg
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-sparkles w-3 h-3 mr-1">
+                <path
+                  d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z">
+                </path>
+                <path d="M20 3v4"></path>
+                <path d="M22 5h-4"></path>
+                <path d="M4 17v2"></path>
+                <path d="M5 18H3"></path>
+              </svg>FAQ</span>
+            <h2 class="text-4xl lg:text-5xl font-bold mb-4">Frequently Asked<span
+                class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> Questions</span></h2>
+          </div>
+          <div class="max-w-3xl mx-auto space-y-4">
+            <div class="card-glow rounded-2xl p-6 border border-border/50 bg-white"
+              style="opacity: 1; transform: none;">
+              <h3 class="text-lg font-bold mb-2">How does TenderAI generate price recommendations?</h3>
+              <p class="text-muted-foreground">TenderAI uses advanced machine learning algorithms to analyze historical
+                tender data, competitor pricing patterns, market trends, and win/loss ratios to generate intelligent bid
+                recommendations with confidence scores.</p>
+            </div>
+            <div class="card-glow rounded-2xl p-6 border border-border/50 bg-white"
+              style="opacity: 1; transform: none;">
+              <h3 class="text-lg font-bold mb-2">Can I import my existing tender data?</h3>
+              <p class="text-muted-foreground">Yes! TenderAI supports Excel and CSV imports with automatic data
+                validation, cleaning, and standardization. Our AI engine processes your historical data to provide
+                immediate insights.</p>
+            </div>
+            <div class="card-glow rounded-2xl p-6 border border-border/50 bg-white"
+              style="opacity: 1; transform: none;">
+              <h3 class="text-lg font-bold mb-2">What countries and markets does TenderAI support?</h3>
+              <p class="text-muted-foreground">TenderAI supports pharmaceutical tender data from over 40 countries
+                across the Middle East, Africa, and Asia. We continuously expand our coverage based on customer needs.
+              </p>
+            </div>
+            <div class="card-glow rounded-2xl p-6 border border-border/50 bg-white"
+              style="opacity: 1; transform: none;">
+              <h3 class="text-lg font-bold mb-2">Is my tender data secure?</h3>
+              <p class="text-muted-foreground">Absolutely. We use enterprise-grade encryption, secure cloud
+                infrastructure, and strict access controls. Your data is never shared with competitors or third parties.
+              </p>
+            </div>
+            <div class="card-glow rounded-2xl p-6 border border-border/50 bg-white"
+              style="opacity: 1; transform: none;">
+              <h3 class="text-lg font-bold mb-2">How accurate are the AI recommendations?</h3>
+              <p class="text-muted-foreground">Our AI recommendations typically achieve 92%+ win optimization rates.
+                Accuracy depends on the quality and volume of historical data available for analysis.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="relative py-40 overflow-hidden bg-gradient-to-br from-slate-950 via-blue-950 to-violet-950">
+        <div class="absolute inset-0">
+          <div class="absolute top-20 left-20 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute bottom-20 right-20 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 2s;"></div>
+          <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-cyan/10 to-violet/10 rounded-full blur-3xl">
+          </div>
+        </div>
+        <div class="absolute inset-0 opacity-10"
+          style="background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 60px 60px;">
+        </div>
+        <div class="absolute inset-0">
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 90.6807%; top: 82.113%; transform: translateY(-28.5581px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 42.6244%; top: 66.8949%; transform: translateY(-22.0688px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 74.3531%; top: 78.0449%; transform: translateY(-2.9931px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 72.5841%; top: 30.4793%; transform: translateY(-27.3574px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 56.258%; top: 93.2954%; transform: translateY(-9.58499px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 56.0848%; top: 94.2019%; transform: translateY(-27.8244px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 25.323%; top: 42.767%; transform: translateY(-29.3206px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 78.2108%; top: 39.6323%; transform: translateY(-6.33473px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 69.5808%; top: 38.0693%; transform: translateY(-1.82586px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 8.6724%; top: 18.1303%; transform: translateY(-13.1912px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 23.7434%; top: 94.7432%; transform: translateY(-9.27649px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 18.2957%; top: 75.9086%; transform: translateY(-17.4403px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 88.2451%; top: 22.2112%; transform: translateY(-11.7384px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 78.0806%; top: 16.1762%; transform: translateY(-27.2648px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 8.45203%; top: 46.4073%; transform: translateY(-29.9985px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 78.8838%; top: 10.3453%; transform: translateY(-25.9463px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 89.9245%; top: 60.023%; transform: translateY(-26.7395px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 24.7905%; top: 93.6488%; transform: translateY(-0.217918px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 72.9514%; top: 96.0574%; transform: translateY(-4.22671px);"></div>
+          <div class="absolute w-1 h-1 bg-primary/30 rounded-full"
+            style="left: 86.315%; top: 33.9776%; transform: translateY(-17.0487px);"></div>
+        </div>
+        <div class="container mx-auto px-6 lg:px-16 relative z-10">
+          <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8" style="opacity: 1; transform: none;">
+              <div><span data-slot="badge"
+                  class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-primary/20 text-primary border-primary/30 mb-6"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-sparkles w-3 h-3 mr-1">
+                    <path
+                      d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z">
+                    </path>
+                    <path d="M20 3v4"></path>
+                    <path d="M22 5h-4"></path>
+                    <path d="M4 17v2"></path>
+                    <path d="M5 18H3"></path>
+                  </svg>AI-Powered Intelligence</span>
+                <h2 class="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">Start Making Smarter<br><span
+                    class="bg-gradient-to-r from-primary via-cyan to-secondary bg-clip-text text-transparent">Tender
+                    Decisions with AI</span></h2>
+                <p class="text-xl text-gray-300 leading-relaxed">TenderAI helps procurement teams analyze competitors,
+                  optimize pricing strategies, and improve tender win probability using intelligent data analysis.</p>
+              </div>
+              <div class="flex flex-wrap gap-4"><a href="pages/dashboard.html" data-discover="true">
+                  <div tabindex="0"><button data-slot="button"
+                      class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 h-9 has-[>svg]:px-3 bg-gradient-to-r from-primary via-cyan to-secondary text-white border-0 rounded-full px-10 py-6 text-lg font-semibold shadow-2xl hover:shadow-primary/50 transition-all duration-300"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-rocket w-5 h-5 mr-2">
+                        <path
+                          d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z">
+                        </path>
+                        <path
+                          d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z">
+                        </path>
+                        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                      </svg>Get Started Now</button></div>
+                </a>
+                <div tabindex="0"><button data-slot="button"
+                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-9 has-[>svg]:px-3 backdrop-blur-xl bg-white/10 border-2 border-white/20 text-white hover:bg-white/20 hover:border-white/30 rounded-full px-10 py-6 text-lg font-semibold shadow-lg transition-all duration-300"><svg
+                      xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-shield w-5 h-5 mr-2">
+                      <path
+                        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                      </path>
+                    </svg>Contact Sales</button></div>
+              </div>
+              <div class="flex items-center gap-8 pt-4">
+                <div class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-circle-check-big w-5 h-5 text-green-400">
+                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                    <path d="m9 11 3 3L22 4"></path>
+                  </svg><span class="text-sm text-gray-300">No credit card required</span></div>
+                <div class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-shield w-5 h-5 text-blue-400">
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                    </path>
+                  </svg><span class="text-sm text-gray-300">Enterprise-grade security</span></div>
+              </div>
+            </div>
+            <div class="relative hidden lg:block">
+              <div class="relative">
+                <div class="card-glow rounded-3xl p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl animate-float"
+                  style="animation-delay: 0s;">
+                  <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-white">AI Analysis Results</h3><span data-slot="badge"
+                      class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden [a&]:hover:bg-primary/90 bg-green-500/20 text-green-400 border-green-500/30"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-brain w-3 h-3 mr-1">
+                        <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z">
+                        </path>
+                        <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z">
+                        </path>
+                        <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                        <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                        <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                        <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                        <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                        <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                        <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+                      </svg>Active</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="p-4 rounded-xl bg-gradient-to-br from-primary/20 to-cyan/20 border border-primary/30">
+                      <p class="text-xs text-gray-400 mb-1">Win Probability</p>
+                      <p class="text-3xl font-bold text-white">94%</p>
+                    </div>
+                    <div
+                      class="p-4 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald/20 border border-green-500/30">
+                      <p class="text-xs text-gray-400 mb-1">Confidence</p>
+                      <p class="text-3xl font-bold text-green-400">High</p>
+                    </div>
+                  </div>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+                      <span class="text-sm text-gray-300">Recommended Price</span><span
+                        class="text-lg font-bold text-white">$403</span></div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+                      <span class="text-sm text-gray-300">Market Average</span><span
+                        class="text-lg font-bold text-gray-400">$425</span></div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+                      <span class="text-sm text-gray-300">Records Analyzed</span><span
+                        class="text-lg font-bold text-primary">127</span></div>
+                  </div>
+                </div>
+                <div
+                  class="absolute -top-8 -right-8 p-4 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 shadow-2xl animate-float"
+                  style="--rot: 2deg; animation-delay: 1s;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-chart-column w-8 h-8 text-white mb-2">
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16"></path>
+                    <path d="M18 17V9"></path>
+                    <path d="M13 17V5"></path>
+                    <path d="M8 17v-3"></path>
+                  </svg>
+                  <p class="text-xs font-bold text-white">Analytics</p>
+                </div>
+                <div
+                  class="absolute -bottom-6 -left-6 p-4 rounded-2xl bg-[#0BAEE7] shadow-2xl animate-float"
+                  style="--rot: -2deg; animation-delay: 2s;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-target w-8 h-8 text-white mb-2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="6"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
+                  </svg>
+                  <p class="text-xs font-bold text-white">92% Accuracy</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- COMPONENT: Landing Footer -->
+      <footer class="py-12 bg-slate-950 border-t border-slate-800">
+        <div class="container mx-auto px-6 lg:px-16">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-zap w-6 h-6 text-white">
+                  <path
+                    d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+                  </path>
+                </svg></div>
+              <div>
+                <p class="font-bold text-white">TenderAI</p>
+                <p class="text-xs text-gray-400">AI-Powered Tender Intelligence</p>
+              </div>
+            </div>
+            <div class="flex gap-8 text-sm text-gray-400"><a href="#features" class="hover:text-white transition-colors">Features</a><a href="#pricing"
+                class="hover:text-white transition-colors">Pricing</a><a href="#about"
+                class="hover:text-white transition-colors">About</a><a href="#contact"
+                class="hover:text-white transition-colors">Contact</a></div>
+            <p class="text-sm text-gray-400">© 2026 TenderAI. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <div id="mobile-sidebar" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden hidden" style="opacity: 1; transition: opacity 0.3s ease;">
+    <div id="mobile-sidebar-content" class="absolute right-0 top-0 bottom-0 w-80 bg-white shadow-2xl translate-x-full" style="transition: transform 0.3s ease;">
+      <div class="p-8 space-y-6">
+        <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap w-6 h-6 text-white"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+            </div>
+            <h2 class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">TenderAI</h2>
+          </div>
+          <button id="close-sidebar-btn" class="p-2 rounded-xl hover:bg-primary/5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x w-6 h-6"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <div class="space-y-2">
+          <a href="#features" class="mobile-nav-link block w-full text-left px-4 py-3 rounded-xl hover:bg-primary/5 transition-colors font-medium">Features</a>
+          <a href="#ai-intelligence" class="mobile-nav-link block w-full text-left px-4 py-3 rounded-xl hover:bg-primary/5 transition-colors font-medium">AI Intelligence</a>
+          <a href="#dashboard" class="mobile-nav-link block w-full text-left px-4 py-3 rounded-xl hover:bg-primary/5 transition-colors font-medium">Dashboard</a>
+          <a href="#analytics" class="mobile-nav-link block w-full text-left px-4 py-3 rounded-xl hover:bg-primary/5 transition-colors font-medium">Analytics</a>
+          <a href="#faq" class="mobile-nav-link block w-full text-left px-4 py-3 rounded-xl hover:bg-primary/5 transition-colors font-medium">FAQ</a>
+        </div>
+        <div class="pt-6 border-t border-border/30">
+          <button onclick="window.location.href='pages/dashboard.html'" data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 px-4 py-2 has-[>svg]:px-3 w-full bg-gradient-to-r from-primary via-secondary to-primary text-white border-0 rounded-xl h-12 shadow-lg hover:shadow-xl transition-all">Login<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4 ml-2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    // Navbar scroll scale effect
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('main-nav');
+      if (window.scrollY > 50) {
+        nav.classList.add('scale-90');
+      } else {
+        nav.classList.remove('scale-90');
+      }
+    });
+
+    // Mobile sidebar toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const mobileSidebarContent = document.getElementById('mobile-sidebar-content');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    function openSidebar() {
+      mobileSidebar.classList.remove('hidden');
+      // slight delay to allow display block to apply before animating
+      setTimeout(() => {
+        mobileSidebar.style.opacity = '1';
+        mobileSidebarContent.classList.remove('translate-x-full');
+      }, 10);
+    }
+
+    function closeSidebar() {
+      mobileSidebar.style.opacity = '0';
+      mobileSidebarContent.classList.add('translate-x-full');
+      setTimeout(() => {
+        mobileSidebar.classList.add('hidden');
+      }, 300);
+    }
+
+    mobileMenuBtn.addEventListener('click', openSidebar);
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+
+    // Close sidebar when clicking outside
+    mobileSidebar.addEventListener('click', (e) => {
+      if (e.target === mobileSidebar) {
+        closeSidebar();
+      }
+    });
+
+    // Close sidebar when a link is clicked
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', closeSidebar);
+    });
+  </script>
+</body>
+
+</html>

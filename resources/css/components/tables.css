@@ -1,0 +1,58 @@
+/* Table Design Parity */
+.data-table tr { border-bottom: 1px solid rgba(var(--border-rgb), 0.2); transition: background-color 0.2s; }
+.data-table tr:hover:not(thead tr) { background-color: rgba(var(--border-rgb), 0.05); }
+.data-table th, .data-table td { padding: 0.75rem 1rem; vertical-align: middle; }
+.data-table th { font-weight: 500; color: var(--foreground); font-size: 0.875rem; }
+.data-table td { font-size: 0.875rem; }
+
+/* Table Horizontal Scrolling Fix */
+.table-container-scroll {
+    overflow-x: auto;
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(var(--border-rgb), 0.1);
+    background-color: rgba(var(--input-rgb), 0.1);
+}
+
+.table-outer {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+/* Users Table Style */
+.users-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-list th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    border-bottom: 1px solid var(--border);
+}
+
+.users-list td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
+}
+
+.user-badge {
+    padding:  0.5rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.user-badge.admin {
+    background-color: rgba(var(--primary-rgb), 0.1);
+    color: var(--primary);
+}
+
+.user-badge.member {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+}

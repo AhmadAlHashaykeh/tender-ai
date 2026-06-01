@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Standardization | TenderAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div class="app-layout">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-decor-top float-decoration"></div>
+                <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
+
+                <header class="sidebar-header">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <div class="logo-shine"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap logo-icon"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="brand-name">TenderAI</h1>
+                            <p class="brand-tagline">Pricing Intelligence</p>
+                        </div>
+                    </div>
+                </header>
+
+                <nav class="sidebar-nav custom-scrollbar">
+                    <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="upload.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                        <span class="nav-label">Upload Data</span>
+                    </a>
+                    <a class="nav-link" href="management.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                        <span class="nav-label">Data Management</span>
+                    </a>
+                    <a class="nav-link" href="companies.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                        <span class="nav-label">Companies</span>
+                    </a>
+                    <a class="nav-link" href="tenders.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                        <span class="nav-label">Tenders</span>
+                    </a>
+                    <a class="nav-link" href="drugs.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                        <span class="nav-label">Drugs</span>
+                    </a>
+                    <a class="nav-link active" href="drug-standardization.html" aria-current="page">
+                        <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                        <span class="nav-label">Standardization</span>
+                    </a>
+                    <a class="nav-link ai-link" href="ai-recommendations.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                        <span class="nav-label">AI Recommendation</span>
+                    </a>
+                    <a class="nav-link" href="prediction-history.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                        <span class="nav-label">Prediction History</span>
+                    </a>
+                    <a class="nav-link" href="reports.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                    <a class="nav-link" href="settings.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </nav>
+
+                <footer class="sidebar-footer">
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-container">
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="user" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="settings" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Settings</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout" href="../index.html">
+                                <i data-lucide="log-out" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="profileBtn" class="user-profile-btn">
+                        <div class="user-avatar">
+                            <div class="avatar-shine"></div>
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-name">John Doe</p>
+                            <p class="user-role">System Admin</p>
+                        </div>
+                        <i data-lucide="chevron-up" class="chevron-up"></i>
+                    </button>
+                </footer>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="main-content">
+                <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                    <div class="header-inner">
+                        <div class="header-left">
+                            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+                            </button>
+                            <div class="search-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search search-icon-header"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                                <input type="text" class="search-input" placeholder="Search tenders, drugs, reports...">
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <a href="ai-recommendations.html" class="no-underline">
+                                <button class="btn-ai">
+                                    <i data-lucide="sparkles" class="icon-xs"></i>
+                                    New AI Prediction
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- COMPONENT: Page Content -->
+                <main class="standardization-view fadeIn">
+                    <div class="standardization-container">
+                        <div class="standard-page-header">
+                            <div class="header-title-group">
+                                <h2 class="page-title">Drug Standardization</h2>
+                                <p class="page-subtitle">Process and standardize drug names and formats</p>
+                            </div>
+                            <button class="btn-primary btn-standardize">
+                                <i data-lucide="circle-check" class="icon-sm"></i>
+                                Apply Standardization
+                            </button>
+                        </div>
+
+                        <!-- Merge Suggestions Section -->
+                        <div class="standard-card">
+                            <div class="standard-card-header">
+                                <h4 class="standard-card-title">Merge Suggestions</h4>
+                                <p class="standard-card-subtitle">Similar drug names that can be merged into a standard name</p>
+                            </div>
+                            <div class="standard-card-content">
+                                <!-- Suggestion Item 1 -->
+                                <div class="suggestion-block">
+                                    <div class="suggestion-meta">
+                                        <span class="badge badge-primary">24 records</span>
+                                        <span class="affected-text">affected</span>
+                                    </div>
+                                    <div class="suggestion-flow">
+                                        <div class="source-names">
+                                            <span class="name-pill">Paracetamol</span>
+                                            <span class="name-pill">PARACETAMOL</span>
+                                            <span class="name-pill">Paracetomol</span>
+                                            <span class="name-pill">Para</span>
+                                        </div>
+                                        <i data-lucide="arrow-right" class="flow-arrow"></i>
+                                        <div class="target-name">Paracetamol</div>
+                                    </div>
+                                </div>
+
+                                <!-- Suggestion Item 2 -->
+                                <div class="suggestion-block">
+                                    <div class="suggestion-meta">
+                                        <span class="badge badge-primary">18 records</span>
+                                        <span class="affected-text">affected</span>
+                                    </div>
+                                    <div class="suggestion-flow">
+                                        <div class="source-names">
+                                            <span class="name-pill">Amoxicillin</span>
+                                            <span class="name-pill">AMOXICILLIN</span>
+                                            <span class="name-pill">Amoxicilin</span>
+                                            <span class="name-pill">Amox</span>
+                                        </div>
+                                        <i data-lucide="arrow-right" class="flow-arrow"></i>
+                                        <div class="target-name">Amoxicillin</div>
+                                    </div>
+                                </div>
+
+                                <!-- Suggestion Item 3 -->
+                                <div class="suggestion-block">
+                                    <div class="suggestion-meta">
+                                        <span class="badge badge-primary">15 records</span>
+                                        <span class="affected-text">affected</span>
+                                    </div>
+                                    <div class="suggestion-flow">
+                                        <div class="source-names">
+                                            <span class="name-pill">Ibuprofen</span>
+                                            <span class="name-pill">IBUPROFEN</span>
+                                            <span class="name-pill">Ibuprophen</span>
+                                        </div>
+                                        <i data-lucide="arrow-right" class="flow-arrow"></i>
+                                        <div class="target-name">Ibuprofen</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Standardization Results Section -->
+                        <div class="standard-card">
+                            <div class="standard-card-header">
+                                <h4 class="standard-card-title">Standardization Results</h4>
+                                <p class="standard-card-subtitle">Extract and standardize drug name components</p>
+                            </div>
+                            <div class="standard-card-content">
+                                <div class="table-responsive">
+                                    <table class="standard-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Original Data</th>
+                                                <th>Drug Name</th>
+                                                <th>Dosage</th>
+                                                <th>Form</th>
+                                                <th>Confidence</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-muted">Paracetamol 500 MG Tablets</td>
+                                                <td class="font-bold">Paracetamol</td>
+                                                <td><span class="badge badge-mono">500mg</span></td>
+                                                <td>Tablets</td>
+                                                <td>
+                                                    <div class="confidence-wrapper">
+                                                        <div class="confidence-bar-bg">
+                                                            <div class="confidence-bar-fill success" style="width: 98%;"></div>
+                                                        </div>
+                                                        <span class="confidence-text">98%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">AMOXICILLIN 250MG CAPSULES</td>
+                                                <td class="font-bold">Amoxicillin</td>
+                                                <td><span class="badge badge-mono">250mg</span></td>
+                                                <td>Capsules</td>
+                                                <td>
+                                                    <div class="confidence-wrapper">
+                                                        <div class="confidence-bar-bg">
+                                                            <div class="confidence-bar-fill success" style="width: 95%;"></div>
+                                                        </div>
+                                                        <span class="confidence-text">95%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Ibuprofen 400 mg coated tablets</td>
+                                                <td class="font-bold">Ibuprofen</td>
+                                                <td><span class="badge badge-mono">400mg</span></td>
+                                                <td>Coated Tablets</td>
+                                                <td>
+                                                    <div class="confidence-wrapper">
+                                                        <div class="confidence-bar-bg">
+                                                            <div class="confidence-bar-fill success" style="width: 97%;"></div>
+                                                        </div>
+                                                        <span class="confidence-text">97%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Omeprazole 20 mg capsule</td>
+                                                <td class="font-bold">Omeprazole</td>
+                                                <td><span class="badge badge-mono">20mg</span></td>
+                                                <td>Capsules</td>
+                                                <td>
+                                                    <div class="confidence-wrapper">
+                                                        <div class="confidence-bar-bg">
+                                                            <div class="confidence-bar-fill success" style="width: 96%;"></div>
+                                                        </div>
+                                                        <span class="confidence-text">96%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">METFORMIN HCL 500MG TAB</td>
+                                                <td class="font-bold">Metformin</td>
+                                                <td><span class="badge badge-mono">500mg</span></td>
+                                                <td>Tablets</td>
+                                                <td>
+                                                    <div class="confidence-wrapper">
+                                                        <div class="confidence-bar-bg">
+                                                            <div class="confidence-bar-fill success" style="width: 99%;"></div>
+                                                        </div>
+                                                        <span class="confidence-text">99%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/drug-standardization.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TenderAI - Upload Data</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Utility CSS replacing Tailwind */
+        .flex { display: flex; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .items-center { align-items: center; }
+        .gap-3 { gap: 0.75rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .w-10 { width: 2.5rem; height: 2.5rem; }
+        .h-10 { width: 2.5rem; height: 2.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .w-5 { width: 1.25rem; height: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+        .text-white { color: #ffffff; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .text-2xl { font-size: 1.5rem; }
+        .font-bold { font-weight: 700; }
+        .text-foreground { color: var(--foreground); }
+        .text-sm { font-size: 0.875rem; }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .ml-0\.5 { margin-left: 0.125rem; }
+        .border { border: 1px solid rgba(226, 232, 240, 0.8); }
+        .font-semibold { font-weight: 600; }
+        .font-normal { font-weight: 400; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .gap-4 { gap: 1rem; }
+        .p-4 { padding: 1rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .gap-2 { gap: 0.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .w-4 { width: 1rem; height: 1rem; }
+        .h-4 { height: 1rem; }
+        .text-\[10px\] { font-size: 10px; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wide { letter-spacing: 0.025em; }
+        .font-medium { font-weight: 500; }
+        
+        /* Gradients matching prediction-history.html */
+        .bg-gradient-to-br { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        
+        .bg-gradient-to-br.from-primary\/5.to-secondary\/5 {
+            background: linear-gradient(135deg, rgba(13, 133, 230, 0.05), rgba(124, 58, 237, 0.05));
+        }
+        .bg-gradient-to-br.from-emerald-500\/5.to-teal-500\/5 {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(20, 184, 166, 0.05));
+        }
+        .bg-gradient-to-br.from-red-500\/5.to-rose-500\/5 {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(244, 63, 94, 0.05));
+        }
+        .border-primary\/10 { border-color: rgba(13, 133, 230, 0.1); }
+        .border-emerald-200\/40 { border-color: rgba(167, 243, 208, 0.4); }
+        .border-red-200\/40 { border-color: rgba(254, 202, 202, 0.4); }
+        
+        .text-primary { color: var(--primary); }
+        .text-success { color: #10b981; }
+        .text-destructive { color: #ef4444; }
+        
+        @media (min-width: 768px) {
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div class="app-layout">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-decor-top float-decoration"></div>
+                <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
+
+                <header class="sidebar-header">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <div class="logo-shine"></div>
+                            <i data-lucide="zap" class="logo-icon"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="brand-name">TenderAI</h1>
+                            <p class="brand-tagline">Pricing Intelligence</p>
+                        </div>
+                    </div>
+                </header>
+
+                <nav class="sidebar-nav custom-scrollbar">
+                    <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <a class="nav-link active" href="upload.html" aria-current="page">
+                        <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                        <span class="nav-label">Upload Data</span>
+                    </a>
+                    <a class="nav-link" href="management.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                        <span class="nav-label">Data Management</span>
+                    </a>
+                    <a class="nav-link" href="companies.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                        <span class="nav-label">Companies</span>
+                    </a>
+                    <a class="nav-link" href="tenders.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                        <span class="nav-label">Tenders</span>
+                    </a>
+                    <a class="nav-link" href="drugs.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                        <span class="nav-label">Drugs</span>
+                    </a>
+                    <a class="nav-link" href="drug-standardization.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                        <span class="nav-label">Standardization</span>
+                    </a>
+                    <a class="nav-link ai-link" href="ai-recommendations.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                        <span class="nav-label">AI Recommendation</span>
+                    </a>
+                    <a class="nav-link" href="prediction-history.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                        <span class="nav-label">Prediction History</span>
+                    </a>
+                    <a class="nav-link" href="reports.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                    <a class="nav-link" href="settings.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </nav>
+
+                <footer class="sidebar-footer">
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-container">
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="user" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="settings" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Settings</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout" href="../index.html">
+                                <i data-lucide="log-out" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="profileBtn" class="user-profile-btn">
+                        <div class="user-avatar">
+                            <div class="avatar-shine"></div>
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-name">John Doe</p>
+                            <p class="user-role">System Admin</p>
+                        </div>
+                        <i data-lucide="chevron-up" class="chevron-up"></i>
+                    </button>
+                </footer>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="main-content">
+                <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                    <div class="header-inner">
+                        <div class="header-left">
+                            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                <i data-lucide="menu"></i>
+                            </button>
+                            <div class="search-container">
+                                <i data-lucide="search" class="search-icon-header"></i>
+                                <input type="text" class="search-input" placeholder="Search tenders, drugs, reports...">
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <a href="ai-recommendations.html" class="no-underline">
+                                <button class="btn-ai">
+                                    <i data-lucide="sparkles" class="icon-xs"></i>
+                                    New AI Prediction
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- COMPONENT: Page Content -->
+                <main class="p-6 min-h-screen">
+                    <div style="opacity: 1; transform: none;">
+                        <div class="space-y-6 max-w-6xl mx-auto">
+                            <!-- Header Info -->
+                            <div style="opacity: 1; transform: none;">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload w-4 h-4 text-white">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" x2="12" y1="3" y2="15"></line>
+                                        </svg>
+                                    </div>
+                                    <h1 class="text-2xl font-bold text-foreground">AI Data Hub</h1>
+                                    <span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 text-[10px] font-bold text-primary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-3 h-3">
+                                            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                            <path d="M20 3v4"></path>
+                                            <path d="M22 5h-4"></path>
+                                            <path d="M4 17v2"></path>
+                                            <path d="M5 18H3"></path>
+                                        </svg>
+                                        AI Operations Center
+                                    </span>
+                                </div>
+                                <p class="text-sm text-muted-foreground ml-0.5">Manage data sources, reference inputs, and preprocessing pipelines</p>
+                            </div>
+
+                            <!-- Legend/Indicator -->
+                            <div class="flex items-center gap-4 px-4 py-3 rounded-xl bg-white border border-border/40 shadow-sm text-xs text-muted-foreground" style="opacity: 1; transform: none;">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-2 h-2 rounded-full bg-primary"></div>
+                                    <span><span class="font-semibold text-foreground">AI Training Data</span> — feeds the prediction model</span>
+                                </div>
+                                <div class="h-3 w-px bg-border"></div>
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-2 h-2 rounded-full bg-violet-400"></div>
+                                    <span><span class="font-semibold text-foreground">Reference Only</span> — business tracking, not used in AI</span>
+                                </div>
+                                <div class="h-3 w-px bg-border"></div>
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                    <span><span class="font-semibold text-foreground">Preprocessing</span> — data quality pipeline</span>
+                                </div>
+                            </div>
+
+                            <!-- 2x2 Grid of Modules -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <!-- Card 1: Upload Data -->
+                                <div class="group relative bg-white rounded-2xl border-2 border-primary/20 shadow-sm hover:shadow-lg hover:shadow-primary/10 hover:border-primary/40 transition-all duration-300 flex flex-col" style="opacity: 1; transform: none;">
+                                    <div class="absolute -top-px left-6 right-6 h-0.5 bg-gradient-to-r from-primary/60 via-secondary/60 to-primary/60 rounded-full"></div>
+                                    <div class="p-6 flex-1 flex flex-col">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cloud-upload w-5 h-5 text-white">
+                                                        <path d="M12 13v8"></path>
+                                                        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                                                        <path d="m8 17 4-4 4 4"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <h3 class="font-bold text-foreground text-sm">Upload Data</h3>
+                                                    <p class="text-[11px] text-muted-foreground mt-0.5">Central AI training source</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-1 px-2 py-1 rounded-lg bg-primary/8 border border-primary/15">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-3 h-3 text-primary">
+                                                    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                                                    <path d="M20 3v4"></path>
+                                                    <path d="M22 5h-4"></path>
+                                                    <path d="M4 17v2"></path>
+                                                    <path d="M5 18H3"></path>
+                                                </svg>
+                                                <span class="text-[10px] font-bold text-primary">AI Training</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground mb-3 leading-relaxed">Historical tender awards: drug name, country, tender ID, awarded price, winner, quantity, year.</p>
+                                        <div class="flex flex-wrap gap-1.5 mb-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100">AI Training</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100">Tender Analysis</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-blue-50 text-blue-600 border-blue-100">Model Retraining</span>
+                                        </div>
+                                        <!-- File Dropzone -->
+                                        <div id="dropzone" class="relative flex-1 min-h-[120px] rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-all duration-200 cursor-pointer border-border/50 hover:border-primary/40 hover:bg-primary/3">
+                                            <input type="file" id="file-upload" accept=".xlsx,.xls,.csv" class="hidden">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload w-7 h-7 transition-colors text-muted-foreground/50">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                <polyline points="17 8 12 3 7 8"></polyline>
+                                                <line x1="12" x2="12" y1="3" y2="15"></line>
+                                            </svg>
+                                            <p class="text-xs font-medium text-muted-foreground">Drop file here or <span class="text-primary font-semibold">browse</span></p>
+                                            <p class="text-[10px] text-muted-foreground/60">.xlsx · .csv supported</p>
+                                        </div>
+                                        
+                                        <!-- File Info Area -->
+                                        <div id="fileInfoContainer" class="file-info-container">
+                                            <div class="file-item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-spreadsheet icon-sm text-primary"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M8 13h2"></path><path d="M14 13h2"></path><path d="M8 17h2"></path><path d="M14 17h2"></path></svg>
+                                                <div class="file-details">
+                                                    <p id="fileName" class="file-name">filename.xlsx</p>
+                                                    <p id="fileSize" class="file-size">0 KB</p>
+                                                </div>
+                                                <button class="btn-icon" id="removeFile" type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Upcoming Tenders -->
+                                <div class="bg-white rounded-2xl border border-border/50 shadow-sm hover:shadow-md hover:border-violet-200 transition-all duration-300 flex flex-col" style="opacity: 1; transform: none;">
+                                    <div class="p-6 flex-1 flex flex-col">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar w-5 h-5 text-white">
+                                                        <path d="M8 2v4"></path>
+                                                        <path d="M16 2v4"></path>
+                                                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                                        <path d="M3 10h18"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <h3 class="font-bold text-foreground text-sm">Upcoming Tenders</h3>
+                                                    <p class="text-[11px] text-muted-foreground mt-0.5">Inline input</p>
+                                                </div>
+                                            </div>
+                                            <button class="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors">
+                                                View all <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3 h-3"><path d="m9 18 6-6-6-6"></path></svg>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground mb-3 leading-relaxed">Human-entered: tender name, date, drugs the company will bid on, estimated quantities.</p>
+                                        <div class="flex flex-wrap gap-1.5 mb-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-violet-50 text-violet-600 border-violet-100">Human Input</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-violet-50 text-violet-600 border-violet-100">Reference Only</span>
+                                        </div>
+                                        <div class="space-y-2 mb-4">
+                                            <input id="tenderNameInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Tender name *" value="">
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <input id="tenderCountryInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Country *" value="">
+                                                <input id="tenderDateInput" type="text" class="datePicker file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Select Date *" value="">
+                                            </div>
+                                            <input id="tenderDrugInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Drug / product *" value="">
+                                            <input id="tenderQuantityInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Quantity (optional)" value="">
+                                            <div class="flex gap-2 pt-1">
+                                                <button id="addTenderBtn" data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 px-4 py-2 has-[&gt;svg]:px-3 flex-1 h-8 text-xs bg-gradient-to-r from-amber-400 to-orange-500 text-white border-0 rounded-lg" disabled>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-3 h-3 mr-1"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Add Tender
+                                                </button>
+                                                <button data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[&gt;svg]:px-3 flex-1 h-8 text-xs rounded-lg border-border/50 text-muted-foreground hover:text-foreground">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-3 h-3 mr-1"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>Full Page
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="border-t border-border/30 pt-3 space-y-2">
+                                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Upcoming Schedule</p>
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock w-3 h-3 text-muted-foreground shrink-0"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[11px] font-medium text-foreground truncate">MOH Tender #2026-SAU-012</p>
+                                                        <div class="flex items-center gap-1 mt-0.5">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-2.5 h-2.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                            <span class="text-[10px] text-muted-foreground">Saudi Arabia</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded-md border bg-amber-50 text-amber-600 border-amber-100">31d</span>
+                                            </div>
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock w-3 h-3 text-muted-foreground shrink-0"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[11px] font-medium text-foreground truncate">UAE Health Authority Q3</p>
+                                                        <div class="flex items-center gap-1 mt-0.5">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-2.5 h-2.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                            <span class="text-[10px] text-muted-foreground">UAE</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded-md border bg-amber-50 text-amber-600 border-amber-100">47d</span>
+                                            </div>
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock w-3 h-3 text-muted-foreground shrink-0"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[11px] font-medium text-foreground truncate">Egypt MOH Pharmaceutical Bid</p>
+                                                        <div class="flex items-center gap-1 mt-0.5">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-2.5 h-2.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                            <span class="text-[10px] text-muted-foreground">Egypt</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded-md border bg-red-50 text-red-600 border-red-100">8d</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Company History -->
+                                <div class="bg-white rounded-2xl border border-border/50 shadow-sm hover:shadow-md hover:border-rose-200 transition-all duration-300 flex flex-col" style="opacity: 1; transform: none;">
+                                    <div class="p-6 flex-1 flex flex-col">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center shadow-md shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy w-5 h-5 text-white">
+                                                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                                                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                                                        <path d="M4 22h16"></path>
+                                                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                                                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                                                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <h3 class="font-bold text-foreground text-sm">Company History</h3>
+                                                    <p class="text-[11px] text-muted-foreground mt-0.5">Inline input</p>
+                                                </div>
+                                            </div>
+                                            <button class="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary transition-colors">
+                                                View all <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3 h-3"><path d="m9 18 6-6-6-6"></path></svg>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground mb-3 leading-relaxed">Company's own participation records: tender name, drug, date, outcome, price submitted.</p>
+                                        <div class="flex flex-wrap gap-1.5 mb-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-violet-50 text-violet-600 border-violet-100">Human Input</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-violet-50 text-violet-600 border-violet-100">Reference Only</span>
+                                        </div>
+                                        <div class="space-y-2 mb-4">
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <input id="historyTenderNameInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Tender name *" value="">
+                                                <input id="historyDrugInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Drug / product *" value="">
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <input id="historyCountryInput" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Country *" value="">
+                                                <input id="historyDateInput" type="text" class="datePicker file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Select Date *" value="">
+                                            </div>
+                                            <input id="historyPriceInput" type="number" data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-8 text-xs rounded-lg border-border/50 bg-slate-50/60 focus:bg-white" placeholder="Submitted price ($) *" value="">
+                                            <div class="flex gap-2">
+                                                <button id="historyWonBtn" class="flex-1 h-8 rounded-lg text-xs font-semibold border transition-all bg-emerald-500 text-white border-emerald-500">Won</button>
+                                                <button id="historyLostBtn" class="flex-1 h-8 rounded-lg text-xs font-semibold border transition-all bg-slate-50 text-muted-foreground border-border/50 hover:border-primary/30">Lost</button>
+                                            </div>
+                                            <div class="flex gap-2 pt-1">
+                                                <button id="addRecordBtn" data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-primary/90 px-4 py-2 has-[&gt;svg]:px-3 flex-1 h-8 text-xs bg-gradient-to-r from-rose-500 to-pink-600 text-white border-0 rounded-lg" disabled>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-3 h-3 mr-1"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Add Record
+                                                </button>
+                                                <button data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 px-4 py-2 has-[&gt;svg]:px-3 flex-1 h-8 text-xs rounded-lg border-border/50 text-muted-foreground hover:text-foreground">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-3 h-3 mr-1"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>Full Page
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="border-t border-border/30 pt-3 space-y-2">
+                                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Recent History</p>
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <div class="w-2 h-2 rounded-full shrink-0 bg-emerald-500"></div>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[11px] font-medium text-foreground truncate">Paracetamol 500mg</p>
+                                                        <p class="text-[10px] text-muted-foreground truncate">MOH #2026-SAU-010</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1.5 shrink-0">
+                                                    <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md border bg-emerald-50 text-emerald-600 border-emerald-100">Won</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <div class="w-2 h-2 rounded-full shrink-0 bg-red-400"></div>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[11px] font-medium text-foreground truncate">Amoxicillin 250mg</p>
+                                                        <p class="text-[10px] text-muted-foreground truncate">UAE Q2 Tender</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1.5 shrink-0">
+                                                    <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md border bg-red-50 text-red-500 border-red-100">Lost</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <div class="w-2 h-2 rounded-full shrink-0 bg-emerald-500"></div>
+                                                    <div class="min-w-0">
+                                                        <p class="text-[11px] font-medium text-foreground truncate">Ibuprofen 400mg</p>
+                                                        <p class="text-[10px] text-muted-foreground truncate">Egypt MOH Bid</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1.5 shrink-0">
+                                                    <span class="text-[9px] font-semibold px-1.5 py-0.5 rounded-md border bg-emerald-50 text-emerald-600 border-emerald-100">Won</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Standardization Module -->
+                                <div class="bg-white rounded-2xl border border-border/50 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 flex flex-col" style="opacity: 1; transform: none;">
+                                    <div class="p-6 flex-1 flex flex-col">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex items-start gap-3">
+                                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md shrink-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-merge w-5 h-5 text-white">
+                                                        <circle cx="18" cy="18" r="3"></circle>
+                                                        <circle cx="6" cy="6" r="3"></circle>
+                                                        <path d="M6 21V9a9 9 0 0 0 9 9"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <h3 class="font-bold text-foreground text-sm">Standardization Module</h3>
+                                                    <p class="text-[11px] text-muted-foreground mt-0.5">Data cleaning pipeline</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground mb-3 leading-relaxed">Drug name mapping/aliases, company name normalization tables. Cleans and deduplicates training data before model ingestion.</p>
+                                        <div class="flex flex-wrap gap-1.5 mb-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-emerald-50 text-emerald-600 border-emerald-100">Data Quality</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border bg-emerald-50 text-emerald-600 border-emerald-100">Preprocessing</span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-2.5">Preprocessing Pipeline</p>
+                                            <div class="flex items-center gap-1 overflow-x-auto pb-1">
+                                                <div class="flex items-center gap-1 shrink-0">
+                                                    <div class="flex flex-col items-center gap-1">
+                                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database w-3.5 h-3.5 text-slate-500"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+                                                        </div>
+                                                        <p class="text-[8px] font-semibold text-muted-foreground text-center leading-tight max-w-[36px]">Raw Data</p>
+                                                    </div>
+                                                    <div class="flex items-center pb-3">
+                                                        <div class="w-4 h-px bg-border/60"></div>
+                                                        <div class="w-1 h-1 rounded-full bg-border/60"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1 shrink-0">
+                                                    <div class="flex flex-col items-center gap-1">
+                                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield w-3.5 h-3.5 text-slate-500"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+                                                        </div>
+                                                        <p class="text-[8px] font-semibold text-muted-foreground text-center leading-tight max-w-[36px]">Validation</p>
+                                                    </div>
+                                                    <div class="flex items-center pb-3">
+                                                        <div class="w-4 h-px bg-border/60"></div>
+                                                        <div class="w-1 h-1 rounded-full bg-border/60"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1 shrink-0">
+                                                    <div class="flex flex-col items-center gap-1">
+                                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-merge w-3.5 h-3.5 text-slate-500"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M6 21V9a9 9 0 0 0 9 9"></path></svg>
+                                                        </div>
+                                                        <p class="text-[8px] font-semibold text-muted-foreground text-center leading-tight max-w-[36px]">Deduplication</p>
+                                                    </div>
+                                                    <div class="flex items-center pb-3">
+                                                        <div class="w-4 h-px bg-border/60"></div>
+                                                        <div class="w-1 h-1 rounded-full bg-border/60"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1 shrink-0">
+                                                    <div class="flex flex-col items-center gap-1">
+                                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-slate-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw w-3.5 h-3.5 text-slate-500"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+                                                        </div>
+                                                        <p class="text-[8px] font-semibold text-muted-foreground text-center leading-tight max-w-[36px]">Normalization</p>
+                                                    </div>
+                                                    <div class="flex items-center pb-3">
+                                                        <div class="w-4 h-px bg-border/60"></div>
+                                                        <div class="w-1 h-1 rounded-full bg-border/60"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1 shrink-0">
+                                                    <div class="flex flex-col items-center gap-1">
+                                                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br from-primary to-secondary shadow-sm">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles w-3.5 h-3.5 text-white"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+                                                        </div>
+                                                        <p class="text-[8px] font-semibold text-muted-foreground text-center leading-tight max-w-[36px]">AI Ready</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-2">Alias Mapping Examples</p>
+                                            <div class="space-y-1.5 rounded-xl border border-border/40 overflow-hidden">
+                                                <div class="flex items-center gap-2 px-3 py-2 text-[10px] ">
+                                                    <span class="text-muted-foreground bg-red-50 border border-red-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">Paracetamol 500</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-3 h-3 text-muted-foreground/40 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                    <span class="text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">Paracetamol 500mg</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 px-3 py-2 text-[10px] border-t border-border/30">
+                                                    <span class="text-muted-foreground bg-red-50 border border-red-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">PCM 500mg</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-3 h-3 text-muted-foreground/40 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                    <span class="text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">Paracetamol 500mg</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 px-3 py-2 text-[10px] border-t border-border/30">
+                                                    <span class="text-muted-foreground bg-red-50 border border-red-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">PharmaCorp Int.</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-3 h-3 text-muted-foreground/40 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                    <span class="text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">PharmaCorp International</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 px-3 py-2 text-[10px] border-t border-border/30">
+                                                    <span class="text-muted-foreground bg-red-50 border border-red-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">KSA</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-3 h-3 text-muted-foreground/40 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                    <span class="text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded font-mono min-w-0 truncate flex-1">Saudi Arabia</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 grid grid-cols-3 gap-2">
+                                            <div class="text-center p-2 rounded-xl bg-slate-50 border border-border/30">
+                                                <p class="text-sm font-bold text-foreground">142</p>
+                                                <p class="text-[9px] text-muted-foreground leading-tight mt-0.5">Drug aliases</p>
+                                            </div>
+                                            <div class="text-center p-2 rounded-xl bg-slate-50 border border-border/30">
+                                                <p class="text-sm font-bold text-foreground">38</p>
+                                                <p class="text-[9px] text-muted-foreground leading-tight mt-0.5">Company aliases</p>
+                                            </div>
+                                            <div class="text-center p-2 rounded-xl bg-slate-50 border border-border/30">
+                                                <p class="text-sm font-bold text-foreground">17</p>
+                                                <p class="text-[9px] text-muted-foreground leading-tight mt-0.5">Duplicates found</p>
+                                            </div>
+                                        </div>
+                                        <button class="mt-3 flex items-center justify-center gap-1.5 w-full h-8 rounded-xl border border-border/50 text-xs text-muted-foreground hover:text-foreground hover:border-emerald-300 hover:bg-emerald-50/40 transition-all duration-200">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap w-3.5 h-3.5"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                                            Manage Standardization Rules
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3 h-3"><path d="m9 18 6-6-6-6"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stats Grid (Initially Hidden) -->
+                            <section id="uploadStats" class="grid grid-cols-1 md:grid-cols-3 gap-4 stats-section-hidden mt-6" style="width: 100%;">
+                                <article class="p-4 rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/10 border">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-spreadsheet w-4 h-4 text-primary"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M8 13h2"></path><path d="M14 13h2"></path><path d="M8 17h2"></path><path d="M14 17h2"></path></svg>
+                                        <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Total Records</p>
+                                    </div>
+                                    <p class="text-2xl font-bold text-foreground">4</p>
+                                </article>
+                                <article class="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border-emerald-200/40 border">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-4 h-4 text-emerald-500"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                                        <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Valid Records</p>
+                                    </div>
+                                    <p class="text-2xl font-bold text-foreground">3</p>
+                                </article>
+                                <article class="p-4 rounded-2xl bg-gradient-to-br from-red-500/5 to-rose-500/5 border-red-200/40 border">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x w-4 h-4 text-red-500"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+                                        <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Error Records</p>
+                                    </div>
+                                    <p class="text-2xl font-bold text-foreground">1</p>
+                                </article>
+                            </section>
+
+                            <!-- Data Preview Section (Initially Hidden) -->
+                            <section id="previewSection" class="preview-section-hidden mt-6">
+                                <article class="upload-card">
+                                    <header class="card-header-padding">
+                                        <h4 class="preview-title">Data Preview</h4>
+                                        <p class="preview-subtitle">Review data before saving - invalid records will be skipped</p>
+                                    </header>
+                                    <div class="upload-card-content no-pt">
+                                        <div class="table-outer">
+                                            <div class="table-container-scroll">
+                                                <table class="data-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Status</th>
+                                                            <th>Drug Name</th>
+                                                            <th>Country</th>
+                                                            <th>Company</th>
+                                                            <th>Price</th>
+                                                            <th>Quantity</th>
+                                                            <th>Year</th>
+                                                            <th>Awarded Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check icon-xs text-success"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg></td>
+                                                            <td>Paracetamol 500mg</td>
+                                                            <td>Saudi Arabia</td>
+                                                            <td>PharmaCorp</td>
+                                                            <td>$425</td>
+                                                            <td>1000</td>
+                                                            <td>2025</td>
+                                                            <td>$420</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check icon-xs text-success"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg></td>
+                                                            <td>Amoxicillin 250mg</td>
+                                                            <td>UAE</td>
+                                                            <td>HealthMed Inc</td>
+                                                            <td>$380</td>
+                                                            <td>500</td>
+                                                            <td>2025</td>
+                                                            <td>$375</td>
+                                                        </tr>
+                                                        <tr class="row-error">
+                                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert icon-xs text-destructive"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg></td>
+                                                            <td>Ibuprofen 400mg</td>
+                                                            <td><span class="text-destructive">Missing</span></td>
+                                                            <td>MediCure Ltd</td>
+                                                            <td>$350</td>
+                                                            <td>800</td>
+                                                            <td>2025</td>
+                                                            <td><span class="text-destructive">Missing</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check icon-xs text-success"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg></td>
+                                                            <td>Omeprazole 20mg</td>
+                                                            <td>Iraq</td>
+                                                            <td>WellPharma</td>
+                                                            <td>$495</td>
+                                                            <td>600</td>
+                                                            <td>2025</td>
+                                                            <td>$490</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <footer class="preview-footer">
+                                            <div class="footer-alert">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert icon-xs"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+                                                <span>1 record(s) with missing data will be removed</span>
+                                            </div>
+                                            <div class="footer-actions">
+                                                <button class="btn-outline">Cancel</button>
+                                                <button class="btn-primary">Save Data (3 records)</button>
+                                            </div>
+                                        </footer>
+                                    </div>
+                                </article>
+                            </section>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/upload.js" defer></script>
+    
+</body>
+</html>
+

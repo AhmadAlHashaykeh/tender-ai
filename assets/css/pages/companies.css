@@ -1,0 +1,387 @@
+/* Company Intelligence View */
+.companies-view {
+    padding: 2rem;
+}
+
+.view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.count-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: linear-gradient(to right, rgba(var(--primary-rgb), 0.1), rgba(var(--secondary-rgb), 0.1));
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+}
+
+.count-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.filter-grid-alt {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .filter-grid-alt {
+        grid-template-columns: 1fr;
+    }
+}
+
+.search-wrapper-large {
+    position: relative;
+}
+
+.input-pill-large, .select-pill-large {
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(0,0,0,0.085);
+    background-color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+    transition: var(--transition);
+    outline: none;
+}
+
+.input-pill-large {
+    padding-left: 2.75rem;
+}
+
+.input-pill-large:focus, .select-pill-large:focus {
+    background-color: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Company Cards */
+.company-list-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.company-card {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(0,0,0,0.085);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.company-card:hover {
+    border-color: rgba(var(--primary-rgb), 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.company-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.company-main-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.company-logo-gradient {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(var(--primary-rgb), 0.3);
+}
+
+.company-logo-gradient svg {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.company-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+.company-card:hover .company-name {
+    color: var(--primary);
+}
+
+.company-meta {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    margin: 0.25rem 0 0;
+}
+
+.company-arrow {
+    color: var(--muted-foreground);
+    transition: all 0.3s ease;
+}
+
+.company-card:hover .company-arrow {
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.company-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .company-stats-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-header svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.stat-label-tiny {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-foreground);
+}
+
+.stat-value-large {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.company-footer-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(var(--border-rgb), 0.3);
+}
+
+.footer-label {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.5rem;
+}
+
+.badge-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.badge-ghost {
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.5rem;
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--foreground);
+}
+
+.badge-brand {
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.5rem;
+    background-color: rgba(var(--primary-rgb), 0.1);
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.icon-tiny {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.company-card:nth-child(1) { animation-delay: 0.1s; }
+.company-card:nth-child(2) { animation-delay: 0.2s; }
+.company-card:nth-child(3) { animation-delay: 0.3s; }
+.company-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Company Detail View */
+.company-detail-view {
+    padding: 1.5rem;
+}
+
+.detail-header {
+    margin-bottom: 2rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    background-color: transparent;
+    color: var(--foreground);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+    margin-bottom: 1.5rem;
+}
+
+.back-btn:hover {
+    background-color: white;
+    box-shadow: var(--shadow-sm);
+    transform: translateX(-4px);
+}
+
+.detail-title-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.company-logo-large {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1.25rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 10px 20px -5px rgba(var(--primary-rgb), 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.company-logo-large::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top right, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.company-logo-large svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.detail-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.025em;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.detail-subtitle {
+    color: var(--muted-foreground);
+    margin: 0.25rem 0 0;
+    font-size: 1rem;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background-color: white;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: var(--transition);
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(var(--primary-rgb), 0.2);
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.metric-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.075em;
+    font-weight: 700;
+    color: var(--muted-foreground);
+}
+
+.metric-icon-small {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--foreground);
+}

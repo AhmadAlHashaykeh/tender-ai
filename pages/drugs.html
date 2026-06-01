@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Intelligence | TenderAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .recharts-rectangle {
+            transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), y 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), d 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div class="app-layout">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-decor-top float-decoration"></div>
+                <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
+
+                <header class="sidebar-header">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <div class="logo-shine"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap logo-icon"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="brand-name">TenderAI</h1>
+                            <p class="brand-tagline">Pricing Intelligence</p>
+                        </div>
+                    </div>
+                </header>
+
+                <nav class="sidebar-nav custom-scrollbar">
+                    <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="upload.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                        <span class="nav-label">Upload Data</span>
+                    </a>
+                    <a class="nav-link" href="management.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                        <span class="nav-label">Data Management</span>
+                    </a>
+                    <a class="nav-link" href="companies.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                        <span class="nav-label">Companies</span>
+                    </a>
+                    <a class="nav-link" href="tenders.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                        <span class="nav-label">Tenders</span>
+                    </a>
+                    <a class="nav-link active" href="drugs.html" aria-current="page">
+                        <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                        <span class="nav-label">Drugs</span>
+                    </a>
+                    <a class="nav-link" href="drug-standardization.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                        <span class="nav-label">Standardization</span>
+                    </a>
+                    <a class="nav-link ai-link" href="ai-recommendations.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                        <span class="nav-label">AI Recommendation</span>
+                    </a>
+                    <a class="nav-link" href="prediction-history.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                        <span class="nav-label">Prediction History</span>
+                    </a>
+                    <a class="nav-link" href="reports.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                    <a class="nav-link" href="settings.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </nav>
+
+                <footer class="sidebar-footer">
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-container">
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="user" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="settings" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Settings</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout" href="../index.html">
+                                <i data-lucide="log-out" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="profileBtn" class="user-profile-btn">
+                        <div class="user-avatar">
+                            <div class="avatar-shine"></div>
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-name">John Doe</p>
+                            <p class="user-role">System Admin</p>
+                        </div>
+                        <i data-lucide="chevron-up" class="chevron-up"></i>
+                    </button>
+                </footer>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="main-content">
+                <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                    <div class="header-inner">
+                        <div class="header-left">
+                            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+                            </button>
+                            <div class="search-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search search-icon-header"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                                <input type="text" class="search-input" placeholder="Search tenders, drugs, reports...">
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <a href="ai-recommendations.html" class="no-underline">
+                                <button class="btn-ai">
+                                    <i data-lucide="sparkles" class="icon-xs"></i>
+                                    New AI Prediction
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- COMPONENT: Page Content -->
+                <main class="p-6 min-h-screen">
+                    <div style="opacity: 1; transform: none;">
+                        <div class="space-y-8 max-w-7xl mx-auto">
+                            <div class="flex items-start justify-between" style="opacity: 1; transform: none;">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-5 h-5 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                        </div>
+                                        <h1 class="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Drug Pricing Intelligence</h1>
+                                    </div>
+                                    <p class="text-muted-foreground ml-0.5">Country-specific awarded pricing and procurement analytics</p>
+                                </div>
+                                <div class="px-4 py-2.5 rounded-xl bg-gradient-to-br from-primary/8 to-secondary/8 border border-primary/15">
+                                    <p class="text-sm font-semibold text-primary" id="drug-count-badge">6 <span class="font-normal text-muted-foreground">products</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-5 space-y-4" style="opacity: 1; transform: none;">
+                                <div class="relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                                    <input data-slot="input" id="drug-search" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 text-base transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] pl-10 h-11 rounded-xl border-border/50 bg-white/70" placeholder="Search by drug name, INN, or code..." value="">
+                                </div>
+                                <div class="h-px bg-border/40"></div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-2 flex-wrap" id="market-filter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-earth w-4 h-4 text-muted-foreground shrink-0"><path d="M21.54 15H17a2 2 0 0 0-2 2v4.54"></path><path d="M7 3.34V5a3 3 0 0 0 3 3a2 2 0 0 1 2 2c0 1.1.9 2 2 2a2 2 0 0 0 2-2c0-1.1.9-2 2-2h3.17"></path><path d="M11 21.95V18a2 2 0 0 0-2-2a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2H2.05"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-sm" data-value="all">All Markets</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Saudi Arabia">Saudi Arabia</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="UAE">UAE</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Egypt">Egypt</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Iraq">Iraq</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Jordan">Jordan</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Kuwait">Kuwait</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Oman">Oman</button>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-wrap" id="category-filter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-4 h-4 text-muted-foreground shrink-0"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-sm" data-value="all">All Categories</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Analgesics">Analgesics</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Antibiotics">Antibiotics</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Gastrology">Gastrology</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Cardiology">Cardiology</button>
+                                        <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-value="Endocrinology">Endocrinology</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-5 relative shadow-sm" style="opacity: 1; transform: none;">
+                                <div class="flex items-start justify-between mb-5">
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-column w-4 h-4 text-primary"><line x1="18" x2="18" y1="20" y2="10"></line><line x1="12" x2="12" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="14"></line></svg>
+                                            <h3 class="font-semibold text-foreground">Price Distribution Across All Drugs</h3>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground">Number of drugs by awarded price range</p>
+                                    </div>
+                                </div>
+                                <div class="recharts-responsive-container" style="width: 100%; height: 180px; min-width: 0px; position: relative;">
+                                    <div class="recharts-wrapper" style="position: relative; cursor: default; width: 100%; height: 100%; max-height: 180px; max-width: 757px; margin: 0 auto;">
+                                        <svg class="recharts-surface" width="100%" height="180" viewBox="0 0 757 180" preserveAspectRatio="xMidYMid meet">
+                                            <defs>
+                                                <clipPath id="recharts-clip">
+                                                    <rect x="29" y="5" height="140" width="723"></rect>
+                                                </clipPath>
+                                            </defs>
+                                            <g class="recharts-cartesian-grid">
+                                                <g class="recharts-cartesian-grid-horizontal">
+                                                    <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="29" y1="145" x2="752" y2="145"></line>
+                                                    <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="29" y1="110" x2="752" y2="110"></line>
+                                                    <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="29" y1="75" x2="752" y2="75"></line>
+                                                    <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="29" y1="40" x2="752" y2="40"></line>
+                                                    <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="29" y1="5" x2="752" y2="5"></line>
+                                                </g>
+                                            </g>
+                                            <g class="recharts-layer recharts-cartesian-axis recharts-xAxis xAxis">
+                                                <g class="recharts-cartesian-axis-ticks">
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                        <text orientation="bottom" stroke="none" font-size="11" x="101.3" y="153" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="101.3" dy="0.71em">&lt;$5</tspan></text>
+                                                    </g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                        <text orientation="bottom" stroke="none" font-size="11" x="245.9" y="153" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="245.9" dy="0.71em">$5–$10</tspan></text>
+                                                    </g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                        <text orientation="bottom" stroke="none" font-size="11" x="390.5" y="153" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="390.5" dy="0.71em">$10–$20</tspan></text>
+                                                    </g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                        <text orientation="bottom" stroke="none" font-size="11" x="535.1" y="153" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="535.1" dy="0.71em">$20–$50</tspan></text>
+                                                    </g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                        <text orientation="bottom" stroke="none" font-size="11" x="679.7" y="153" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="middle" fill="#64748B"><tspan x="679.7" dy="0.71em">&gt;$50</tspan></text>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                            <g class="recharts-layer recharts-cartesian-axis recharts-yAxis yAxis">
+                                                <g class="recharts-cartesian-axis-ticks">
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" stroke="none" font-size="11" x="21" y="145" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="21" dy="0.355em">0</tspan></text></g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" stroke="none" font-size="11" x="21" y="110" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="21" dy="0.355em">1</tspan></text></g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" stroke="none" font-size="11" x="21" y="75" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="21" dy="0.355em">2</tspan></text></g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" stroke="none" font-size="11" x="21" y="40" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="21" dy="0.355em">3</tspan></text></g>
+                                                    <g class="recharts-layer recharts-cartesian-axis-tick"><text orientation="left" stroke="none" font-size="11" x="21" y="8.25" class="recharts-text recharts-cartesian-axis-tick-value" text-anchor="end" fill="#64748B"><tspan x="21" dy="0.355em">4</tspan></text></g>
+                                                </g>
+                                            </g>
+                                            
+                                            <!-- Columns background highlight tracker -->
+                                            <rect id="chart-hover-bg" fill="#0D85E6" fill-opacity="0.05" x="0" y="5" width="144.6" height="140" class="hidden pointer-events-none transition-all duration-150"></rect>
+
+                                            <g class="recharts-layer recharts-bar">
+                                                <g class="recharts-layer recharts-bar-rectangles">
+                                                    <g class="recharts-layer">
+                                                        <!-- Bar 1 -->
+                                                        <g class="recharts-layer recharts-bar-rectangle">
+                                                            <path id="bar-rect-0" x="77" y="145" width="48" height="0" rx="6" ry="6" fill="#0D85E6" fill-opacity="0.75" class="recharts-rectangle transition-all duration-500 ease-out" d="M77,145 L 125,145 L 125,145 L 77,145Z" data-height="35" data-y="110"></path>
+                                                        </g>
+                                                        <!-- Bar 2 -->
+                                                        <g class="recharts-layer recharts-bar-rectangle">
+                                                            <path id="bar-rect-1" x="221.6" y="145" width="48" height="0" rx="6" ry="6" fill="#0D85E6" fill-opacity="0.75" class="recharts-rectangle transition-all duration-500 ease-out" d="M221.6,145 L 269.6,145 L 269.6,145 L 221.6,145Z" data-height="105" data-y="40"></path>
+                                                        </g>
+                                                        <!-- Bar 3 -->
+                                                        <g class="recharts-layer recharts-bar-rectangle">
+                                                            <path id="bar-rect-2" x="366.2" y="145" width="48" height="0" rx="6" ry="6" fill="#0D85E6" fill-opacity="0.75" class="recharts-rectangle transition-all duration-500 ease-out" d="M366.2,145 L 414.2,145 L 414.2,145 L 366.2,145Z" data-height="35" data-y="110"></path>
+                                                        </g>
+                                                        <!-- Bar 4 -->
+                                                        <g class="recharts-layer recharts-bar-rectangle">
+                                                            <path id="bar-rect-3" x="510.8" y="145" width="48" height="0" rx="6" ry="6" fill="#0D85E6" fill-opacity="0.75" class="recharts-rectangle transition-all duration-500 ease-out" d="M510.8,145 L 558.8,145 L 558.8,145 L 510.8,145Z" data-height="35" data-y="110"></path>
+                                                        </g>
+                                                        <!-- Bar 5 -->
+                                                        <g class="recharts-layer recharts-bar-rectangle">
+                                                            <path id="bar-rect-4" x="655.4" y="145" width="48" height="0" rx="6" ry="6" fill="#0D85E6" fill-opacity="0.75" class="recharts-rectangle transition-all duration-500 ease-out" d="M655.4,145 L 703.4,145 L 703.4,145 L 655.4,145Z" data-height="0" data-y="145"></path>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                            
+                                            <!-- Hover Zones (Hit areas) -->
+                                            <g>
+                                                <rect x="29" y="5" width="144.6" height="140" fill="transparent" class="cursor-pointer chart-hit-area" data-index="0"></rect>
+                                                <rect x="173.6" y="5" width="144.6" height="140" fill="transparent" class="cursor-pointer chart-hit-area" data-index="1"></rect>
+                                                <rect x="318.2" y="5" width="144.6" height="140" fill="transparent" class="cursor-pointer chart-hit-area" data-index="2"></rect>
+                                                <rect x="462.8" y="5" width="144.6" height="140" fill="transparent" class="cursor-pointer chart-hit-area" data-index="3"></rect>
+                                                <rect x="607.4" y="5" width="144.6" height="140" fill="transparent" class="cursor-pointer chart-hit-area" data-index="4"></rect>
+                                            </g>
+                                        </svg>
+                                        
+                                        <!-- Tooltip Overlay -->
+                                        <div id="chart-tooltip" class="absolute pointer-events-none bg-white border border-slate-100 rounded-xl shadow-xl p-3 text-xs hidden transition-all duration-150 z-50 min-w-[150px]">
+                                            <p id="tooltip-title" class="font-bold text-slate-800 mb-1"></p>
+                                            <p id="tooltip-count" class="font-semibold text-primary mb-0.5"></p>
+                                            <p id="tooltip-list" class="text-[10px] text-slate-400 font-medium"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Drug Cards Grid -->
+                            <div class="space-y-4" id="drugs-list">
+                                <!-- Card 1 (Paracetamol) -->
+                                <div class="drug-card-item" data-name="Paracetamol 500mg Tablet" data-inn="Paracetamol" data-code="PAR-500" data-category="Analgesics" data-markets="Saudi Arabia,UAE,Egypt,Iraq" data-value="18600000">
+                                    <a href="drug-details.html" data-discover="true">
+                                        <div class="group bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex items-start justify-between mb-5">
+                                                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-6 h-6 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-1">Paracetamol 500mg Tablet</h3>
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">Analgesics</span>
+                                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-[10px] font-semibold text-muted-foreground text-xs">PAR-500</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 mt-1 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                </div>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign w-3.5 h-3.5 text-primary/60"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Avg Price</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">$4.00</p>
+                                                        <p class="text-[10px] text-muted-foreground">per unit</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-3.5 h-3.5 text-emerald-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Price Range</span>
+                                                        </div>
+                                                        <p class="text-sm font-bold text-foreground">$2.90 – $5.80</p>
+                                                        <p class="text-[10px] text-muted-foreground">min / max awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-violet-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3.5 h-3.5 text-violet-500"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Total Qty</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">4.7M</p>
+                                                        <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-3.5 h-3.5 text-amber-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Tenders</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">26</p>
+                                                        <p class="text-[10px] text-muted-foreground">award records</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/30">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Saudi Arabia</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">UAE</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Egypt</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Iraq</span>
+                                                        <span class="text-xs text-muted-foreground">+1</span>
+                                                    </div>
+                                                    <span class="text-xs text-muted-foreground font-medium">$18.6M total value</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- Card 2 (Amoxicillin) -->
+                                <div class="drug-card-item" data-name="Amoxicillin 250mg Capsule" data-inn="Amoxicillin" data-code="AMX-250" data-category="Antibiotics" data-markets="Saudi Arabia,UAE,Egypt,Jordan" data-value="10400000">
+                                    <a href="drug-details.html" data-discover="true">
+                                        <div class="group bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex items-start justify-between mb-5">
+                                                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-6 h-6 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-1">Amoxicillin 250mg Capsule</h3>
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-blue-50 text-blue-700 border-blue-200">Antibiotics</span>
+                                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-[10px] font-semibold text-muted-foreground text-xs">AMX-250</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 mt-1 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                </div>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign w-3.5 h-3.5 text-primary/60"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Avg Price</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">$8.00</p>
+                                                        <p class="text-[10px] text-muted-foreground">per unit</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-3.5 h-3.5 text-emerald-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Price Range</span>
+                                                        </div>
+                                                        <p class="text-sm font-bold text-foreground">$6.20 – $10.80</p>
+                                                        <p class="text-[10px] text-muted-foreground">min / max awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-violet-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3.5 h-3.5 text-violet-500"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Total Qty</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">1.3M</p>
+                                                        <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-3.5 h-3.5 text-amber-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Tenders</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">18</p>
+                                                        <p class="text-[10px] text-muted-foreground">award records</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/30">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Saudi Arabia</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">UAE</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Egypt</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Jordan</span>
+                                                    </div>
+                                                    <span class="text-xs text-muted-foreground font-medium">$10.4M total value</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- Card 3 (Ibuprofen) -->
+                                <div class="drug-card-item" data-name="Ibuprofen 400mg Tablet" data-inn="Ibuprofen" data-code="IBU-400" data-category="Analgesics" data-markets="Saudi Arabia,UAE,Egypt,Iraq" data-value="11500000">
+                                    <a href="drug-details.html" data-discover="true">
+                                        <div class="group bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex items-start justify-between mb-5">
+                                                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-6 h-6 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-1">Ibuprofen 400mg Tablet</h3>
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">Analgesics</span>
+                                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-[10px] font-semibold text-muted-foreground text-xs">IBU-400</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 mt-1 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                </div>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign w-3.5 h-3.5 text-primary/60"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Avg Price</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">$5.00</p>
+                                                        <p class="text-[10px] text-muted-foreground">per unit</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-3.5 h-3.5 text-emerald-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Price Range</span>
+                                                        </div>
+                                                        <p class="text-sm font-bold text-foreground">$4.00 – $7.00</p>
+                                                        <p class="text-[10px] text-muted-foreground">min / max awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-violet-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3.5 h-3.5 text-violet-500"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Total Qty</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">2.3M</p>
+                                                        <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-3.5 h-3.5 text-amber-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Tenders</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">18</p>
+                                                        <p class="text-[10px] text-muted-foreground">award records</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/30">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Saudi Arabia</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">UAE</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Egypt</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Iraq</span>
+                                                    </div>
+                                                    <span class="text-xs text-muted-foreground font-medium">$11.5M total value</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- Card 4 (Omeprazole) -->
+                                <div class="drug-card-item" data-name="Omeprazole 20mg Capsule" data-inn="Omeprazole" data-code="OME-20" data-category="Gastrology" data-markets="Saudi Arabia,UAE,Kuwait,Oman" data-value="9300000">
+                                    <a href="drug-details.html" data-discover="true">
+                                        <div class="group bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex items-start justify-between mb-5">
+                                                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-6 h-6 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-1">Omeprazole 20mg Capsule</h3>
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-teal-50 text-teal-700 border-teal-200">Gastrology</span>
+                                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-[10px] font-semibold text-muted-foreground text-xs">OME-20</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 mt-1 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                </div>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign w-3.5 h-3.5 text-primary/60"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Avg Price</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">$8.30</p>
+                                                        <p class="text-[10px] text-muted-foreground">per unit</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-3.5 h-3.5 text-emerald-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Price Range</span>
+                                                        </div>
+                                                        <p class="text-sm font-bold text-foreground">$7.10 – $10.10</p>
+                                                        <p class="text-[10px] text-muted-foreground">min / max awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-violet-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3.5 h-3.5 text-violet-500"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Total Qty</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">1.1M</p>
+                                                        <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-3.5 h-3.5 text-amber-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Tenders</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">17</p>
+                                                        <p class="text-[10px] text-muted-foreground">award records</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/30">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Saudi Arabia</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">UAE</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Kuwait</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Oman</span>
+                                                        <span class="text-xs text-muted-foreground">+1</span>
+                                                    </div>
+                                                    <span class="text-xs text-muted-foreground font-medium">$9.3M total value</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- Card 5 (Atorvastatin) -->
+                                <div class="drug-card-item" data-name="Atorvastatin 20mg Tablet" data-inn="Atorvastatin" data-code="ATR-20" data-category="Cardiology" data-markets="Saudi Arabia,UAE,Jordan,Egypt" data-value="7000000">
+                                    <a href="drug-details.html" data-discover="true">
+                                        <div class="group bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex items-start justify-between mb-5">
+                                                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-6 h-6 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-1">Atorvastatin 20mg Tablet</h3>
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-rose-50 text-rose-700 border-rose-200">Cardiology</span>
+                                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-[10px] font-semibold text-muted-foreground text-xs">ATR-20</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 mt-1 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                </div>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign w-3.5 h-3.5 text-primary/60"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Avg Price</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">$10.75</p>
+                                                        <p class="text-[10px] text-muted-foreground">per unit</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-3.5 h-3.5 text-emerald-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Price Range</span>
+                                                        </div>
+                                                        <p class="text-sm font-bold text-foreground">$7.60 – $14.60</p>
+                                                        <p class="text-[10px] text-muted-foreground">min / max awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-violet-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3.5 h-3.5 text-violet-500"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Total Qty</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">650K</p>
+                                                        <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-3.5 h-3.5 text-amber-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Tenders</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">14</p>
+                                                        <p class="text-[10px] text-muted-foreground">award records</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/30">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Saudi Arabia</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">UAE</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Jordan</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Egypt</span>
+                                                    </div>
+                                                    <span class="text-xs text-muted-foreground font-medium">$7.0M total value</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- Card 6 (Insulin Glargine) -->
+                                <div class="drug-card-item" data-name="Insulin Glargine 100U/mL Pen" data-inn="Insulin Glargine" data-code="INS-GLR" data-category="Endocrinology" data-markets="Saudi Arabia,UAE,Kuwait" data-value="10900000">
+                                    <a href="drug-details.html" data-discover="true">
+                                        <div class="group bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 overflow-hidden">
+                                            <div class="p-6">
+                                                <div class="flex items-start justify-between mb-5">
+                                                    <div class="flex items-start gap-4 flex-1 min-w-0">
+                                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shrink-0">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-microscope w-6 h-6 text-white"><path d="M6 18h8"></path><path d="M3 22h18"></path><path d="M14 22a7 7 0 1 0 0-14h-1"></path><path d="M9 14h2"></path><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path></svg>
+                                                        </div>
+                                                        <div class="min-w-0">
+                                                            <h3 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200 mb-1">Insulin Glargine 100U/mL Pen</h3>
+                                                            <div class="flex items-center gap-2 flex-wrap">
+                                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-orange-50 text-orange-700 border-orange-200">Endocrinology</span>
+                                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-[10px] font-semibold text-muted-foreground text-xs">INS-GLR</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 mt-1 shrink-0"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                                </div>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign w-3.5 h-3.5 text-primary/60"><line x1="12" x2="12" y1="2" y2="22"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Avg Price</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">$31.07</p>
+                                                        <p class="text-[10px] text-muted-foreground">per unit</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-3.5 h-3.5 text-emerald-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Price Range</span>
+                                                        </div>
+                                                        <p class="text-sm font-bold text-foreground">$25.00 – $38.00</p>
+                                                        <p class="text-[10px] text-muted-foreground">min / max awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border border-violet-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package w-3.5 h-3.5 text-violet-500"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Total Qty</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">350K</p>
+                                                        <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                                    </div>
+                                                    <div class="p-3 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-200/40">
+                                                        <div class="flex items-center gap-1.5 mb-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-activity w-3.5 h-3.5 text-amber-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                                                            <span class="text-[10px] text-muted-foreground font-medium uppercase tracking-wide">Tenders</span>
+                                                        </div>
+                                                        <p class="text-2xl font-bold text-foreground">12</p>
+                                                        <p class="text-[10px] text-muted-foreground">award records</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/30">
+                                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3.5 h-3.5 text-muted-foreground"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Saudi Arabia</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">UAE</span>
+                                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-medium border bg-white border-border/50 text-foreground/60">Kuwait</span>
+                                                    </div>
+                                                    <span class="text-xs text-muted-foreground font-medium">$10.9M total value</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/drugs.js" defer></script>
+    
+</body>
+</html>
+

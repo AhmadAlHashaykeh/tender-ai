@@ -1,0 +1,52 @@
+/* Tabs System */
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.tabs-list {
+    background-color: var(--muted);
+    height: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0.35rem;
+    border-radius: 0.75rem;
+    gap: 0.25rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+.tabs-trigger {
+    border: none;
+    background: transparent;
+    border-radius: 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tabs-trigger:hover {
+    color: var(--foreground);
+}
+
+.tabs-trigger.active {
+    background-color: white;
+    color: var(--foreground);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tabs-content {
+    display: none;
+}
+
+.tabs-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}

@@ -1,0 +1,744 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TenderAI Login Page — Dark AI Theme
+   Loaded exclusively on /login via @push('head-styles') → @vite(login.css)
+   All selectors are prefixed lp- to avoid cascade collisions with app.css.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Host-page overrides ─────────────────────────────────────────────────
+   auth.blade.php sets <body class="auth-page"> so these rules are safely
+   scoped and will never apply to the landing page or any other guest page.
+
+   Overrides:
+     variables.css → body { background: var(--background); display: block }
+     reset.css     → body { display: flex; flex-direction: column; background: #f8fafc }
+
+   body.auth-page specificity (0-1-1) beats plain body (0-0-1) — no !important needed.
+   ─────────────────────────────────────────────────────────────────────────── */
+body.auth-page {
+  background: #050816;
+  display: block;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── 2. Design tokens (scoped) ──────────────────────────────────────────────*/
+.lp-root {
+  --lp-blue:        #3b82f6;
+  --lp-blue-dark:   #2563eb;
+  --lp-purple:      #8b5cf6;
+  --lp-cyan:        #06b6d4;
+  --lp-bg:          #050816;
+  --lp-bg-2:        #0b1120;
+  --lp-card-bg:     rgba(13, 20, 40, 0.8);
+  --lp-input-bg:    rgba(30, 41, 59, 0.65);
+  --lp-text:        #e2e8f0;
+  --lp-muted:       #94a3b8;
+  --lp-border:      rgba(148, 163, 184, 0.14);
+  --lp-r:           0.75rem;
+}
+
+/* ── 3. Page root ────────────────────────────────────────────────────────── */
+.lp-root {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  background: linear-gradient(135deg, #050816 0%, #080f24 55%, #0a0420 100%);
+}
+
+/* ── 4. Grid overlay ─────────────────────────────────────────────────────── */
+.lp-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ── 5. Glow orbs ────────────────────────────────────────────────────────── */
+.lp-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lp-glow-1 {
+  top: -8rem;
+  left: -8rem;
+  width: 45rem;
+  height: 45rem;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
+  animation: lp-pulse 9s ease-in-out infinite;
+}
+
+.lp-glow-2 {
+  bottom: -8rem;
+  right: -6rem;
+  width: 40rem;
+  height: 40rem;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.14) 0%, transparent 70%);
+  animation: lp-pulse 9s 3.5s ease-in-out infinite;
+}
+
+.lp-glow-3 {
+  top: 50%;
+  left: 42%;
+  transform: translate(-50%, -50%);
+  width: 28rem;
+  height: 28rem;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.07) 0%, transparent 70%);
+}
+
+/* ── 6. Keyframes ────────────────────────────────────────────────────────── */
+@keyframes lp-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.55; transform: scale(1.1); }
+}
+
+@keyframes lp-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lp-right {
+  from { opacity: 0; transform: translateX(22px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes lp-spin {
+  to { transform: rotate(360deg); }
+}
+
+.lp-anim-up    { opacity: 0; animation: lp-up    0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.lp-anim-right { opacity: 0; animation: lp-right 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+.lp-d1 { animation-delay: 0.10s; }
+.lp-d2 { animation-delay: 0.22s; }
+.lp-d3 { animation-delay: 0.36s; }
+.lp-d4 { animation-delay: 0.52s; }
+
+/* ── 7. Two-column layout ────────────────────────────────────────────────── */
+.lp-layout {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .lp-layout { flex-direction: row; }
+}
+
+/* ── 8. Left panel ───────────────────────────────────────────────────────── */
+.lp-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.75rem;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .lp-panel {
+    padding: 5rem 3rem 5rem 5rem;
+    justify-content: flex-end;
+  }
+
+  /* Vertical divider line with blue gradient */
+  .lp-panel::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 12%;
+    height: 76%;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(59, 130, 246, 0.28),
+      rgba(139, 92, 246, 0.18),
+      transparent
+    );
+  }
+}
+
+.lp-panel-inner {
+  max-width: 33rem;
+  width: 100%;
+}
+
+/* ── 9. Brand ────────────────────────────────────────────────────────────── */
+.lp-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 2.75rem;
+}
+
+.lp-logo {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--lp-blue), var(--lp-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.25),
+    0 0 28px rgba(59, 130, 246, 0.4),
+    0 0 56px rgba(59, 130, 246, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.lp-logo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 60%);
+}
+
+/* reset.css svg { height:100% } — override so icon isn't stretched */
+.lp-logo svg { width: 1.75rem !important; height: 1.75rem !important; }
+
+.lp-brand-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(to right, #e2e8f0 10%, var(--lp-blue) 55%, var(--lp-purple) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lp-brand-tag {
+  font-size: 0.75rem;
+  color: var(--lp-muted);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 0.125rem;
+}
+
+/* ── 10. Headline ────────────────────────────────────────────────────────── */
+.lp-headline {
+  margin-bottom: 2.5rem;
+}
+
+.lp-headline h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.18;
+  color: var(--lp-text);
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .lp-headline h1 { font-size: 3.125rem; }
+}
+
+.lp-grad {
+  background: linear-gradient(to right, var(--lp-blue) 0%, var(--lp-purple) 55%, var(--lp-cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lp-subhead {
+  font-size: 1rem;
+  color: var(--lp-muted);
+  line-height: 1.75;
+  max-width: 28rem;
+}
+
+/* ── 11. Feature list ────────────────────────────────────────────────────── */
+.lp-feats {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.lp-feat {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(148, 163, 184, 0.09);
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  cursor: default;
+}
+
+.lp-feat:hover {
+  border-color: rgba(59, 130, 246, 0.22);
+  background: rgba(15, 23, 42, 0.7);
+  transform: translateX(5px);
+}
+
+.lp-feat-ico {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lp-feat-ico--blue {
+  background: linear-gradient(135deg, var(--lp-blue), var(--lp-blue-dark));
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+.lp-feat-ico--purple {
+  background: linear-gradient(135deg, var(--lp-purple), #6d28d9);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+
+.lp-feat-ico--cyan {
+  background: linear-gradient(135deg, var(--lp-cyan), #0284c7);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+}
+
+/* Icon size override (reset.css stretches svg to height:100%) */
+.lp-feat-ico svg { width: 1.125rem !important; height: 1.125rem !important; }
+
+.lp-feat-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--lp-text);
+  line-height: 1.3;
+  margin-bottom: 0.2rem;
+}
+
+.lp-feat-desc {
+  font-size: 0.8rem;
+  color: var(--lp-muted);
+  line-height: 1.55;
+}
+
+/* ── 12. Enterprise notice ───────────────────────────────────────────────── */
+.lp-enterprise {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--lp-muted);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.07);
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.lp-enterprise svg { width: 1rem !important; height: 1rem !important; }
+
+/* ── 13. Right column ────────────────────────────────────────────────────── */
+.lp-card-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.75rem;
+}
+
+@media (min-width: 1024px) {
+  .lp-card-col {
+    padding: 5rem 5rem 5rem 3rem;
+    justify-content: flex-start;
+  }
+}
+
+/* ── 14. Login card ──────────────────────────────────────────────────────── */
+.lp-card {
+  width: 100%;
+  max-width: 26rem;
+  background: var(--lp-card-bg);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid var(--lp-border);
+  border-radius: 1.5rem;
+  padding: 2.25rem 2rem;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.07),
+    0 32px 64px rgba(0, 0, 0, 0.5),
+    0 0 100px rgba(59, 130, 246, 0.04);
+}
+
+@media (min-width: 1024px) {
+  .lp-card { padding: 2.5rem; }
+}
+
+/* Top-edge glow line on card */
+.lp-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.65), transparent);
+  border-radius: 1px;
+}
+
+/* ── 15. Card icon ───────────────────────────────────────────────────────── */
+.lp-card-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--lp-blue), var(--lp-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.2),
+    0 0 28px rgba(59, 130, 246, 0.35),
+    0 0 56px rgba(59, 130, 246, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.lp-card-icon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 60%);
+}
+
+.lp-card-icon svg { width: 1.625rem !important; height: 1.625rem !important; }
+
+/* ── 16. Card header ─────────────────────────────────────────────────────── */
+.lp-card-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.lp-card-header h2 {
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--lp-text);
+  line-height: 1.2;
+  margin-bottom: 0.375rem;
+}
+
+.lp-card-header p {
+  font-size: 0.875rem;
+  color: var(--lp-muted);
+  line-height: 1.55;
+}
+
+/* ── 17. Alerts ──────────────────────────────────────────────────────────── */
+.lp-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--lp-r);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.lp-alert svg { width: 1rem !important; height: 1rem !important; }
+
+.lp-alert--ok {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  color: #6ee7b7;
+}
+
+.lp-alert--err {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  color: #fca5a5;
+}
+
+/* ── 18. Form fields ─────────────────────────────────────────────────────── */
+.lp-field {
+  margin-bottom: 1.125rem;
+}
+
+.lp-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+.lp-input-wrap {
+  position: relative;
+}
+
+/* Left icon slot */
+.lp-ico-l {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--lp-muted);
+  z-index: 1;
+}
+
+.lp-ico-l svg { width: 1.125rem !important; height: 1.125rem !important; color: var(--lp-muted); }
+
+/* ── The actual input ────────────────────────────────────────────────────── */
+/* reset.css: button,input { border:none }  → override with !important        */
+/* reset.css: input:focus::placeholder { scale:.85; transform:translateY() }  */
+/*   → overridden below with higher specificity                               */
+.lp-input {
+  display: block;
+  width: 100%;
+  height: 3rem;
+  padding: 0 3rem 0 2.75rem;
+  border-radius: var(--lp-r);
+  border: 1.5px solid rgba(148, 163, 184, 0.2) !important;
+  background: var(--lp-input-bg) !important;
+  color: var(--lp-text) !important;
+  font-size: 0.875rem !important;
+  font-family: 'Inter', sans-serif !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  outline: none !important;
+  caret-color: var(--lp-blue);
+}
+
+/* Override reset.css placeholder-float effect for login inputs */
+.lp-input::placeholder {
+  color: #44556a !important;
+}
+
+.lp-input:focus::placeholder {
+  transform: none !important;
+  scale: unset !important;
+  opacity: 0.5;
+}
+
+.lp-input:focus {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  background: rgba(20, 30, 55, 0.95) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12) !important;
+}
+
+.lp-input--err {
+  border-color: rgba(239, 68, 68, 0.45) !important;
+}
+
+.lp-input--err:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* ── 19. Password toggle ─────────────────────────────────────────────────── */
+/* reset.css: button { border:none } — fine, we don't need a border here      */
+.lp-pw-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none !important;
+  border: none !important;
+  color: var(--lp-muted);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  outline: none !important;
+  z-index: 2;
+}
+
+.lp-pw-toggle:hover { color: var(--lp-text); }
+
+.lp-pw-toggle:focus-visible {
+  outline: 2px solid var(--lp-blue) !important;
+  border-radius: 4px;
+}
+
+.lp-pw-toggle svg { width: 1.125rem !important; height: 1.125rem !important; }
+
+/* ── 20. Remember + Forgot row ───────────────────────────────────────────── */
+.lp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.375rem;
+}
+
+.lp-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--lp-muted);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Native checkbox styled with accent-color */
+.lp-check {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 4px;
+  accent-color: var(--lp-blue);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lp-forgot {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--lp-blue);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.lp-forgot:hover { opacity: 0.72; }
+
+/* ── 21. Submit button ───────────────────────────────────────────────────── */
+/* reset.css: button { border:none } — harmless here, we set our own          */
+.lp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: var(--lp-r);
+  border: none !important;
+  background: linear-gradient(135deg, var(--lp-blue) 0%, var(--lp-purple) 100%);
+  color: #ffffff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  outline: none !important;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.15),
+    0 8px 24px rgba(59, 130, 246, 0.28);
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Shimmer sweep on hover */
+.lp-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+
+.lp-btn:hover:not(:disabled)::before { left: 100%; }
+
+.lp-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.2),
+    0 14px 30px rgba(59, 130, 246, 0.38);
+}
+
+.lp-btn:active:not(:disabled) { transform: translateY(0); }
+
+.lp-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lp-btn-spin {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lp-btn-spin svg { width: 1.125rem !important; height: 1.125rem !important; }
+
+/* ── 22. Demo hint ───────────────────────────────────────────────────────── */
+.lp-demo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: var(--lp-r);
+  background: rgba(59, 130, 246, 0.07);
+  border: 1px dashed rgba(59, 130, 246, 0.2);
+  font-size: 0.8rem;
+  color: var(--lp-muted);
+  margin-bottom: 1rem;
+  line-height: 1.45;
+}
+
+.lp-demo strong { color: #93c5fd; font-weight: 600; }
+
+.lp-demo svg { width: 0.875rem !important; height: 0.875rem !important; }
+
+/* ── 23. Secure footer ───────────────────────────────────────────────────── */
+.lp-secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #3d4f66;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.07);
+  margin-top: 0.5rem;
+}
+
+.lp-secure svg { width: 0.875rem !important; height: 0.875rem !important; }
+
+/* ── 24. Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  .lp-panel     { padding: 2.5rem 1.5rem 1.25rem; }
+  .lp-card-col  { padding: 1.25rem 1.5rem 2.5rem; }
+  .lp-headline h1 { font-size: 2rem; }
+  .lp-feat      { padding: 0.875rem 1rem; }
+}
+
+@media (max-width: 639px) {
+  .lp-panel    { padding: 2rem 1.25rem 1rem; }
+  .lp-card-col { padding: 1rem 1.25rem 2rem; }
+  .lp-card     { padding: 1.75rem 1.25rem; border-radius: 1.25rem; }
+  .lp-headline h1 { font-size: 1.75rem; }
+  .lp-brand-name  { font-size: 1.5rem; }
+  .lp-card-header h2 { font-size: 1.375rem; }
+  .lp-feats    { gap: 0.6rem; }
+}
+
+/* ── 25. Reduced-motion ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .lp-anim-up,
+  .lp-anim-right { animation: none; opacity: 1; }
+  .lp-glow-1,
+  .lp-glow-2     { animation: none; }
+  .lp-btn::before { display: none; }
+}

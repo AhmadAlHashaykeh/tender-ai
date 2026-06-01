@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Details | TenderAI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div class="app-layout">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-decor-top float-decoration"></div>
+                <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
+
+                <header class="sidebar-header">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <div class="logo-shine"></div>
+                            <i data-lucide="zap" class="logo-icon"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="brand-name">TenderAI</h1>
+                            <p class="brand-tagline">Pricing Intelligence</p>
+                        </div>
+                    </div>
+                </header>
+
+                <nav class="sidebar-nav custom-scrollbar">
+                    <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="upload.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                        <span class="nav-label">Upload Data</span>
+                    </a>
+                    <a class="nav-link" href="management.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                        <span class="nav-label">Data Management</span>
+                    </a>
+                    <a class="nav-link" href="companies.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                        <span class="nav-label">Companies</span>
+                    </a>
+                    <a class="nav-link" href="tenders.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                        <span class="nav-label">Tenders</span>
+                    </a>
+                    <a class="nav-link active" href="drugs.html" aria-current="page">
+                        <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                        <span class="nav-label">Drugs</span>
+                    </a>
+                    <a class="nav-link" href="drug-standardization.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                        <span class="nav-label">Standardization</span>
+                    </a>
+                    <a class="nav-link ai-link" href="ai-recommendations.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                        <span class="nav-label">AI Recommendation</span>
+                    </a>
+                    <a class="nav-link" href="prediction-history.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                        <span class="nav-label">Prediction History</span>
+                    </a>
+                    <a class="nav-link" href="reports.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                    <a class="nav-link" href="settings.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </nav>
+
+                <footer class="sidebar-footer">
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-container">
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="user" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="settings" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Settings</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout" href="../index.html">
+                                <i data-lucide="log-out" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="profileBtn" class="user-profile-btn">
+                        <div class="user-avatar">
+                            <div class="avatar-shine"></div>
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-name">John Doe</p>
+                            <p class="user-role">System Admin</p>
+                        </div>
+                        <i data-lucide="chevron-up" class="chevron-up"></i>
+                    </button>
+                </footer>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="main-content">
+                <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                    <div class="header-inner">
+                        <div class="header-left">
+                            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                <i data-lucide="menu"></i>
+                            </button>
+                            <div class="search-container">
+                                <i data-lucide="search" class="search-icon-header"></i>
+                                <input type="text" class="search-input" placeholder="Search tenders, drugs, reports...">
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <a href="ai-recommendations.html" class="no-underline">
+                                <button class="btn-ai">
+                                    <i data-lucide="sparkles" class="icon-xs"></i>
+                                    New AI Prediction
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+
+                <style>
+                    .chart-bar-animate {
+                        transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), y 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), fill 0.5s ease !important;
+                    }
+                    #trend-line-path {
+                        transition: stroke-dashoffset 0.8s ease-in-out !important;
+                    }
+                </style>
+                <!-- COMPONENT: Page Content -->
+                <main class="p-6 min-h-screen">
+                    <div style="opacity: 1; transform: none;">
+                        <div class="space-y-7 max-w-6xl mx-auto">
+                            
+                            <!-- Back Button & Header Box -->
+                            <div style="opacity: 1; transform: none;">
+                                <a href="drugs.html" data-discover="true">
+                                    <button data-slot="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-9 px-4 py-2 has-[>svg]:px-3 mb-4 -ml-2 text-muted-foreground hover:text-foreground hover:bg-white/60">
+                                        <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+                                        Back to Drugs
+                                    </button>
+                                </a>
+                                
+                                <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-6 shadow-sm">
+                                    <div class="flex items-start gap-4 mb-5">
+                                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-xl shrink-0">
+                                            <i data-lucide="microscope" class="w-7 h-7 text-white"></i>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <h1 class="text-2xl font-bold text-foreground mb-1" id="drug-title">Paracetamol 500mg Tablet</h1>
+                                            <div class="flex items-center gap-2 flex-wrap">
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">Analgesics</span>
+                                                <span class="font-mono bg-muted/40 px-2 py-0.5 rounded-md text-xs font-semibold text-muted-foreground">PAR-500</span>
+                                                <span class="text-xs text-muted-foreground">Tablet · 500mg</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <p class="text-xs text-muted-foreground font-medium mb-2 flex items-center gap-1.5">
+                                            <i data-lucide="earth" class="w-3.5 h-3.5"></i>
+                                            Market Context
+                                        </p>
+                                        <div class="flex flex-wrap gap-2" id="market-context-chips">
+                                            <button class="market-chip px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200" data-market="all">All Markets</button>
+                                            <button class="market-chip px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200" data-market="saudi">Saudi Arabia</button>
+                                            <button class="market-chip px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200" data-market="uae">UAE</button>
+                                            <button class="market-chip px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200" data-market="egypt">Egypt</button>
+                                            <button class="market-chip px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200" data-market="iraq">Iraq</button>
+                                            <button class="market-chip px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200" data-market="jordan">Jordan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Statistics Grid (6 Cards) -->
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" style="opacity: 1; transform: none;">
+                                <!-- Avg Price -->
+                                <div class="p-3.5 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/10 border shadow-sm">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="dollar-sign" class="w-3.5 h-3.5 text-muted-foreground/60"></i>
+                                        <span class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Avg Price</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-foreground" id="stat-avg-price">$3.50</p>
+                                    <p class="text-[10px] text-muted-foreground">per unit</p>
+                                </div>
+                                <!-- Min Awarded -->
+                                <div class="p-3.5 rounded-xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border-emerald-200/40 border shadow-sm">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="trending-down" class="w-3.5 h-3.5 text-muted-foreground/60"></i>
+                                        <span class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Min Awarded</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-foreground" id="stat-min-price">$3.10</p>
+                                    <p class="text-[10px] text-muted-foreground">lowest recorded</p>
+                                </div>
+                                <!-- Max Awarded -->
+                                <div class="p-3.5 rounded-xl bg-gradient-to-br from-rose-500/5 to-pink-500/5 border-rose-200/40 border shadow-sm">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-muted-foreground/60"></i>
+                                        <span class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Max Awarded</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-foreground" id="stat-max-price">$4.00</p>
+                                    <p class="text-[10px] text-muted-foreground">highest recorded</p>
+                                </div>
+                                <!-- Total Qty -->
+                                <div class="p-3.5 rounded-xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border-violet-200/40 border shadow-sm">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="package" class="w-3.5 h-3.5 text-muted-foreground/60"></i>
+                                        <span class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Total Qty</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-foreground" id="stat-qty">1.8M</p>
+                                    <p class="text-[10px] text-muted-foreground">units awarded</p>
+                                </div>
+                                <!-- Tenders -->
+                                <div class="p-3.5 rounded-xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-200/40 border shadow-sm">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="chart-no-axes-column" class="w-3.5 h-3.5 text-muted-foreground/60"></i>
+                                        <span class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Tenders</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-foreground" id="stat-tenders">6</p>
+                                    <p class="text-[10px] text-muted-foreground">award records</p>
+                                </div>
+                                <!-- Total Value -->
+                                <div class="p-3.5 rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/10 border shadow-sm">
+                                    <div class="flex items-center gap-1.5 mb-1">
+                                        <i data-lucide="dollar-sign" class="w-3.5 h-3.5 text-muted-foreground/60"></i>
+                                        <span class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Total Value</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-foreground" id="stat-value">$6.3M</p>
+                                    <p class="text-[10px] text-muted-foreground">awarded value</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Smart Pricing Insights -->
+                            <div class="bg-gradient-to-br from-primary/5 via-secondary/5 to-transparent border border-primary/15 rounded-2xl p-6 shadow-sm" style="opacity: 1; transform: none;">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md shrink-0 mt-0.5">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center gap-2 mb-0.5 flex-wrap">
+                                            <h3 class="font-semibold text-foreground">Smart Pricing Insights</h3>
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-primary/8 border-primary/20 text-primary" id="insight-market-badge">Egypt</span>
+                                        </div>
+                                        <p class="text-xs text-muted-foreground mb-3">Market-specific intelligence based on awarded tender history</p>
+                                        <ul class="space-y-2" style="opacity: 1;" id="insights-list">
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Egypt is the most price-competitive market at $3.50 avg — lowest in the region.</li>
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Highest annual volume at 1.8M units — large-scale government procurement.</li>
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Global Pharma Partners consistently wins in Egypt on aggressive pricing.</li>
+                                            <li class="flex items-start gap-2.5 text-sm text-foreground/80"><div class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0"></div>Price controls by MOH Egypt keep awarded prices within a narrow range.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Graph Card (Single Country / Compare Markets) -->
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden shadow-sm animate-fade-in" style="opacity: 1; transform: none;">
+                                <div class="flex items-center justify-between p-5 border-b border-border/40 flex-wrap gap-3">
+                                    <div>
+                                        <h3 class="font-semibold text-foreground" id="chart-card-title">Price Trend — Egypt</h3>
+                                        <p class="text-xs text-muted-foreground mt-0.5" id="chart-card-subtitle">Awarded price per unit · +12.9% change since 2022</p>
+                                    </div>
+                                    <div class="flex items-center gap-1 bg-muted/30 rounded-xl p-1">
+                                        <button id="toggle-single" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 bg-white shadow-sm text-foreground">Single Country</button>
+                                        <button id="toggle-compare" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 text-muted-foreground hover:text-foreground">Compare Markets</button>
+                                    </div>
+                                </div>
+                                <div class="p-5">
+                                    <div style="opacity: 1; transform: none;">
+                                        
+                                        <!-- Single Country Line Chart -->
+                                        <div id="chart-single-container" class="relative w-full h-[260px] transition-all duration-300">
+                                            <svg class="recharts-surface" width="100%" height="260" viewBox="0 0 757 260" style="width: 100%; height: 100%;">
+                                                <g class="recharts-cartesian-grid">
+                                                    <g class="recharts-cartesian-grid-horizontal">
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="225" x2="752" y2="225"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="170" x2="752" y2="170"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="115" x2="752" y2="115"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="60" x2="752" y2="60"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="5" x2="752" y2="5"></line>
+                                                    </g>
+                                                </g>
+                                                <g class="recharts-layer recharts-cartesian-axis xAxis">
+                                                    <g class="recharts-cartesian-axis-ticks">
+                                                        <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                            <text orientation="bottom" stroke="none" font-size="11" x="49" y="233" class="recharts-text" text-anchor="middle" fill="#64748B"><tspan x="49" dy="0.71em">2022</tspan></text>
+                                                        </g>
+                                                        <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                            <text orientation="bottom" stroke="none" font-size="11" x="224.75" y="233" class="recharts-text" text-anchor="middle" fill="#64748B"><tspan x="224.75" dy="0.71em">2023</tspan></text>
+                                                        </g>
+                                                        <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                            <text orientation="bottom" stroke="none" font-size="11" x="400.5" y="233" class="recharts-text" text-anchor="middle" fill="#64748B"><tspan x="400.5" dy="0.71em">2024</tspan></text>
+                                                        </g>
+                                                        <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                            <text orientation="bottom" stroke="none" font-size="11" x="576.25" y="233" class="recharts-text" text-anchor="middle" fill="#64748B"><tspan x="576.25" dy="0.71em">2025</tspan></text>
+                                                        </g>
+                                                        <g class="recharts-layer recharts-cartesian-axis-tick">
+                                                            <text orientation="bottom" stroke="none" font-size="11" x="752" y="233" class="recharts-text" text-anchor="middle" fill="#64748B"><tspan x="752" dy="0.71em">2026</tspan></text>
+                                                        </g>
+                                                    </g>
+                                                </g>
+                                                <g class="recharts-layer recharts-cartesian-axis yAxis" id="line-chart-y-axis">
+                                                    <!-- Injected dynamically -->
+                                                </g>
+                                                <line id="vertical-guide-line" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="3 3" y1="5" y2="225" x1="0" x2="0" class="hidden"></line>
+                                                <g class="recharts-layer recharts-line">
+<path
+    id="trend-line-path"
+    stroke="#0D85E6"
+    stroke-width="3"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    d=""
+></path>                                                    <g id="line-chart-dots" class="recharts-layer recharts-line-dots">
+                                                        <!-- Injected dynamically -->
+                                                    </g>
+                                                </g>
+                                                <g id="line-chart-interactive-rects">
+                                                    <!-- Injected dynamically -->
+                                                </g>
+                                            </svg>
+                                            <!-- Tooltip -->
+                                            <div id="chart-tooltip" class="absolute pointer-events-none bg-white/95 backdrop-blur-sm border border-border/80 p-3 rounded-xl shadow-xl transition-all duration-200 opacity-0 scale-95 z-30 min-w-[125px]">
+                                                <div id="tooltip-year" class="text-[11px] font-semibold text-muted-foreground mb-1">2025</div>
+                                                <div id="tooltip-price" class="text-sm font-bold text-primary">$3.55/unit</div>
+                                                <div id="tooltip-volume" class="text-[10px] text-muted-foreground">1.8M units</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Compare Markets Bar Chart -->
+                                        <div id="chart-compare-container" class="relative w-full h-[260px] transition-all duration-300 hidden opacity-0">
+                                            <svg class="recharts-surface" width="100%" height="260" viewBox="0 0 757 260" style="width: 100%; height: 100%;">
+                                                <g class="recharts-cartesian-grid">
+                                                    <g class="recharts-cartesian-grid-horizontal">
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="225" x2="752" y2="225"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="170" x2="752" y2="170"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="115" x2="752" y2="115"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="60" x2="752" y2="60"></line>
+                                                        <line stroke-dasharray="3 3" stroke="#E2E8F0" fill="none" x1="49" y1="5" x2="752" y2="5"></line>
+                                                    </g>
+                                                </g>
+                                                <g class="recharts-layer recharts-cartesian-axis yAxis">
+                                                    <text orientation="left" stroke="none" font-size="11" x="41" y="225" class="recharts-text" text-anchor="end" fill="#64748B"><tspan x="41" dy="0.355em">$0</tspan></text>
+                                                    <text orientation="left" stroke="none" font-size="11" x="41" y="170" class="recharts-text" text-anchor="end" fill="#64748B"><tspan x="41" dy="0.355em">$2.0</tspan></text>
+                                                    <text orientation="left" stroke="none" font-size="11" x="41" y="115" class="recharts-text" text-anchor="end" fill="#64748B"><tspan x="41" dy="0.355em">$4.0</tspan></text>
+                                                    <text orientation="left" stroke="none" font-size="11" x="41" y="60" class="recharts-text" text-anchor="end" fill="#64748B"><tspan x="41" dy="0.355em">$6.0</tspan></text>
+                                                    <text orientation="left" stroke="none" font-size="11" x="41" y="8.25" class="recharts-text" text-anchor="end" fill="#64748B"><tspan x="41" dy="0.355em">$8.0</tspan></text>
+                                                </g>
+                                                <g id="bar-chart-bars-group">
+                                                    <!-- Injected dynamically -->
+                                                </g>
+                                            </svg>
+                                            <div class="absolute bottom-[-18px] left-1/2 transform -translate-x-1/2 flex items-center gap-1.5 text-xs text-muted-foreground select-none">
+                                                <span class="w-2 h-2 rounded-full bg-secondary inline-block animate-pulse"></span>
+                                                <span id="bar-chart-legend-text">Egypt highlighted</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Table Breakdown -->
+                            <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden shadow-sm" style="opacity: 1; transform: none;">
+                                <div class="p-5 border-b border-border/40">
+                                    <h3 class="font-semibold text-foreground">Market Pricing Breakdown</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">Awarded prices and volumes by country — click a row to switch market context</p>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead>
+                                            <tr class="border-b border-border/40 bg-muted/20">
+                                                <th class="text-left px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Market</th>
+                                                <th class="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Avg Price</th>
+                                                <th class="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Min</th>
+                                                <th class="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Max</th>
+                                                <th class="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Qty</th>
+                                                <th class="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tenders</th>
+                                                <th class="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b border-border/20 cursor-pointer transition-all duration-200 hover:bg-muted/20 market-row" data-market="all" style="opacity: 1;">
+                                                <td class="px-5 py-3.5">
+                                                    <div class="flex items-center gap-2">
+                                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 text-muted-foreground"></i>
+                                                        <span class="font-semibold text-foreground">All Markets</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3.5 text-right font-bold text-foreground tabular-nums">$4.00</td>
+                                                <td class="px-4 py-3.5 text-right text-emerald-600 font-medium tabular-nums">$2.90</td>
+                                                <td class="px-4 py-3.5 text-right text-rose-500 font-medium tabular-nums">$5.80</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">4.7M</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">26</td>
+                                                <td class="px-5 py-3.5 text-right font-bold text-foreground tabular-nums">$18.60M</td>
+                                            </tr>
+                                            <tr class="border-b border-border/20 cursor-pointer transition-all duration-200 hover:bg-muted/20 market-row" data-market="saudi" style="opacity: 1;">
+                                                <td class="px-5 py-3.5">
+                                                    <div class="flex items-center gap-2">
+                                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 text-muted-foreground"></i>
+                                                        <span class="font-semibold text-foreground">Saudi Arabia</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3.5 text-right font-bold text-foreground tabular-nums">$4.20</td>
+                                                <td class="px-4 py-3.5 text-right text-emerald-600 font-medium tabular-nums">$3.80</td>
+                                                <td class="px-4 py-3.5 text-right text-rose-500 font-medium tabular-nums">$4.80</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">1.2M</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">8</td>
+                                                <td class="px-5 py-3.5 text-right font-bold text-foreground tabular-nums">$5.04M</td>
+                                            </tr>
+                                            <tr class="border-b border-border/20 cursor-pointer transition-all duration-200 hover:bg-muted/20 market-row" data-market="uae" style="opacity: 1;">
+                                                <td class="px-5 py-3.5">
+                                                    <div class="flex items-center gap-2">
+                                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 text-muted-foreground"></i>
+                                                        <span class="font-semibold text-foreground">UAE</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3.5 text-right font-bold text-foreground tabular-nums">$5.10</td>
+                                                <td class="px-4 py-3.5 text-right text-emerald-600 font-medium tabular-nums">$4.60</td>
+                                                <td class="px-4 py-3.5 text-right text-rose-500 font-medium tabular-nums">$5.80</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">450K</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">4</td>
+                                                <td class="px-5 py-3.5 text-right font-bold text-foreground tabular-nums">$2.29M</td>
+                                            </tr>
+                                            <tr class="border-b border-border/20 cursor-pointer transition-all duration-200 hover:bg-muted/20 market-row" data-market="egypt" style="opacity: 1;">
+                                                <td class="px-5 py-3.5">
+                                                    <div class="flex items-center gap-2">
+                                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 text-muted-foreground"></i>
+                                                        <span class="font-semibold text-foreground">Egypt</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3.5 text-right font-bold text-foreground tabular-nums">$3.50</td>
+                                                <td class="px-4 py-3.5 text-right text-emerald-600 font-medium tabular-nums">$3.10</td>
+                                                <td class="px-4 py-3.5 text-right text-rose-500 font-medium tabular-nums">$4.00</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">1.8M</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">6</td>
+                                                <td class="px-5 py-3.5 text-right font-bold text-foreground tabular-nums">$6.30M</td>
+                                            </tr>
+                                            <tr class="border-b border-border/20 cursor-pointer transition-all duration-200 hover:bg-muted/20 market-row" data-market="iraq" style="opacity: 1;">
+                                                <td class="px-5 py-3.5">
+                                                    <div class="flex items-center gap-2">
+                                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 text-muted-foreground"></i>
+                                                        <span class="font-semibold text-foreground">Iraq</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3.5 text-right font-bold text-foreground tabular-nums">$4.00</td>
+                                                <td class="px-4 py-3.5 text-right text-emerald-600 font-medium tabular-nums">$3.60</td>
+                                                <td class="px-4 py-3.5 text-right text-rose-500 font-medium tabular-nums">$4.50</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">900K</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">5</td>
+                                                <td class="px-5 py-3.5 text-right font-bold text-foreground tabular-nums">$3.60M</td>
+                                            </tr>
+                                            <tr class="border-b border-border/20 cursor-pointer transition-all duration-200 hover:bg-muted/20 market-row" data-market="jordan" style="opacity: 1;">
+                                                <td class="px-5 py-3.5">
+                                                    <div class="flex items-center gap-2">
+                                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0 text-muted-foreground"></i>
+                                                        <span class="font-semibold text-foreground">Jordan</span>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3.5 text-right font-bold text-foreground tabular-nums">$3.20</td>
+                                                <td class="px-4 py-3.5 text-right text-emerald-600 font-medium tabular-nums">$2.90</td>
+                                                <td class="px-4 py-3.5 text-right text-rose-500 font-medium tabular-nums">$3.60</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">300K</td>
+                                                <td class="px-4 py-3.5 text-right text-foreground/80 tabular-nums">3</td>
+                                                <td class="px-5 py-3.5 text-right font-bold text-foreground tabular-nums">$0.96M</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/drug-details.js" defer></script>
+    
+</body>
+</html>
+

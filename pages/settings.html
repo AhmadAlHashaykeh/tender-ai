@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TenderAI - Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div class="app-layout">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+            <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-decor-top float-decoration"></div>
+                <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
+
+                <header class="sidebar-header">
+                    <div class="brand-container">
+                        <div class="brand-logo">
+                            <div class="logo-shine"></div>
+                            <i data-lucide="zap" class="logo-icon"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h1 class="brand-name">TenderAI</h1>
+                            <p class="brand-tagline">Pricing Intelligence</p>
+                        </div>
+                    </div>
+                </header>
+
+                <nav class="sidebar-nav custom-scrollbar">
+                    <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="upload.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                        <span class="nav-label">Upload Data</span>
+                    </a>
+                    <a class="nav-link" href="management.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                        <span class="nav-label">Data Management</span>
+                    </a>
+                    <a class="nav-link" href="companies.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                        <span class="nav-label">Companies</span>
+                    </a>
+                    <a class="nav-link" href="tenders.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                        <span class="nav-label">Tenders</span>
+                    </a>
+                    <a class="nav-link" href="drugs.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                        <span class="nav-label">Drugs</span>
+                    </a>
+                    <a class="nav-link" href="drug-standardization.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                        <span class="nav-label">Standardization</span>
+                    </a>
+                    <a class="nav-link ai-link" href="ai-recommendations.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                        <span class="nav-label">AI Recommendation</span>
+                    </a>
+                    <a class="nav-link" href="prediction-history.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                        <span class="nav-label">Prediction History</span>
+                    </a>
+                    <a class="nav-link" href="reports.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                    <a class="nav-link active" href="settings.html">
+                        <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </nav>
+
+                <footer class="sidebar-footer">
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-container">
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="user" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="settings.html">
+                                <i data-lucide="settings" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Settings</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item logout" href="../index.html">
+                                <i data-lucide="log-out" class="dropdown-icon"></i>
+                                <span class="dropdown-label">Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    <button id="profileBtn" class="user-profile-btn">
+                        <div class="user-avatar">
+                            <div class="avatar-shine"></div>
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <p class="user-name">John Doe</p>
+                            <p class="user-role">System Admin</p>
+                        </div>
+                        <i data-lucide="chevron-up" class="chevron-up"></i>
+                    </button>
+                </footer>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="main-content">
+                <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                    <div class="header-inner">
+                        <div class="header-left">
+                            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                <i data-lucide="menu"></i>
+                            </button>
+                            <div class="search-container">
+                                <i data-lucide="search" class="search-icon-header"></i>
+                                <input type="text" class="search-input" placeholder="Search settings...">
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <button class="btn-ai">
+                                <i data-lucide="sparkles" class="icon-xs"></i>
+                                New AI Prediction
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- COMPONENT: Page Content -->
+                <main class="settings-view">
+                    <section class="settings-header">
+                        <h2 class="page-title">Settings</h2>
+                        <p class="subtitle">Manage system settings and preferences</p>
+                    </section>
+
+                    <div class="tabs-container">
+                        <div class="tabs-list" role="tablist">
+                            <button class="tabs-trigger active" data-tab="general" role="tab">General</button>
+                            <button class="tabs-trigger" data-tab="ai" role="tab">AI Settings</button>
+                            <button class="tabs-trigger" data-tab="users" role="tab">Users</button>
+                        </div>
+
+                        <!-- General Settings -->
+                        <div class="tabs-content active" id="general" role="tabpanel">
+                            <div class="settings-card">
+                                <header class="settings-card-header">
+                                    <h4 class="settings-card-title">General Settings</h4>
+                                    <p class="settings-card-description">Configure basic system settings</p>
+                                </header>
+                                <div class="settings-card-content">
+                                    <div class="form-section">
+                                        <div class="form-group">
+                                            <label class="form-label" for="company-name">Company Name</label>
+                                            <input type="text" class="form-input" id="company-name" value="Global Healthcare Inc">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="contact-email">Contact Email</label>
+                                            <input type="email" class="form-input" id="contact-email" value="contact@globalhealth.com">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="phone">Phone Number</label>
+                                            <input type="text" class="form-input" id="phone" value="+1 234 567 8900">
+                                        </div>
+
+                                        <div class="settings-separator"></div>
+
+                                        <div class="preferences-section">
+                                            <h4 class="settings-card-title mb-4" style="font-size: 1rem;">Preferences</h4>
+                                            
+                                            <div class="preference-item">
+                                                <div class="preference-info">
+                                                    <h5>Language</h5>
+                                                    <p>System interface language</p>
+                                                </div>
+                                                <span class="preference-value">English</span>
+                                            </div>
+
+                                            <div class="preference-item">
+                                                <div class="preference-info">
+                                                    <h5>Time Zone</h5>
+                                                    <p>UTC+00:00</p>
+                                                </div>
+                                                <span class="preference-value">GMT</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="settings-footer">
+                                            <button class="btn-primary save-settings-btn">
+                                                <i data-lucide="save" class="icon-sm"></i>
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Settings -->
+                        <div class="tabs-content" id="ai" role="tabpanel">
+                            <div class="settings-card">
+                                <header class="settings-card-header">
+                                    <h4 class="settings-card-title">AI Configuration</h4>
+                                    <p class="settings-card-description">Customize AI pricing model parameters</p>
+                                </header>
+                                <div class="settings-card-content">
+                                    <div class="form-section">
+                                        <div class="form-group">
+                                            <label class="form-label" for="default-discount">Default Discount Rate (%)</label>
+                                            <input type="number" class="form-input" id="default-discount" step="0.5" value="5">
+                                            <p class="text-muted-desc">Default rate used in prediction calculations</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="default-inflation">Default Inflation Rate (%)</label>
+                                            <input type="number" class="form-input" id="default-inflation" step="0.1" value="3.5">
+                                            <p class="text-muted-desc">Expected inflation rate for future calculations</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="confidence-threshold">Confidence Threshold (%)</label>
+                                            <input type="number" class="form-input" id="confidence-threshold" value="85">
+                                            <p class="text-muted-desc">Minimum confidence level to accept predictions</p>
+                                        </div>
+
+                                        <div class="settings-separator"></div>
+
+                                        <div class="advanced-options-section">
+                                            <h4 class="settings-card-title mb-4" style="font-size: 1rem;">Advanced Options</h4>
+                                            
+                                            <div class="preference-item">
+                                                <div class="preference-info">
+                                                    <h5>Seasonal Trend Analysis</h5>
+                                                    <p>Include seasonal factors in analysis</p>
+                                                </div>
+                                                <button type="button" role="switch" aria-checked="true" class="settings-switch">
+                                                    <span class="settings-switch-thumb"></span>
+                                                </button>
+                                            </div>
+
+                                            <div class="preference-item">
+                                                <div class="preference-info">
+                                                    <h5>Competitor Analysis</h5>
+                                                    <p>Consider historical competitor prices</p>
+                                                </div>
+                                                <button type="button" role="switch" aria-checked="true" class="settings-switch">
+                                                    <span class="settings-switch-thumb"></span>
+                                                </button>
+                                            </div>
+
+                                            <div class="preference-item">
+                                                <div class="preference-info">
+                                                    <h5>Quantity Impact</h5>
+                                                    <p>Adjust prices based on requested quantity</p>
+                                                </div>
+                                                <button type="button" role="switch" aria-checked="true" class="settings-switch">
+                                                    <span class="settings-switch-thumb"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="settings-footer mt-4">
+                                            <button class="btn-primary save-settings-btn">
+                                                <i data-lucide="save" class="icon-sm"></i>
+                                                Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- API Settings Card -->
+                            <div class="settings-card mt-6">
+                                <header class="settings-card-header">
+                                    <h4 class="settings-card-title">API Settings</h4>
+                                    <p class="settings-card-description">Access keys for external services</p>
+                                </header>
+                                <div class="settings-card-content">
+                                    <div class="form-section">
+                                        <div class="form-group">
+                                            <label class="form-label" for="api-key-input">API Key</label>
+                                            <input type="password" class="form-input" id="api-key-input" value="sk_live_xxxxxxxxxxxxxxxxxx">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="api-endpoint">API Endpoint</label>
+                                            <input type="text" class="form-input" id="api-endpoint" value="https://api.tenderai.com/v1">
+                                        </div>
+                                        <div class="settings-footer mt-2">
+                                            <button class="btn-primary save-settings-btn">
+                                                <i data-lucide="save" class="icon-sm"></i>
+                                                Save API Settings
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Users Settings -->
+                        <div class="tabs-content" id="users" role="tabpanel">
+                            <div class="settings-card">
+                                <header class="settings-card-header flex-between">
+                                    <div>
+                                        <h4 class="settings-card-title">User Management</h4>
+                                        <p class="settings-card-description">Manage team access and roles</p>
+                                    </div>
+                                </header>
+                                <div class="settings-card-content">
+                                    <div class="user-item-list">
+                                        <!-- John Doe -->
+                                        <div class="user-item">
+                                            <div class="user-info-group">
+                                                <div class="user-avatar-circle">
+                                                    <i data-lucide="user" class="icon-sm"></i>
+                                                </div>
+                                                <div class="user-details">
+                                                    <h5>John Doe</h5>
+                                                    <p>john@company.com</p>
+                                                </div>
+                                            </div>
+                                            <div class="user-actions">
+                                                <span class="user-badge admin">Manager</span>
+                                                <button class="btn-primary btn-small">Edit</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Sarah Johnson -->
+                                        <div class="user-item">
+                                            <div class="user-info-group">
+                                                <div class="user-avatar-circle">
+                                                    <i data-lucide="user" class="icon-sm"></i>
+                                                </div>
+                                                <div class="user-details">
+                                                    <h5>Sarah Johnson</h5>
+                                                    <p>sarah@company.com</p>
+                                                </div>
+                                            </div>
+                                            <div class="user-actions">
+                                                <span class="user-badge member">Analyst</span>
+                                                <button class="btn-primary btn-small">Edit</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Michael Chen -->
+                                        <div class="user-item">
+                                            <div class="user-info-group">
+                                                <div class="user-avatar-circle">
+                                                    <i data-lucide="user" class="icon-sm"></i>
+                                                </div>
+                                                <div class="user-details">
+                                                    <h5>Michael Chen</h5>
+                                                    <p>michael@company.com</p>
+                                                </div>
+                                            </div>
+                                            <div class="user-actions">
+                                                <span class="user-badge member">Employee</span>
+                                                <button class="btn-primary btn-small">Edit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-primary w-full mt-4">
+                                        <i data-lucide="user-plus" class="icon-sm"></i>
+                                        Add New User
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/settings.js" defer></script>
+</body>
+</html>

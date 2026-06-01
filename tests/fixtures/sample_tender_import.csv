@@ -1,0 +1,6 @@
+Code,INN,Product Name,Country,Tender #,Awarded price,Price USD,Winner,Company Name,Version,Year,Qty,Tender Value
+D001,Paracetamol,Paracetamol 500mg,Saudi Arabia,T-2024-001,420,425,PharmaCorp,PharmaCorp International,v1,2024,1000,425000
+D002,Amoxicillin,Amoxicillin 250mg,United Arab Emirates,T-2024-002,375,380,,HealthMed Inc,v1,2024,500,190000
+D003,Ibuprofen,Ibuprofen 400mg,,T-2024-003,350,350,MediCure Ltd,,v1,2024,800,280000
+D004,Omeprazole,Omeprazole 20mg,Iraq,T-2024-004,490,495,WellPharma,WellPharma,v2,2024,600,297000
+D001,Paracetamol,Paracetamol 500mg,Saudi Arabia,T-2024-001,420,425,PharmaCorp,PharmaCorp International,v1,2024,1000,425000

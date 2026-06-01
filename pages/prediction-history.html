@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: '#0D85E6',
+              secondary: '#7C3AED',
+              cyan: '#06B6D4',
+              foreground: '#0f172a',
+              background: '#ffffff',
+              muted: '#f1f5f9',
+              'muted-foreground': '#64748B',
+              border: '#e2e8f0',
+              card: '#ffffff',
+            },
+            opacity: {
+              '8': '0.08',
+              '15': '0.15',
+            }
+          }
+        }
+      }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TenderAI - Prediction History</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Utility CSS replacing Tailwind */
+        .page-wrapper {
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+        .container-mx {
+            max-width: 80rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+        }
+        
+        /* Drawer Overlay */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 40;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Drawer Sidebar */
+        .drawer-sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 28rem;
+            background-color: white;
+            box-shadow: -10px 0 25px -5px rgba(0, 0, 0, 0.1), -10px 0 10px -5px rgba(0, 0, 0, 0.04);
+            border-left: 1px solid rgba(226,232,240,0.8);
+            z-index: 50;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .drawer-sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Tailwind properties replaced by standard CSS */
+        .p-6 { padding: 1.5rem; }
+        .min-h-screen { min-height: 100vh; }
+        .space-y-7 > * + * { margin-top: 1.75rem; }
+        .max-w-7xl { max-width: 80rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .flex { display: flex; }
+        .items-start { align-items: flex-start; }
+        .justify-between { justify-content: space-between; }
+        .items-center { align-items: center; }
+        .gap-3 { gap: 0.75rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .w-10 { width: 2.5rem; height: 2.5rem; }
+        .h-10 { width: 2.5rem; height: 2.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .bg-gradient-to-br { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        
+        /* Specific gradient overrides with correct opacities to prevent full opacity bug */
+        .bg-gradient-to-br.from-primary\/8.to-secondary\/8 {
+            background: linear-gradient(135deg, rgba(13, 133, 230, 0.08), rgba(124, 58, 237, 0.08));
+        }
+        .bg-gradient-to-br.from-primary\/5.to-secondary\/5 {
+            background: linear-gradient(135deg, rgba(13, 133, 230, 0.05), rgba(124, 58, 237, 0.05));
+        }
+        .bg-gradient-to-br.from-violet-500\/5.to-purple-500\/5 {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(168, 85, 247, 0.05));
+        }
+        .bg-gradient-to-br.from-emerald-500\/5.to-teal-500\/5 {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(20, 184, 166, 0.05));
+        }
+        .bg-gradient-to-br.from-red-500\/5.to-rose-500\/5 {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(244, 63, 94, 0.05));
+        }
+        .bg-gradient-to-br.from-amber-500\/5.to-orange-500\/5 {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(249, 115, 22, 0.05));
+        }
+        .bg-gradient-to-r.from-primary\/5.to-secondary\/5 {
+            background: linear-gradient(90deg, rgba(13, 133, 230, 0.05), rgba(124, 58, 237, 0.05));
+        }
+        .bg-gradient-to-br.from-primary\/4.to-secondary\/4 {
+            background: linear-gradient(135deg, rgba(13, 133, 230, 0.04), rgba(124, 58, 237, 0.04));
+        }
+        .w-5 { width: 1.25rem; height: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+        .text-white { color: #ffffff; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .text-2xl { font-size: 1.5rem; }
+        .font-bold { font-weight: 700; }
+        .text-foreground { color: var(--foreground); }
+        .text-sm { font-size: 0.875rem; }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .ml-0\.5 { margin-left: 0.125rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .from-primary\/8 { background-color: rgba(13, 133, 230, 0.08); }
+        .to-secondary\/8 { background-color: rgba(124, 58, 237, 0.08); }
+        .border { border: 1px solid rgba(226, 232, 240, 0.8); }
+        .border-primary\/15 { border-color: rgba(13, 133, 230, 0.15); }
+        .font-semibold { font-weight: 600; }
+        .font-normal { font-weight: 400; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .gap-4 { gap: 1rem; }
+        .p-4 { padding: 1rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .from-primary\/5 { background-color: rgba(13, 133, 230, 0.05); }
+        .to-secondary\/5 { background-color: rgba(124, 58, 237, 0.05); }
+        .border-primary\/10 { border-color: rgba(13, 133, 230, 0.1); }
+        .gap-2 { gap: 0.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .w-4 { width: 1rem; height: 1rem; }
+        .h-4 { height: 1rem; }
+        .text-\[10px\] { font-size: 10px; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wide { letter-spacing: 0.025em; }
+        .font-medium { font-weight: 500; }
+        .from-violet-500\/5 { background-color: rgba(139, 92, 246, 0.05); }
+        .to-purple-500\/5 { background-color: rgba(168, 85, 247, 0.05); }
+        .border-violet-200\/40 { border-color: rgba(221, 214, 254, 0.4); }
+        .text-violet-500 { color: #8b5cf6; }
+        .from-emerald-500\/5 { background-color: rgba(16, 185, 129, 0.05); }
+        .to-teal-500\/5 { background-color: rgba(20, 184, 166, 0.05); }
+        .border-emerald-200\/40 { border-color: rgba(167, 243, 208, 0.4); }
+        .text-emerald-500 { color: #10b981; }
+        .from-red-500\/5 { background-color: rgba(239, 68, 68, 0.05); }
+        .to-rose-500\/5 { background-color: rgba(244, 63, 94, 0.05); }
+        .border-red-200\/40 { border-color: rgba(254, 202, 202, 0.4); }
+        .text-red-500 { color: #ef4444; }
+        .from-amber-500\/5 { background-color: rgba(245, 158, 11, 0.05); }
+        .to-orange-500\/5 { background-color: rgba(249, 115, 22, 0.05); }
+        .border-amber-200\/40 { border-color: rgba(253, 230, 138, 0.4); }
+        .text-amber-500 { color: #f59e0b; }
+        .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); }
+        .border-border\/50 { border-color: rgba(226, 232, 240, 0.5); }
+        .p-5 { padding: 1.25rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .left-3\.5 { left: 0.875rem; }
+        .top-1\/2 { top: 50%; }
+        .-translate-y-1\/2 { transform: translateY(-50%); }
+        .min-w-0 { min-width: 0; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .pl-10 { padding-left: 2.5rem; }
+        .h-10 { height: 2.5rem; }
+        .bg-white\/70 { background-color: rgba(255, 255, 255, 0.7); }
+        .h-px { height: 1px; }
+        .bg-border\/40 { background-color: rgba(226, 232, 240, 0.4); }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .flex-wrap { flex-wrap: wrap; }
+        .shrink-0 { flex-shrink: 0; }
+        .mr-1 { margin-right: 0.25rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .transition-all { transition: all 0.2s ease; }
+        .duration-200 { transition-duration: 200ms; }
+        .bg-white\/60 { background-color: rgba(255, 255, 255, 0.6); }
+        .text-foreground\/70 { color: rgba(15, 23, 42, 0.7); }
+        .hover\:border-primary\/40:hover { border-color: rgba(13, 133, 230, 0.4); }
+        .hover\:text-primary:hover { color: var(--primary); }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-x-auto { overflow-x: auto; }
+        .border-b { border-bottom: 1px solid rgba(226, 232, 240, 0.8); }
+        .bg-muted\/20 { background-color: rgba(241, 245, 249, 0.2); }
+        .text-left { text-align: left; }
+        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+        .border-border\/20 { border-color: rgba(226, 232, 240, 0.2); }
+        .hover\:bg-primary\/4:hover { background-color: rgba(13, 133, 230, 0.04); }
+        .cursor-pointer { cursor: pointer; }
+        .transition-colors { transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+        .w-3\.5 { width: 0.875rem; height: 0.875rem; }
+        .max-w-\[200px\] { max-width: 200px; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mt-0\.5 { margin-top: 0.125rem; }
+        .font-mono { font-family: monospace; }
+        .text-muted-foreground\/40 { color: rgba(100, 116, 139, 0.4); }
+        .w-2\.5 { width: 0.625rem; height: 0.625rem; }
+        .h-2\.5 { height: 0.625rem; }
+        .text-primary\/50 { color: rgba(13, 133, 230, 0.5); }
+        .text-right { text-align: right; }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .text-foreground\/80 { color: rgba(15, 23, 42, 0.8); }
+        .justify-end { justify-content: flex-end; }
+        .text-primary\/60 { color: rgba(13, 133, 230, 0.6); }
+        .text-emerald-600 { color: #16a34a; }
+        .text-center { text-align: center; }
+        .bg-amber-50 { background-color: #fffbeb; }
+        .text-amber-700 { color: #b45309; }
+        .border-amber-200 { border-color: #fef3c7; }
+        .bg-emerald-50 { background-color: #f0fdf4; }
+        .text-emerald-700 { color: #15803d; }
+        .border-emerald-200 { border-color: #bbf7d0; }
+        .bg-violet-50 { background-color: #f5f3ff; }
+        .text-violet-700 { color: #6d28d9; }
+        .border-violet-200 { border-color: #ddd6fe; }
+        .bg-red-50 { background-color: #fef2f2; }
+        .text-red-600 { color: #dc2626; }
+        .border-red-200 { border-color: #fecaca; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .text-blue-700 { color: #1d4ed8; }
+        .border-blue-200 { border-color: #bfdbfe; }
+        .bg-slate-50 { background-color: #f8fafc; }
+        .text-slate-600 { color: #475569; }
+        .border-slate-200 { border-color: #e2e8f0; }
+        .inline-flex { display: inline-flex; }
+        .bg-gradient-to-r.from-primary.to-secondary { background: linear-gradient(to right, var(--primary), var(--secondary)); }
+        .border-transparent { border-color: transparent; }
+        
+        /* Media Queries for MD */
+        @media (min-width: 768px) {
+            .md\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        }
+        
+        /* Drawer inner specific utilities */
+        .w-9 { width: 2.25rem; height: 2.25rem; }
+        .h-9 { width: 2.25rem; height: 2.25rem; }
+        .w-8 { width: 2rem; height: 2rem; }
+        .h-8 { width: 2rem; height: 2rem; }
+        .w-3 { width: 0.75rem; height: 0.75rem; }
+        .h-3 { width: 0.75rem; height: 0.75rem; }
+        .bg-muted\/30 { background-color: rgba(241, 245, 249, 0.3); }
+        .border-border\/40 { border-color: rgba(226, 232, 240, 0.4); }
+        .space-y-2\.5 > * + * { margin-top: 0.625rem; }
+        .mb-0\.5 { margin-bottom: 0.125rem; }
+        .py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+        .border-2 { border-width: 2px; }
+        .bg-emerald-50\/60 { background-color: rgba(240, 253, 244, 0.6); }
+        .border-emerald-200 { border-color: #bbf7d0; }
+        .text-emerald-700 { color: #15803d; }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .gap-2 { gap: 0.5rem; }
+        .text-xl { font-size: 1.25rem; }
+        .bg-gradient-to-br.from-primary\/4.to-secondary\/4 { background: linear-gradient(135deg, rgba(13, 133, 230, 0.04), rgba(124, 58, 237, 0.04)); }
+        .border-primary\/10 { border-color: rgba(13, 133, 230, 0.1); }
+        .bg-primary\/10 { background-color: rgba(13, 133, 230, 0.1); }
+        .text-foreground\/80 { color: rgba(15, 23, 42, 0.8); }
+        .bg-muted\/20 { background-color: rgba(241, 245, 249, 0.2); }
+        .border-t { border-top: 1px solid rgba(226, 232, 240, 0.8); }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+    </style>
+    <link rel="stylesheet" href="../assets/css/app.css">
+</head>
+<body>
+    <div id="container">
+        <div>
+            <div>
+                <div class="app-layout">
+                    <!-- Sidebar Overlay (Mobile) -->
+                    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+                    <!-- COMPONENT: Sidebar -->
+            <!-- Laravel later: route-based sidebar links -->
+            <!-- Sidebar Navigation -->
+                    <aside class="sidebar" id="sidebar">
+                        <div class="sidebar-decor-top float-decoration"></div>
+                        <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
+
+                        <header class="sidebar-header">
+                            <div class="brand-container">
+                                <div class="brand-logo">
+                                    <div class="logo-shine"></div>
+                                    <i data-lucide="zap" class="logo-icon"></i>
+                                </div>
+                                <div class="brand-text">
+                                    <h1 class="brand-name">TenderAI</h1>
+                                    <p class="brand-tagline">Pricing Intelligence</p>
+                                </div>
+                            </div>
+                        </header>
+
+                        <nav class="sidebar-nav custom-scrollbar">
+                            <!-- Laravel later: route() -->
+                    <a class="nav-link" href="dashboard.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="layout-dashboard"></i></div>
+                                <span class="nav-label">Dashboard</span>
+                            </a>
+                            <a class="nav-link" href="upload.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="upload"></i></div>
+                                <span class="nav-label">Upload Data</span>
+                            </a>
+                            <a class="nav-link" href="management.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="database"></i></div>
+                                <span class="nav-label">Data Management</span>
+                            </a>
+                            <a class="nav-link" href="companies.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="building-2"></i></div>
+                                <span class="nav-label">Companies</span>
+                            </a>
+                            <a class="nav-link" href="tenders.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="file-stack"></i></div>
+                                <span class="nav-label">Tenders</span>
+                            </a>
+                            <a class="nav-link" href="drugs.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="microscope"></i></div>
+                                <span class="nav-label">Drugs</span>
+                            </a>
+                            <a class="nav-link" href="drug-standardization.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="pill"></i></div>
+                                <span class="nav-label">Standardization</span>
+                            </a>
+                            <a class="nav-link ai-link" href="ai-recommendations.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="sparkles"></i></div>
+                                <span class="nav-label">AI Recommendation</span>
+                            </a>
+                            <a class="nav-link active" href="prediction-history.html" aria-current="page">
+                                <div class="nav-icon-wrapper"><i data-lucide="history"></i></div>
+                                <span class="nav-label">Prediction History</span>
+                            </a>
+                            <a class="nav-link" href="reports.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="chart-column"></i></div>
+                                <span class="nav-label">Reports</span>
+                            </a>
+                            <a class="nav-link" href="settings.html">
+                                <div class="nav-icon-wrapper"><i data-lucide="settings"></i></div>
+                                <span class="nav-label">Settings</span>
+                            </a>
+                        </nav>
+
+                        <footer class="sidebar-footer">
+                            <div id="profileDropdown" class="profile-dropdown">
+                                <div class="dropdown-container">
+                                    <a class="dropdown-item" href="settings.html">
+                                        <i data-lucide="user" class="dropdown-icon"></i>
+                                        <span class="dropdown-label">Profile</span>
+                                    </a>
+                                    <a class="dropdown-item" href="settings.html">
+                                        <i data-lucide="settings" class="dropdown-icon"></i>
+                                        <span class="dropdown-label">Settings</span>
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item logout" href="../index.html">
+                                        <i data-lucide="log-out" class="dropdown-icon"></i>
+                                        <span class="dropdown-label">Logout</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <button id="profileBtn" class="user-profile-btn">
+                                <div class="user-avatar">
+                                    <div class="avatar-shine"></div>
+                                    <span class="avatar-text">JD</span>
+                                </div>
+                                <div class="user-info">
+                                    <p class="user-name">John Doe</p>
+                                    <p class="user-role">System Admin</p>
+                                </div>
+                                <i data-lucide="chevron-up" class="chevron-up"></i>
+                            </button>
+                        </footer>
+                    </aside>
+
+                    <!-- Content Area -->
+                    <div class="main-content">
+                        <!-- COMPONENT: Topbar -->
+                <header class="top-header">
+                            <div class="header-inner">
+                                <div class="header-left">
+                                    <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                                        <i data-lucide="menu"></i>
+                                    </button>
+                                    <div class="search-container">
+                                        <i data-lucide="search" class="search-icon-header"></i>
+                                        <input type="text" class="search-input" placeholder="Search tenders, drugs, reports...">
+                                    </div>
+                                </div>
+                                <div class="header-right">
+                                    <a href="ai-recommendations.html" class="no-underline">
+                                        <button class="btn-ai">
+                                            <i data-lucide="sparkles" class="icon-xs"></i>
+                                            New AI Prediction
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </header>
+
+                        <!-- COMPONENT: Page Content -->
+                <main class="p-6 min-h-screen">
+                            <div style="opacity: 1; transform: none;">
+                                <div class="space-y-7 max-w-7xl mx-auto">
+                                    
+                                    <!-- Header Info -->
+                                    <div class="flex items-start justify-between" style="opacity: 1; transform: none;">
+                                        <div>
+                                            <div class="flex items-center gap-3 mb-1">
+                                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-md">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-history w-5 h-5 text-white"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>
+                                                </div>
+                                                <h1 class="text-2xl font-bold text-foreground">Prediction History</h1>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground ml-0.5">Track and review previous AI-generated tender price recommendations</p>
+                                        </div>
+                                        <div class="px-4 py-2.5 rounded-xl bg-gradient-to-br from-primary/8 to-secondary/8 border border-primary/15">
+                                            <p class="text-sm font-semibold text-primary"><span id="record-count">7</span> <span class="font-normal text-muted-foreground">of 7 records</span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Stats Grid -->
+                                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4" style="opacity: 1; transform: none;">
+                                        <div class="p-4 rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 border-primary/10 border">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-column w-4 h-4 text-primary"><line x1="18" x2="18" y1="20" y2="10"></line><line x1="12" x2="12" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="14"></line></svg>
+                                                <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Total Predictions</p>
+                                            </div>
+                                            <p class="text-2xl font-bold text-foreground">7</p>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-gradient-to-br from-violet-500/5 to-purple-500/5 border-violet-200/40 border">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-stack w-4 h-4 text-violet-500"><path d="M21 7h-3a2 2 0 0 1-2-2V2"></path><path d="M21 6v6.5c0 .8-.7 1.5-1.5 1.5h-7c-.8 0-1.5-.7-1.5-1.5v-9c0-.8.7-1.5 1.5-1.5H17Z"></path><path d="M7 8v8.8c0 .3.2.6.4.8.2.2.5.4.8.4H15"></path><path d="M3 12v8.8c0 .3.2.6.4.8.2.2.5.4.8.4H11"></path></svg>
+                                                <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Submitted</p>
+                                            </div>
+                                            <p class="text-2xl font-bold text-foreground">1</p>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border-emerald-200/40 border">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy w-4 h-4 text-emerald-500"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                                                <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Won</p>
+                                            </div>
+                                            <p class="text-2xl font-bold text-foreground">2</p>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-gradient-to-br from-red-500/5 to-rose-500/5 border-red-200/40 border">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x w-4 h-4 text-red-500"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+                                                <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Lost</p>
+                                            </div>
+                                            <p class="text-2xl font-bold text-foreground">1</p>
+                                        </div>
+                                        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-200/40 border">
+                                            <div class="flex items-center gap-2 mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-4 h-4 text-amber-500"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                                <p class="text-[10px] text-muted-foreground uppercase tracking-wide font-medium">Avg Accuracy</p>
+                                            </div>
+                                            <p class="text-2xl font-bold text-foreground">97.4%</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Search and Filters Panel -->
+                                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 p-5 space-y-4" style="opacity: 1; transform: none;">
+                                        <div class="relative">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                                            <input id="search-predictions" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 flex w-full min-w-0 border px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive pl-10 h-10 rounded-xl border-border/50 bg-white/70" placeholder="Search by tender, drug, country, or code..." value="">
+                                        </div>
+                                        <div class="h-px bg-border/40"></div>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center gap-2 flex-wrap" id="status-filter-row">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-funnel w-4 h-4 text-muted-foreground shrink-0"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"></path></svg>
+                                                <span class="text-xs text-muted-foreground font-medium mr-1">Status:</span>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-sm active" data-status="All">All</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-status="Generated">Generated</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-status="Reviewed">Reviewed</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-status="Submitted">Submitted</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-status="Won">Won</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-status="Lost">Lost</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-status="Pending">Pending</button>
+                                            </div>
+                                            <div class="flex items-center gap-2 flex-wrap" id="risk-filter-row">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert w-4 h-4 text-muted-foreground shrink-0"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+                                                <span class="text-xs text-muted-foreground font-medium mr-1">Risk:</span>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-gradient-to-r from-primary to-secondary text-white border-transparent shadow-sm active" data-risk="All">All</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-risk="Low">Low</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-risk="Medium">Medium</button>
+                                                <button class="px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 bg-white/60 border-border/50 text-foreground/70 hover:border-primary/40 hover:text-primary" data-risk="High">High</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Table Area -->
+                                    <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-border/50 overflow-hidden" style="opacity: 1; transform: none;">
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full text-sm" id="predictions-table">
+                                                <thead>
+                                                    <tr class="border-b border-border/40 bg-muted/20">
+                                                        <th class="text-left px-5 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Date</th>
+                                                        <th class="text-left px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tender</th>
+                                                        <th class="text-left px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Drug / Product</th>
+                                                        <th class="text-right px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Quantity</th>
+                                                        <th class="text-right px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Rec. Price</th>
+                                                        <th class="text-right px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Win Prob.</th>
+                                                        <th class="text-center px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Risk</th>
+                                                        <th class="text-center px-4 py-3.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Status</th>
+                                                        <th class="px-4 py-3.5"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="predictions-tbody">
+                                                    <!-- Row 1 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="1" data-status="Won" data-risk="Medium">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-20</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">14:32</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">Gulf Health Council Tender (GHC)</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">SA-2026-001</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>Saudi Arabia
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Paracetamol 500mg</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">500K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">4.04</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-emerald-600">76%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">Medium</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                                                <i data-lucide="trophy" class="w-3 h-3"></i>Won
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Row 2 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="2" data-status="Submitted" data-risk="Medium">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-18</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">11:15</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">UAE Health Authority Quarterly Procurement</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">UAE-2026-012</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>United Arab Emirates
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Insulin Glargine 100U/mL Pen</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">50K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">32.28</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-amber-600">71%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">Medium</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-violet-50 text-violet-700 border-violet-200">
+                                                                <i data-lucide="file-stack" class="w-3 h-3"></i>Submitted
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Row 3 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="3" data-status="Won" data-risk="Low">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-15</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">09:48</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">Egypt MOH Central Pharmaceutical Tender</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">EG-2025-089</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>Egypt
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Ibuprofen 400mg</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">700K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">4.63</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-emerald-600">81%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Low</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                                                <i data-lucide="trophy" class="w-3 h-3"></i>Won
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Row 4 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="4" data-status="Lost" data-risk="Low">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-12</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">16:05</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">NUPCO Annual Antibiotics Tender</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">SA-NUPCO-2026</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>Saudi Arabia
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Amoxicillin 250mg</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">300K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">8.12</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-amber-600">74%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-emerald-50 text-emerald-700 border-emerald-200">Low</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-red-50 text-red-600 border-red-200">
+                                                                <i data-lucide="circle-x" class="w-3 h-3"></i>Lost
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Row 5 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="5" data-status="Reviewed" data-risk="High">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-10</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">13:22</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">Iraq Ministry of Health Q1 Procurement</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">IQ-2026-034</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>Iraq
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Omeprazole 20mg</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">200K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">7.51</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-amber-600">62%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-red-50 text-red-600 border-red-200">High</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-blue-50 text-blue-700 border-blue-200">
+                                                                <i data-lucide="brain" class="w-3 h-3"></i>Reviewed
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Row 6 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="6" data-status="Generated" data-risk="High">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-08</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">10:44</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">Jordan MOH Central Procurement Tender</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">JO-MOH-2026</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>Jordan
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Atorvastatin 20mg</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">150K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">9.44</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-red-500">58%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-red-50 text-red-600 border-red-200">High</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-slate-50 text-slate-600 border-slate-200">
+                                                                <i data-lucide="sparkles" class="w-3 h-3"></i>Generated
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Row 7 -->
+                                                    <tr class="border-b border-border/20 hover:bg-primary/4 cursor-pointer transition-colors group table-body-row" data-id="7" data-status="Pending" data-risk="Medium">
+                                                        <td class="px-5 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="calendar" class="w-3.5 h-3.5 text-muted-foreground shrink-0"></i>
+                                                                <div>
+                                                                    <p class="text-xs font-semibold text-foreground m-0">2026-05-05</p>
+                                                                    <p class="text-[10px] text-muted-foreground m-0">15:30</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 max-w-[200px]">
+                                                            <p class="text-xs font-semibold text-foreground truncate m-0">Kuwait MOH Specialty Pharmaceuticals Tender</p>
+                                                            <div class="flex items-center gap-1 mt-0.5">
+                                                                <span class="font-mono text-[10px] text-muted-foreground">KW-MOH-2025</span>
+                                                                <span class="text-muted-foreground/40">·</span>
+                                                                <span class="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                                                                    <i data-lucide="map-pin" class="w-2.5 h-2.5"></i>Kuwait
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5">
+                                                            <div class="flex items-center gap-1.5">
+                                                                <i data-lucide="package" class="w-3.5 h-3.5 text-primary/50 shrink-0"></i>
+                                                                <span class="text-xs font-medium text-foreground">Insulin Glargine 100U/mL Pen</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-xs tabular-nums text-foreground/80">60K</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <i data-lucide="dollar-sign" class="w-3 h-3 text-primary/60"></i>
+                                                                <span class="text-sm font-bold text-foreground tabular-nums">27.46</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <span class="text-sm font-bold tabular-nums text-amber-600">68%</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">Medium</span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-center">
+                                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-amber-50 text-amber-700 border-amber-200">
+                                                                <i data-lucide="clock" class="w-3 h-3"></i>Pending
+                                                            </span>
+                                                        </td>
+                                                        <td class="px-4 py-3.5 text-right">
+                                                            <i data-lucide="chevron-right" class="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors"></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sliding Sidebar Drawer -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <div class="drawer-sidebar" id="drawer-sidebar">
+        <!-- Rendered dynamically via javascript -->
+    </div>
+    
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/pages/prediction-history.js" defer></script>
+</body>
+</html>

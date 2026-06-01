@@ -1,0 +1,112 @@
+/* Sidebar Footer & User Profile */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(var(--border-rgb), 0.2);
+    position: relative;
+    z-index: 10;
+}
+
+.user-profile-btn {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(to bottom right, rgba(var(--primary-rgb), 0.1), rgba(255, 255, 255, 0.4), rgba(var(--secondary-rgb), 0.1));
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+
+.user-profile-btn:hover {
+    border-color: rgba(var(--primary-rgb), 0.3);
+    background-color: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.1);
+}
+
+.recharts-default-legend {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: nowrap !important;
+}
+
+.recharts-legend-wrapper {
+    width: 100% !important;
+}
+
+.recharts-legend-item {
+    display: inline-flex !important;
+    align-items: center;
+    white-space: nowrap !important;
+}
+
+.recharts-legend-item-text {
+    white-space: nowrap !important;
+    display: inline-block;
+}
+.user-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 100%;
+    background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.875rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(var(--primary-rgb), 0.3);
+}
+
+.avatar-shine {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top right, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.avatar-text {
+    position: relative;
+    z-index: 1;
+}
+
+.chevron-up {
+    margin-left: auto;
+    color: var(--muted-foreground);
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.user-profile-btn:hover .chevron-up {
+    transform: translateY(-2px);
+    color: var(--primary);
+}
+
+
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin: 0;
+    color: var(--foreground);
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin: 0;
+}
