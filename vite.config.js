@@ -21,6 +21,8 @@ const pageScripts = [
 ];
 
 export default defineConfig({
+    // Set VITE_BASE_PATH=/tenderai/public/ on Hostinger before npm run build
+    base: process.env.VITE_BASE_PATH || '/',
     plugins: [
         laravel({
             input: [
