@@ -1,0 +1,122 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-pFOESqaw.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/css/pages/login.css": {
+    "file": "assets/login-B_H8RYmI.css",
+    "src": "resources/css/pages/login.css",
+    "isEntry": true,
+    "name": "login",
+    "names": [
+      "login.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DMxjwzAj.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/pages/ai-recommendations.js": {
+    "file": "assets/ai-recommendations-8NNn36hK.js",
+    "name": "ai-recommendations",
+    "src": "resources/js/pages/ai-recommendations.js",
+    "isEntry": true
+  },
+  "resources/js/pages/companies.js": {
+    "file": "assets/companies-l0sNRNKZ.js",
+    "name": "companies",
+    "src": "resources/js/pages/companies.js",
+    "isEntry": true
+  },
+  "resources/js/pages/company-detail.js": {
+    "file": "assets/company-detail-BP5lIk_b.js",
+    "name": "company-detail",
+    "src": "resources/js/pages/company-detail.js",
+    "isEntry": true
+  },
+  "resources/js/pages/dashboard.js": {
+    "file": "assets/dashboard-DJKd3np3.js",
+    "name": "dashboard",
+    "src": "resources/js/pages/dashboard.js",
+    "isEntry": true
+  },
+  "resources/js/pages/drug-details.js": {
+    "file": "assets/drug-details-D43IB7pS.js",
+    "name": "drug-details",
+    "src": "resources/js/pages/drug-details.js",
+    "isEntry": true
+  },
+  "resources/js/pages/drug-standardization.js": {
+    "file": "assets/drug-standardization-BsYd372T.js",
+    "name": "drug-standardization",
+    "src": "resources/js/pages/drug-standardization.js",
+    "isEntry": true
+  },
+  "resources/js/pages/drugs.js": {
+    "file": "assets/drugs-D3A7ApKq.js",
+    "name": "drugs",
+    "src": "resources/js/pages/drugs.js",
+    "isEntry": true
+  },
+  "resources/js/pages/login.js": {
+    "file": "assets/login-CxudNOWe.js",
+    "name": "login",
+    "src": "resources/js/pages/login.js",
+    "isEntry": true
+  },
+  "resources/js/pages/management.js": {
+    "file": "assets/management-BePWnOVS.js",
+    "name": "management",
+    "src": "resources/js/pages/management.js",
+    "isEntry": true
+  },
+  "resources/js/pages/prediction-history.js": {
+    "file": "assets/prediction-history-DC8XGf5Q.js",
+    "name": "prediction-history",
+    "src": "resources/js/pages/prediction-history.js",
+    "isEntry": true
+  },
+  "resources/js/pages/product-matching.js": {
+    "file": "assets/product-matching-C_HlDXj7.js",
+    "name": "product-matching",
+    "src": "resources/js/pages/product-matching.js",
+    "isEntry": true
+  },
+  "resources/js/pages/reports.js": {
+    "file": "assets/reports-CZQGERSF.js",
+    "name": "reports",
+    "src": "resources/js/pages/reports.js",
+    "isEntry": true
+  },
+  "resources/js/pages/settings.js": {
+    "file": "assets/settings-DBiWnmrY.js",
+    "name": "settings",
+    "src": "resources/js/pages/settings.js",
+    "isEntry": true
+  },
+  "resources/js/pages/tender-details.js": {
+    "file": "assets/tender-details-jNJRtv6w.js",
+    "name": "tender-details",
+    "src": "resources/js/pages/tender-details.js",
+    "isEntry": true
+  },
+  "resources/js/pages/tenders.js": {
+    "file": "assets/tenders-C0RDzCMt.js",
+    "name": "tenders",
+    "src": "resources/js/pages/tenders.js",
+    "isEntry": true
+  },
+  "resources/js/pages/upload.js": {
+    "file": "assets/upload-Bes3XI-V.js",
+    "name": "upload",
+    "src": "resources/js/pages/upload.js",
+    "isEntry": true
+  }
+}
