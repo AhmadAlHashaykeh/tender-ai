@@ -1,3 +1,5 @@
+import { initGlobalSearch } from './global-search';
+
 // Shared app bootstrap: icons, shell interactions, alerts, and date pickers
 (function() {
     let tailwindScriptPresent = false;
@@ -167,6 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Chart Animations
     initChartAnimations();
+
+    // Global topbar search
+    initGlobalSearch();
 });
 
 /**

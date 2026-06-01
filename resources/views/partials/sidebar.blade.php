@@ -3,7 +3,7 @@
     <div class="sidebar-decor-bottom float-decoration" style="animation-delay: 3s;"></div>
 
     <header class="sidebar-header">
-        <div class="brand-container">
+        <a href="{{ route('dashboard') }}" class="brand-container brand-home-link" aria-label="Go to dashboard">
             <div class="brand-logo">
                 <div class="logo-shine"></div>
                 <i data-lucide="zap" class="logo-icon"></i>
@@ -12,7 +12,7 @@
                 <h1 class="brand-name">TenderAI</h1>
                 <p class="brand-tagline">Pricing Intelligence</p>
             </div>
-        </div>
+        </a>
     </header>
 
     <nav class="sidebar-nav custom-scrollbar">

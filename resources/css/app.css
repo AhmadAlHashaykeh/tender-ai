@@ -8,6 +8,7 @@
 @import url('./layout/topbar.css');
 @import url('./components/animations.css');
 @import url('./components/dropdowns.css');
+@import url('./components/global-search.css');
 @import url('./components/cards.css');
 @import url('./components/buttons.css');
 @import url('./components/forms.css');

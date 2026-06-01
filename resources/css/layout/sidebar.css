@@ -82,6 +82,17 @@
     z-index: 10;
 }
 
+a.brand-container.brand-home-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+a.brand-container.brand-home-link:hover {
+    opacity: 0.88;
+}
+
 .brand-logo {
     width: 3rem;
     height: 3rem;
