@@ -47,6 +47,18 @@ php artisan queue:work --queue=default --tries=3 --timeout=3600
 
 Do **not** set `QUEUE_CONNECTION=sync` if you want to test the real SaaS flow.
 
+## Materialization skip diagnostics
+
+If `imports:materialize` reports `Skipped: N` with `Materialized: 0`:
+
+```bash
+php artisan imports:diagnose-materialization BATCH_ID
+php artisan imports:materialize --batch=BATCH_ID --retry-skipped
+php artisan queue:process-pending --max-jobs=25 --timeout=120
+```
+
+Skip reasons are stored on each `import_rows.normalized_data` as `materialization_skip_reason` / `materialization_skip_details`.
+
 ## Upload details recovery (no SSH required)
 
 On **Uploaded file** details:

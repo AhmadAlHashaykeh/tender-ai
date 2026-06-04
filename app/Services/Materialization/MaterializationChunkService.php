@@ -251,6 +251,9 @@ class MaterializationChunkService
                     $outcome = $this->materializationService->materializeRow($row, true, $this->lookupCache);
                     $summary['processed']++;
                     $summary[$outcome['bucket']]++;
+                    if (isset($outcome['skip_reason'])) {
+                        $summary['skip_reasons'][$outcome['skip_reason']] = ($summary['skip_reasons'][$outcome['skip_reason']] ?? 0) + 1;
+                    }
                     $summary['companies_created'] += $outcome['companies_created'];
                     $summary['drugs_created'] += $outcome['drugs_created'];
                     $summary['tenders_created'] += $outcome['tenders_created'];
@@ -441,22 +444,11 @@ class MaterializationChunkService
      */
     protected function eligibleRowNumbers(ImportBatch $batch): array
     {
-        return ImportRow::query()
-            ->where('import_batch_id', $batch->id)
-            ->whereIn('validation_status', [
-                ImportRowValidationStatus::Valid->value,
-                ImportRowValidationStatus::Warning->value,
-            ])
-            ->whereIn('standardization_status', [
-                StandardizationStatus::AutoApproved->value,
-                StandardizationStatus::Approved->value,
-            ])
-            ->whereNull('bid_record_id')
-            ->whereNotExists(function ($sub) {
-                $sub->selectRaw('1')
-                    ->from('bid_records')
-                    ->whereColumn('bid_records.source_import_row_id', 'import_rows.id');
-            })
+        $query = ImportRow::query()->where('import_batch_id', $batch->id);
+
+        app(MaterializationEligibilityService::class)->constrainEligible($query);
+
+        return $query
             ->orderBy('row_number')
             ->pluck('row_number')
             ->map(fn ($n) => (int) $n)
@@ -490,8 +482,16 @@ class MaterializationChunkService
 
         $this->materializationService->updateBatchCounts($batch->fresh());
 
-        if ($status === 'completed') {
-            app(ImportPipelineOrchestratorService::class)->onMaterializationComplete($batch->fresh());
+        $fullSummary = array_merge($summary, [
+            'skip_reasons' => $this->materializationService->aggregateSkipReasons($batch->fresh()),
+        ]);
+
+        $this->materializationService->syncBatchMaterializationMetadata($batch->fresh(), $fullSummary);
+
+        $batch = $batch->fresh();
+
+        if (($batch->metadata['materialization_status'] ?? '') === 'completed') {
+            app(ImportPipelineOrchestratorService::class)->onMaterializationComplete($batch);
         }
     }
 
@@ -519,6 +519,7 @@ class MaterializationChunkService
             'tenders_created' => 0,
             'tender_items_created' => 0,
             'bid_records_created' => 0,
+            'skip_reasons' => [],
         ];
     }
 }

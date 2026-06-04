@@ -13,7 +13,8 @@ class MaterializeImportsCommand extends Command
                             {--batch= : Import batch ID}
                             {--limit= : Maximum rows to process}
                             {--dry-run : Simulate without persisting}
-                            {--only-approved=true : Only auto_approved/approved rows}';
+                            {--only-approved=true : Only auto_approved/approved rows}
+                            {--retry-skipped : Clear prior skip markers and materialize eligible rows again}';
 
     protected $description = 'Materialize eligible import rows into domain entities (Phase 4B)';
 
@@ -23,6 +24,7 @@ class MaterializeImportsCommand extends Command
         $limit = $this->option('limit') !== null ? (int) $this->option('limit') : null;
         $dryRun = (bool) $this->option('dry-run');
         $onlyApproved = filter_var($this->option('only-approved'), FILTER_VALIDATE_BOOLEAN);
+        $retrySkipped = (bool) $this->option('retry-skipped');
 
         if ($dryRun) {
             $this->warn('Dry run enabled — no database writes.');
@@ -53,22 +55,64 @@ class MaterializeImportsCommand extends Command
         foreach ($batches as $batch) {
             $this->info("Materializing batch #{$batch->id} ({$batch->original_filename})");
 
+            if ($retrySkipped && ! $dryRun) {
+                $cleared = $service->clearStaleSkipMarkers($batch);
+                $this->line("Cleared {$cleared} prior skip marker(s).");
+                $batch->update([
+                    'metadata' => array_merge($batch->metadata ?? [], [
+                        'materialization_status' => 'processing',
+                        'pipeline_status' => 'preparing_materialization',
+                        'pipeline_ready_at' => null,
+                    ]),
+                ]);
+            }
+
             if ($dryRun) {
                 $batchSummary = $this->dryRunBatch($batch, $service, $onlyApproved, $limit);
             } else {
-                $batchSummary = $service->materializeBatch($batch, $onlyApproved, $limit, true);
+                $batchSummary = $service->materializeBatch($batch, $onlyApproved, $limit, true, $retrySkipped);
             }
 
             foreach ($summary as $key => $value) {
-                $summary[$key] += $batchSummary[$key];
+                if ($key === 'skip_reasons') {
+                    foreach ($batchSummary['skip_reasons'] ?? [] as $reason => $count) {
+                        $summary['skip_reasons'][$reason] = ($summary['skip_reasons'][$reason] ?? 0) + $count;
+                    }
+
+                    continue;
+                }
+
+                $summary[$key] += $batchSummary[$key] ?? 0;
+            }
+
+            if (! $dryRun && ($batchSummary['materialized'] ?? 0) > 0) {
+                app(\App\Services\Import\ImportPipelineOrchestratorService::class)
+                    ->onMaterializationComplete($batch->fresh());
             }
         }
 
         $this->newLine();
-        $this->table(
-            ['Metric', 'Count'],
-            collect($summary)->map(fn ($count, $metric) => [str_replace('_', ' ', ucfirst($metric)), $count])->values()->all()
-        );
+        $tableRows = collect($summary)
+            ->except(['skip_reasons'])
+            ->map(fn ($count, $metric) => [str_replace('_', ' ', ucfirst($metric)), $count])
+            ->values()
+            ->all();
+        $this->table(['Metric', 'Count'], $tableRows);
+
+        if (! empty($summary['skip_reasons'])) {
+            $this->newLine();
+            $this->info('Skip reasons');
+            $this->table(
+                ['Reason', 'Rows'],
+                collect($summary['skip_reasons'])
+                    ->map(fn ($count, $reason) => [
+                        \App\Services\Materialization\MaterializationEligibilityService::reasonLabels()[$reason] ?? $reason,
+                        $count,
+                    ])
+                    ->values()
+                    ->all(),
+            );
+        }
 
         return self::SUCCESS;
     }

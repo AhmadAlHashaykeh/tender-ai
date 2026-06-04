@@ -5,6 +5,7 @@ namespace App\Services\Import;
 use App\Models\BidRecord;
 use App\Models\ImportBatch;
 use App\Models\PricingStatistic;
+use App\Services\Materialization\ImportMaterializationService;
 use Illuminate\Support\Facades\DB;
 
 class ImportPipelineReadinessService
@@ -77,6 +78,14 @@ class ImportPipelineReadinessService
     {
         $metadata = $batch->metadata ?? [];
 
+        if (in_array($metadata['materialization_status'] ?? '', ['incomplete', 'preparing', 'processing'], true)) {
+            return false;
+        }
+
+        if (app(ImportMaterializationService::class)->batchMaterializationStats($batch)['eligible_pending'] > 0) {
+            return false;
+        }
+
         if (($metadata['pipeline_status'] ?? '') !== 'ready') {
             return false;
         }
@@ -89,7 +98,12 @@ class ImportPipelineReadinessService
             return false;
         }
 
-        return $this->batchHasSufficientMarketStatistics($batch);
+        if ($this->batchRequiresMarketStatistics($batch)
+            && ! $this->batchHasSufficientMarketStatistics($batch)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

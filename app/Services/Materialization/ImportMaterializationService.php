@@ -19,6 +19,7 @@ class ImportMaterializationService
         protected TenderItemMaterializationService $tenderItemService,
         protected BidRecordMaterializationService $bidRecordService,
         protected ImportBatchService $importBatchService,
+        protected MaterializationEligibilityService $eligibility,
     ) {}
 
     /**
@@ -39,10 +40,11 @@ class ImportMaterializationService
         bool $onlyApproved = true,
         ?int $limit = null,
         bool $persist = true,
+        bool $retrySkipped = false,
     ): array {
         $summary = $this->emptySummary();
 
-        $query = $this->eligibleQuery($batch->id, $onlyApproved);
+        $query = $this->eligibleQuery($batch->id, $onlyApproved, $retrySkipped);
 
         if ($limit !== null) {
             $query->limit($limit);
@@ -58,11 +60,17 @@ class ImportMaterializationService
                 $summary['tenders_created'] += $outcome['tenders_created'];
                 $summary['tender_items_created'] += $outcome['tender_items_created'];
                 $summary['bid_records_created'] += $outcome['bid_records_created'];
+
+                if (isset($outcome['skip_reason'])) {
+                    $key = $outcome['skip_reason'];
+                    $summary['skip_reasons'][$key] = ($summary['skip_reasons'][$key] ?? 0) + 1;
+                }
             }
         });
 
         if ($persist) {
             $this->updateBatchCounts($batch);
+            $this->syncBatchMaterializationMetadata($batch->fresh(), $summary);
         }
 
         return $summary;
@@ -75,7 +83,9 @@ class ImportMaterializationService
      *     drugs_created: int,
      *     tenders_created: int,
      *     tender_items_created: int,
-     *     bid_records_created: int
+     *     bid_records_created: int,
+     *     skip_reason?: string,
+     *     skip_details?: string
      * }
      */
     public function materializeRow(
@@ -83,21 +93,14 @@ class ImportMaterializationService
         bool $persist = true,
         ?MaterializationLookupCache $cache = null,
     ): array {
-        $noop = [
-            'bucket' => 'skipped',
-            'companies_created' => 0,
-            'drugs_created' => 0,
-            'tenders_created' => 0,
-            'tender_items_created' => 0,
-            'bid_records_created' => 0,
-        ];
+        $ineligibleReason = $this->eligibility->ineligibilityReason($row);
 
-        if (! $this->isEligible($row)) {
-            return $noop;
-        }
+        if ($ineligibleReason !== null) {
+            if ($cache !== null && $ineligibleReason === MaterializationEligibilityService::REASON_ALREADY_MATERIALIZED) {
+                $cache->markRowMaterialized($row->id);
+            }
 
-        if ($this->isAlreadyMaterialized($row, $cache)) {
-            return $noop;
+            return $this->skippedOutcome($row, $ineligibleReason, $persist);
         }
 
         if (! $persist) {
@@ -121,7 +124,11 @@ class ImportMaterializationService
 
         try {
             DB::transaction(function () use ($row, &$counts, $cache): void {
-                $countryId = $this->resolveCountryId($row);
+                $countryId = $this->eligibility->resolveCountryId($row);
+
+                if ($countryId === null) {
+                    throw new \RuntimeException('Country could not be resolved for materialization.');
+                }
 
                 $company = $this->companyService->resolve($row, $countryId, $cache);
                 $counts['companies_created'] += $company['created'] ? 1 : 0;
@@ -183,68 +190,92 @@ class ImportMaterializationService
 
     public function isEligible(ImportRow $row): bool
     {
-        if (! in_array($row->validation_status, [
-            ImportRowValidationStatus::Valid->value,
-            ImportRowValidationStatus::Warning->value,
-        ], true)) {
-            return false;
-        }
-
-        if (! in_array($row->standardization_status, [
-            StandardizationStatus::AutoApproved->value,
-            StandardizationStatus::Approved->value,
-        ], true)) {
-            return false;
-        }
-
-        $priceUsd = $row->normalized_data['price_usd'] ?? null;
-        if (! is_numeric($priceUsd) || (float) $priceUsd <= 0) {
-            return false;
-        }
-
-        if ($this->resolveCountryId($row, false) === null) {
-            return false;
-        }
-
-        if (! filled($row->raw_code) && ! filled($row->raw_inn) && ! filled($row->raw_product_name)) {
-            return false;
-        }
-
-        if (! filled($row->raw_company_name) && ! filled($row->raw_winner)) {
-            return false;
-        }
-
-        $tenderNumber = $row->normalized_data['standardization']['tender']['tender_number'] ?? $row->raw_tender_number;
-
-        return filled($tenderNumber);
+        return $this->eligibility->isEligible($row);
     }
 
     public function isAlreadyMaterialized(ImportRow $row, ?MaterializationLookupCache $cache = null): bool
     {
-        if ($row->bid_record_id !== null) {
-            return true;
-        }
-
         if ($cache !== null && $cache->isRowMaterialized($row->id)) {
             return true;
         }
 
-        return BidRecord::query()->where('source_import_row_id', $row->id)->exists();
+        return $this->eligibility->isAlreadyMaterialized($row);
     }
 
     public function resolveCountryId(ImportRow $row, bool $throw = true): ?int
     {
-        $countryId = $row->normalized_data['country_id'] ?? null;
+        $countryId = $this->eligibility->resolveCountryId($row);
 
-        if ($countryId !== null) {
-            return (int) $countryId;
-        }
-
-        if ($throw) {
+        if ($countryId === null && $throw) {
             throw new \RuntimeException('Country could not be resolved for materialization.');
         }
 
-        return null;
+        return $countryId;
+    }
+
+    /**
+     * @return array{bucket: string, companies_created: int, drugs_created: int, tenders_created: int, tender_items_created: int, bid_records_created: int, skip_reason: string, skip_details: string}
+     */
+    protected function skippedOutcome(ImportRow $row, string $reason, bool $persist): array
+    {
+        $payload = $this->eligibility->skipPayload($row);
+        $payload['reason'] = $reason;
+
+        if ($persist) {
+            $normalized = $row->normalized_data ?? [];
+            $normalized['materialization_status'] = 'skipped';
+            $normalized['materialization_skip_reason'] = $payload['reason'];
+            $normalized['materialization_skip_details'] = $payload['details'];
+            $normalized['materialization_skipped_at'] = now()->toIso8601String();
+            unset($normalized['materialization_error']);
+
+            $row->update(['normalized_data' => $normalized]);
+        }
+
+        return [
+            'bucket' => 'skipped',
+            'companies_created' => 0,
+            'drugs_created' => 0,
+            'tenders_created' => 0,
+            'tender_items_created' => 0,
+            'bid_records_created' => 0,
+            'skip_reason' => $payload['reason'],
+            'skip_details' => $payload['details'],
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $summary
+     */
+    public function syncBatchMaterializationMetadata(ImportBatch $batch, array $summary): void
+    {
+        $stats = $this->batchMaterializationStats($batch);
+        $bidCount = (int) BidRecord::query()->where('import_batch_id', $batch->id)->count();
+
+        $status = $stats['eligible_pending'] > 0 ? 'incomplete' : 'completed';
+
+        $batch->update([
+            'metadata' => array_merge($batch->metadata ?? [], [
+                'materialization_status' => $status,
+                'materialization_completed_at' => now()->toIso8601String(),
+                'materialization_processed_rows' => (int) ($summary['processed'] ?? 0),
+                'materialization_materialized_rows' => (int) ($summary['materialized'] ?? 0),
+                'materialization_skipped_rows' => (int) ($summary['skipped'] ?? 0),
+                'materialization_failed_rows' => (int) ($summary['failed'] ?? 0),
+                'materialization_skip_reasons' => $summary['skip_reasons'] ?? [],
+                'materialization_summary' => [
+                    'processed' => (int) ($summary['processed'] ?? 0),
+                    'materialized' => (int) ($summary['materialized'] ?? 0),
+                    'skipped' => (int) ($summary['skipped'] ?? 0),
+                    'failed' => (int) ($summary['failed'] ?? 0),
+                ],
+                'materialization_last_error' => $status === 'incomplete'
+                    ? 'Some approved rows were not materialized. Run imports:diagnose-materialization for details.'
+                    : ($summary['failed'] > 0
+                        ? sprintf('%d row(s) failed during materialization.', $summary['failed'])
+                        : null),
+            ]),
+        ]);
     }
 
     /**
@@ -268,8 +299,6 @@ class ImportMaterializationService
         $review = StandardizationStatus::ReviewRequired->value;
 
         $materializationFailedExpr = $this->jsonEqualsExpression('materialization_status', 'failed');
-        $priceUsdExpr = $this->jsonNumericExpression('price_usd');
-        $countryIdExpr = $this->jsonPathExpression('country_id');
 
         $base = DB::table('import_rows')->where('import_batch_id', $batchId);
 
@@ -295,31 +324,9 @@ class ImportMaterializationService
             ->where('standardization_status', $review)
             ->count();
 
-        $eligiblePending = (clone $base)
-            ->whereIn('validation_status', [$valid, $warning])
-            ->whereIn('standardization_status', [$auto, $approved])
-            ->whereNull('bid_record_id')
-            ->whereNotExists(function ($sub) {
-                $sub->select(DB::raw(1))
-                    ->from('bid_records')
-                    ->whereColumn('bid_records.source_import_row_id', 'import_rows.id');
-            })
-            ->whereRaw("{$priceUsdExpr} > 0")
-            ->whereRaw("{$countryIdExpr} IS NOT NULL")
-            ->where(function ($query) {
-                $query->whereNotNull('raw_code')
-                    ->orWhereNotNull('raw_inn')
-                    ->orWhereNotNull('raw_product_name');
-            })
-            ->where(function ($query) {
-                $query->whereNotNull('raw_company_name')
-                    ->orWhereNotNull('raw_winner');
-            })
-            ->where(function ($query) {
-                $query->whereNotNull('raw_tender_number')
-                    ->orWhereRaw($this->jsonPathExpression('standardization.tender.tender_number').' IS NOT NULL');
-            })
-            ->count();
+        $eligiblePending = $this->eligibility->constrainEligible(
+            ImportRow::query()->where('import_batch_id', $batchId),
+        )->count();
 
         $total = (int) ($batch->row_count ?: (clone $base)->count());
         $ineligible = max(0, $total - $materialized - $failed - $eligiblePending - $pendingStandardization - $awaitingReview);
@@ -395,21 +402,78 @@ class ImportMaterializationService
         $this->importBatchService->refreshQualityScore($batch->fresh());
     }
 
-    protected function eligibleQuery(int $batchId, bool $onlyApproved)
+    public function clearStaleSkipMarkers(ImportBatch $batch): int
+    {
+        $cleared = 0;
+
+        $this->eligibility->constrainEligible(
+            ImportRow::query()->where('import_batch_id', $batch->id),
+        )->chunkById(100, function ($rows) use (&$cleared): void {
+            foreach ($rows as $row) {
+                $normalized = $row->normalized_data ?? [];
+
+                if (($normalized['materialization_status'] ?? '') !== 'skipped') {
+                    continue;
+                }
+
+                unset(
+                    $normalized['materialization_status'],
+                    $normalized['materialization_skip_reason'],
+                    $normalized['materialization_skip_details'],
+                    $normalized['materialization_skipped_at'],
+                );
+
+                $row->update(['normalized_data' => $normalized]);
+                $cleared++;
+            }
+        });
+
+        return $cleared;
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    public function aggregateSkipReasons(ImportBatch $batch): array
+    {
+        $counts = [];
+
+        ImportRow::query()
+            ->where('import_batch_id', $batch->id)
+            ->orderBy('row_number')
+            ->chunkById(200, function ($rows) use (&$counts): void {
+                foreach ($rows as $row) {
+                    $reason = $row->normalized_data['materialization_skip_reason'] ?? null;
+
+                    if ($reason === null) {
+                        $reason = $this->eligibility->ineligibilityReason($row);
+                    }
+
+                    if ($reason === null) {
+                        continue;
+                    }
+
+                    $counts[$reason] = ($counts[$reason] ?? 0) + 1;
+                }
+            });
+
+        ksort($counts);
+
+        return $counts;
+    }
+
+    protected function eligibleQuery(int $batchId, bool $onlyApproved, bool $retrySkipped = false)
     {
         $query = ImportRow::query()->where('import_batch_id', $batchId);
 
         if ($onlyApproved) {
-            $query->whereIn('standardization_status', [
-                StandardizationStatus::AutoApproved->value,
-                StandardizationStatus::Approved->value,
+            $this->eligibility->constrainEligible($query);
+        } else {
+            $query->whereIn('validation_status', [
+                ImportRowValidationStatus::Valid->value,
+                ImportRowValidationStatus::Warning->value,
             ]);
         }
-
-        $query->whereIn('validation_status', [
-            ImportRowValidationStatus::Valid->value,
-            ImportRowValidationStatus::Warning->value,
-        ]);
 
         return $query;
     }
@@ -439,6 +503,7 @@ class ImportMaterializationService
             'tenders_created' => 0,
             'tender_items_created' => 0,
             'bid_records_created' => 0,
+            'skip_reasons' => [],
         ];
     }
 }

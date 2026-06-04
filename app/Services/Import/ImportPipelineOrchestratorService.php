@@ -7,6 +7,7 @@ use App\Enums\StandardizationStatus;
 use App\Jobs\RefreshImportStatisticsJob;
 use App\Models\ImportBatch;
 use App\Models\ImportRow;
+use App\Services\Materialization\ImportMaterializationService;
 use App\Services\Materialization\MaterializationChunkService;
 use App\Services\Standardization\ImportRowStandardizationService;
 
@@ -16,6 +17,7 @@ class ImportPipelineOrchestratorService
         protected ImportJobDispatcher $jobDispatcher,
         protected ImportRowStandardizationService $standardizationService,
         protected MaterializationChunkService $materializationService,
+        protected ImportMaterializationService $importMaterializationService,
         protected ImportPipelineReadinessService $readiness,
     ) {}
 
@@ -123,6 +125,22 @@ class ImportPipelineOrchestratorService
         }
 
         if (! $this->readiness->batchRequiresMarketStatistics($batch)) {
+            $materializationStats = $this->importMaterializationService->batchMaterializationStats($batch);
+
+            if ($materializationStats['eligible_pending'] > 0
+                || ($metadata['materialization_status'] ?? '') === 'incomplete') {
+                $batch->update([
+                    'metadata' => array_merge($metadata, [
+                        'pipeline_status' => 'materialization_incomplete',
+                        'pipeline_ready_at' => null,
+                        'statistics_status' => 'not_started',
+                        'materialization_last_error' => 'Approved rows are waiting for materialization. Run imports:diagnose-materialization or imports:materialize --retry-skipped.',
+                    ]),
+                ]);
+
+                return;
+            }
+
             $batch->update([
                 'metadata' => array_merge($batch->metadata ?? [], [
                     'statistics_skipped_reason' => 'no_materialized_bid_records',

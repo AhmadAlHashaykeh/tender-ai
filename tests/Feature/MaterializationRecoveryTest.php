@@ -90,6 +90,9 @@ class MaterializationRecoveryTest extends TestCase
         $row = $this->makeApprovedRow();
         $batch = $row->importBatch;
 
+        app(\App\Services\Materialization\ImportMaterializationService::class)->materializeRow($row);
+        $row->refresh();
+
         MaterializationChunk::create([
             'import_batch_id' => $batch->id,
             'chunk_number' => 1,
