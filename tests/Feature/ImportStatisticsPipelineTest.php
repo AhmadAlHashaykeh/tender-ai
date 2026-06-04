@@ -92,10 +92,9 @@ class ImportStatisticsPipelineTest extends TestCase
 
     public function test_failed_statistics_can_retry_via_http(): void
     {
-        Queue::fake();
-
         $user = User::factory()->create();
         $batch = $this->batchWithMaterializationCompleted();
+        $this->seedBidRecordForBatch($batch);
         $batch->update([
             'metadata' => array_merge($batch->metadata ?? [], [
                 'statistics_status' => 'failed',
@@ -106,9 +105,11 @@ class ImportStatisticsPipelineTest extends TestCase
 
         $this->actingAs($user)
             ->post(route('imports.statistics.retry', $batch))
-            ->assertRedirect(route('imports.show', $batch));
+            ->assertRedirect(route('imports.show', $batch))
+            ->assertSessionHas('success');
 
-        Queue::assertPushed(RefreshImportStatisticsJob::class);
+        $this->assertGreaterThan(0, PricingStatistic::query()->count());
+        $this->assertTrue(app(ImportPipelineReadinessService::class)->batchIsPipelineReady($batch->fresh()));
     }
 
     public function test_refresh_import_statistics_job_does_not_require_cli(): void

@@ -9,6 +9,8 @@ use App\Models\ImportMappingTemplate;
 use App\Services\Import\ColumnMappingService;
 use App\Services\Import\ImportBatchService;
 use App\Services\Import\ImportBatchStatsService;
+use App\Services\Import\ImportBatchPipelineAdvanceService;
+use App\Services\Import\ImportPipelineDiagnosticsService;
 use App\Services\Import\ImportPipelineOrchestratorService;
 use App\Services\Import\ImportPipelineReadinessService;
 use App\Services\Import\ImportPipelineService;
@@ -54,9 +56,13 @@ class ImportBatchController extends Controller
             'groups' => $readiness->distinctDrugCountryGroupCount($import),
             'statistics' => $readiness->pricingStatisticsCountForBatch($import),
         ];
+        $pipelineDiagnostics = app(ImportPipelineDiagnosticsService::class)->forBatch($import);
 
         $showAdvanced = (bool) config('import.show_advanced_details', false)
             || (bool) config('app.debug', false);
+
+        $canRetryStatistics = ($import->metadata['materialization_status'] ?? '') === 'completed';
+        $canRunPendingProcessing = ! in_array($import->status, ['queued', 'processing', 'parsing', 'validating'], true);
 
         return view('imports.show', [
             'batch' => $import,
@@ -66,7 +72,10 @@ class ImportBatchController extends Controller
             'pipeline' => $pipeline,
             'ux' => $pipeline['user_experience'],
             'showAdvanced' => $showAdvanced,
-            'queueHealth' => $showAdvanced ? app(QueueHealthService::class)->adminStatus() : null,
+            'queueHealth' => app(QueueHealthService::class)->adminStatus(),
+            'pipelineDiagnostics' => $pipelineDiagnostics,
+            'canRetryStatistics' => $canRetryStatistics,
+            'canRunPendingProcessing' => $canRunPendingProcessing,
             'pricingStatsSummary' => $pricingStatsSummary,
             'qualityScore' => $quality['score'],
             'qualityRating' => $quality['rating'],
@@ -230,29 +239,30 @@ class ImportBatchController extends Controller
 
     public function retryStatistics(
         ImportBatch $import,
-        ImportPipelineOrchestratorService $orchestrator,
+        ImportBatchPipelineAdvanceService $pipelineAdvance,
     ): RedirectResponse {
-        $metadata = $import->metadata ?? [];
+        $result = $pipelineAdvance->retryMarketStatisticsSync($import);
 
-        if (($metadata['materialization_status'] ?? '') !== 'completed') {
+        if ($result['success']) {
             return redirect()
                 ->route('imports.show', $import)
-                ->withErrors(['statistics' => 'Market statistics can only be refreshed after data preparation completes.']);
+                ->with('success', $result['message']);
         }
-
-        $import->update([
-            'metadata' => array_merge($metadata, [
-                'pipeline_ready_at' => null,
-                'pipeline_status' => 'preparing_statistics',
-                'statistics_status' => 'not_started',
-            ]),
-        ]);
-
-        $orchestrator->dispatchStatisticsRefresh($import->fresh());
 
         return redirect()
             ->route('imports.show', $import)
-            ->with('success', 'Market statistics refresh has been queued.');
+            ->withErrors(['statistics' => $result['message']]);
+    }
+
+    public function runPendingProcessing(
+        ImportBatch $import,
+        ImportBatchPipelineAdvanceService $pipelineAdvance,
+    ): RedirectResponse {
+        $result = $pipelineAdvance->runPendingProcessing($import);
+
+        return redirect()
+            ->route('imports.show', $import)
+            ->with('success', $result['message']);
     }
 
     public function destroy(ImportBatch $import, ImportBatchService $importBatchService): RedirectResponse

@@ -314,7 +314,9 @@ class MaterializationChunkService
 
     public function checkBatchFinalization(ImportBatch $batch): void
     {
-        if (! $batch->usesChunkedMaterialization()) {
+        $chunks = MaterializationChunk::query()->where('import_batch_id', $batch->id)->get();
+
+        if ($chunks->isEmpty()) {
             return;
         }
 
@@ -330,7 +332,6 @@ class MaterializationChunkService
             return;
         }
 
-        $chunks = MaterializationChunk::query()->where('import_batch_id', $batch->id)->get();
         $failedChunks = $chunks->where('status', MaterializationChunkStatus::Failed->value)->count();
 
         $summary = [

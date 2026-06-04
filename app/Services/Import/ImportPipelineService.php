@@ -235,15 +235,20 @@ class ImportPipelineService
                 'route' => route('predictions.index'),
                 'type' => 'link',
             ],
-            $statisticsFailed => [
-                'label' => 'Retry Market Statistics',
-                'route' => route('imports.statistics.retry', $batch),
-                'type' => 'form',
-            ],
             $reviewCount > 0 => [
                 'label' => 'Review Matches',
                 'route' => route('standardization.index', ['batch' => $batch->id, 'status' => 'review_required']),
                 'type' => 'link',
+            ],
+            $statisticsFailed, $buildingIntelligence, $statisticsProcessing => [
+                'label' => 'Retry Market Statistics',
+                'route' => route('imports.statistics.retry', $batch),
+                'type' => 'form',
+            ],
+            $materializationComplete && ! $isReady => [
+                'label' => 'Run Pending Processing',
+                'route' => route('imports.pipeline.run-pending', $batch),
+                'type' => 'form',
             ],
             default => null,
         };

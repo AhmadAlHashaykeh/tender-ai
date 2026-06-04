@@ -50,6 +50,66 @@
 
         <x-import-user-progress :ux="$ux" :batch="$batch" />
 
+        <div class="p-5 rounded-2xl bg-white border border-border/50 shadow-sm" id="import-pipeline-diagnostics">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                <div>
+                    <h2 class="text-sm font-semibold text-foreground">Import Pipeline Status</h2>
+                    <p class="text-xs text-muted-foreground mt-1">Diagnostic view for upload → matching → materialization → market statistics.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    @if ($canRunPendingProcessing)
+                        <form method="POST" action="{{ route('imports.pipeline.run-pending', $batch) }}">
+                            @csrf
+                            <button type="submit" class="h-8 px-3 rounded-lg border border-border/60 text-xs font-semibold text-foreground hover:bg-slate-50">
+                                Run Pending Processing
+                            </button>
+                        </form>
+                    @endif
+                    @if ($canRetryStatistics)
+                        <form method="POST" action="{{ route('imports.statistics.retry', $batch) }}">
+                            @csrf
+                            <button type="submit" class="h-8 px-3 rounded-lg bg-primary text-white text-xs font-semibold hover:opacity-90">
+                                Retry Market Statistics
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+
+            @if ($errors->has('statistics'))
+                <div class="mb-4 p-3 rounded-lg bg-red-50 border border-red-100 text-xs text-red-700">{{ $errors->first('statistics') }}</div>
+            @endif
+
+            <dl class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 text-xs">
+                <div><dt class="text-muted-foreground">Rows uploaded</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['rows_uploaded']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Rows processed</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['rows_processed']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Rows standardized</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['rows_standardized']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Product matches pending</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['product_matches_pending']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Product matches approved</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['product_matches_approved']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Entities materialized</dt><dd class="font-semibold text-foreground">{{ $pipelineDiagnostics['entities_materialized'] ? 'Yes' : 'No' }}</dd></div>
+                <div><dt class="text-muted-foreground">Bid records created</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['bid_records_created']) }} <span class="text-muted-foreground font-normal">({{ number_format($pipelineDiagnostics['bid_records_analytics_eligible']) }} analytics-ready)</span></dd></div>
+                <div><dt class="text-muted-foreground">Drug × country groups</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['drug_country_groups']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Market statistics (this upload)</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['market_statistics_records']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Pending jobs (this upload)</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['pending_jobs']) }} <span class="text-muted-foreground font-normal">/ {{ number_format($pipelineDiagnostics['queue_pending_total']) }} total</span></dd></div>
+                <div><dt class="text-muted-foreground">Failed jobs (this upload)</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['failed_jobs']) }}</dd></div>
+                <div><dt class="text-muted-foreground">Pipeline ready</dt><dd class="font-semibold text-foreground">{{ $pipelineDiagnostics['pipeline_ready'] ? 'Yes' : 'No' }}</dd></div>
+            </dl>
+
+            @if (! empty($pipelineDiagnostics['last_error']))
+                <p class="mt-4 text-xs text-red-700"><strong>Last error:</strong> {{ $pipelineDiagnostics['last_error'] }}</p>
+            @endif
+
+            @if (($queueHealth['should_warn'] ?? false))
+                <p class="mt-3 text-xs text-amber-800 bg-amber-50 border border-amber-100 rounded-lg p-3">
+                    <strong>Background queue:</strong> {{ $queueHealth['message'] }}
+                    @if (($queueHealth['pending_jobs'] ?? 0) > 0)
+                        ({{ $queueHealth['pending_jobs'] }} job(s) waiting.)
+                    @endif
+                    Ensure Hostinger cron runs <code class="text-[10px]">php artisan schedule:run</code> every minute.
+                </p>
+            @endif
+        </div>
+
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div class="p-4 rounded-2xl bg-white border border-border/40">
                 <p class="text-[10px] text-muted-foreground uppercase">Total Records</p>

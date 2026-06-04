@@ -36,11 +36,11 @@ class ImportPipelineOrchestratorService
 
     public function onImportValidationComplete(ImportBatch $batch): void
     {
+        $batch = $batch->fresh();
+
         if (! $this->pipelineAutomationEnabled()) {
             return;
         }
-
-        $batch = $batch->fresh();
 
         if (! $this->isValidationComplete($batch)) {
             return;
@@ -123,6 +123,12 @@ class ImportPipelineOrchestratorService
         }
 
         if (! $this->readiness->batchRequiresMarketStatistics($batch)) {
+            $batch->update([
+                'metadata' => array_merge($batch->metadata ?? [], [
+                    'statistics_skipped_reason' => 'no_materialized_bid_records',
+                ]),
+            ]);
+
             $this->markPipelineReady($batch, [
                 'groups_processed' => 0,
                 'pricing_statistics_created' => 0,

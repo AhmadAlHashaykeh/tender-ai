@@ -42,6 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('imports.materialization.retry-failed');
     Route::post('/imports/{import}/statistics/retry', [ImportBatchController::class, 'retryStatistics'])
         ->name('imports.statistics.retry');
+    Route::post('/imports/{import}/pipeline/run-pending', [ImportBatchController::class, 'runPendingProcessing'])
+        ->name('imports.pipeline.run-pending');
     Route::get('/management', [ManagementController::class, 'index'])->name('management.index');
     Route::get('/management/bid-records/{bidRecord}', [ManagementController::class, 'show'])->name('management.bid-records.show');
     Route::get('/management/bid-records/{bidRecord}/edit', [ManagementController::class, 'edit'])->name('management.bid-records.edit');

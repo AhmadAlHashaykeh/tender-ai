@@ -112,12 +112,19 @@ class ImportPipelineReadinessService
             ->exists();
 
         $importsProcessing = ImportBatch::query()
-            ->where(function ($query) {
-                $query->where('metadata->pipeline_status', '!=', 'ready')
-                    ->orWhereNull('metadata->pipeline_ready_at');
-            })
             ->whereNotIn('status', ['failed', 'uploaded', 'awaiting_mapping'])
+            ->where(function ($query) {
+                $query->whereIn('status', ['queued', 'processing', 'parsing', 'validating'])
+                    ->orWhere('metadata->pipeline_status', '!=', 'ready')
+                    ->orWhereNull('metadata->pipeline_ready_at')
+                    ->orWhere('metadata->statistics_status', 'processing')
+                    ->orWhereIn('metadata->materialization_status', ['preparing', 'processing'])
+                    ->orWhereIn('metadata->standardization_status', ['processing']);
+            })
             ->exists();
+
+        $batchesAwaitingStatistics = $this->countBatchesAwaitingMarketStatistics();
+        $importsWithoutAnalyticsBids = $this->hasCompletedImportsWithoutAnalyticsBids();
 
         $statisticsFailed = ImportBatch::query()
             ->where('metadata->statistics_status', 'failed')
@@ -128,12 +135,18 @@ class ImportPipelineReadinessService
 
         if ($pricingStatsCount > 0) {
             $messageType = 'ready';
-        } elseif ($importsProcessing) {
+        } elseif ($importsProcessing || $batchesAwaitingStatistics > 0) {
             $messageType = 'processing';
             $message = 'Your uploaded data is still being prepared. Recommendations will be available shortly.';
+            if ($batchesAwaitingStatistics > 0 && config('queue.default') === 'database') {
+                $message .= ' If this persists, open your upload details and run pending processing or retry market statistics.';
+            }
         } elseif ($statisticsFailed) {
             $messageType = 'failed';
             $message = 'Market analysis preparation failed on a recent upload. Open the uploaded file and retry market statistics.';
+        } elseif ($importsWithoutAnalyticsBids) {
+            $messageType = 'no_analytics_bids';
+            $message = 'Uploads were processed but no analytics-ready bid records exist yet. Complete product matching and materialization from the upload details page.';
         } elseif (! $hasAnyImport) {
             $messageType = 'no_data';
             $message = 'Upload tender data through the import hub to enable price recommendations.';
@@ -145,10 +158,54 @@ class ImportPipelineReadinessService
         return [
             'pricing_statistics_count' => $pricingStatsCount,
             'has_any_import' => $hasAnyImport,
-            'imports_processing' => $importsProcessing,
+            'imports_processing' => $importsProcessing || $batchesAwaitingStatistics > 0,
+            'batches_awaiting_statistics' => $batchesAwaitingStatistics,
             'statistics_failed' => $statisticsFailed,
             'message' => $message,
             'message_type' => $messageType,
         ];
+    }
+
+    /**
+     * Completed materialization with bid groups but insufficient pricing_statistics for that batch.
+     */
+    public function countBatchesAwaitingMarketStatistics(): int
+    {
+        return ImportBatch::query()
+            ->whereNotIn('status', ['failed', 'uploaded', 'awaiting_mapping'])
+            ->where('metadata->materialization_status', 'completed')
+            ->get()
+            ->filter(function (ImportBatch $batch) {
+                if (($batch->metadata['statistics_status'] ?? '') === 'failed') {
+                    return false;
+                }
+
+                return $this->batchRequiresMarketStatistics($batch)
+                    && ! $this->batchHasSufficientMarketStatistics($batch);
+            })
+            ->count();
+    }
+
+    public function hasCompletedImportsWithoutAnalyticsBids(): bool
+    {
+        $completedBatches = ImportBatch::query()
+            ->whereNotIn('status', ['failed', 'uploaded', 'awaiting_mapping'])
+            ->where('metadata->materialization_status', 'completed')
+            ->pluck('id');
+
+        if ($completedBatches->isEmpty()) {
+            return false;
+        }
+
+        $hasAnyBid = BidRecord::query()->whereIn('import_batch_id', $completedBatches)->exists();
+
+        if (! $hasAnyBid) {
+            return true;
+        }
+
+        return ! BidRecord::query()
+            ->analyticsEligible()
+            ->whereIn('import_batch_id', $completedBatches)
+            ->exists();
     }
 }

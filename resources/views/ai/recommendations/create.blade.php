@@ -68,6 +68,8 @@
                     <strong>No market statistics yet.</strong> {{ $availability['message'] }}
                 @elseif(($availability['message_type'] ?? '') === 'processing')
                     <strong>Data preparation in progress.</strong> {{ $availability['message'] }}
+                @elseif(($availability['message_type'] ?? '') === 'no_analytics_bids')
+                    <strong>Market data not ready.</strong> {{ $availability['message'] }}
                 @else
                     <strong>{{ ($availability['message_type'] ?? '') === 'failed' ? 'Market analysis issue.' : 'Market statistics pending.' }}</strong>
                     {{ $availability['message'] }}

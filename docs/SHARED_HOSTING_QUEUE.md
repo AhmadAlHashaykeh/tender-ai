@@ -47,6 +47,26 @@ php artisan queue:work --queue=default --tries=3 --timeout=3600
 
 Do **not** set `QUEUE_CONNECTION=sync` if you want to test the real SaaS flow.
 
+## Upload details recovery (no SSH required)
+
+On **Uploaded file** details:
+
+- **Run Pending Processing** — runs `queue:process-pending` and re-orchestrates the next pipeline step for that batch.
+- **Retry Market Statistics** — runs statistics refresh synchronously when bid records exist (Hostinger-safe).
+
+## Production diagnostics (SSH)
+
+```bash
+/opt/alt/php82/usr/bin/php artisan imports:diagnose
+/opt/alt/php82/usr/bin/php artisan imports:diagnose BATCH_ID
+/opt/alt/php82/usr/bin/php artisan queue:failed
+/opt/alt/php82/usr/bin/php artisan schedule:list
+/opt/alt/php82/usr/bin/php artisan queue:process-pending --max-jobs=25 --timeout=120
+/opt/alt/php82/usr/bin/php artisan stats:refresh
+/opt/alt/php82/usr/bin/php artisan imports:materialize --batch=BATCH_ID
+/opt/alt/php82/usr/bin/php artisan imports:standardize --batch=BATCH_ID
+```
+
 ## What was removed
 
 - `ProcessPendingQueueOnRequest` middleware (ran `queue:work` after every page load and caused 60s timeouts)
