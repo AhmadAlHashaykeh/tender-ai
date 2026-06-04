@@ -40,7 +40,7 @@ class RepairCountriesCommand extends Command
             [
                 ['Rows processed', $summary['processed']],
                 ['Country mapped', $summary['country_mapped']],
-                ['Region only (GCC)', $summary['region_only']],
+                ['Region only (no country)', $summary['region_only']],
                 ['Still unmapped', $summary['still_unmapped']],
                 ['Materialization skip cleared', $summary['skip_cleared']],
             ],

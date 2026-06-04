@@ -59,6 +59,11 @@ class ImportCountryRepairService
                     $normalized['region_id'] = $country['region_id'] ?? null;
                     $normalized['country_confidence'] = $country['confidence'];
 
+                    if ($country['country_id'] !== null) {
+                        $normalized['country_name'] = $country['normalized']['canonical_name']
+                            ?? null;
+                    }
+
                     $std = $normalized['standardization'] ?? [];
                     $std['country'] = $country['normalized'];
                     $normalized['standardization'] = $std;
@@ -113,6 +118,7 @@ class ImportCountryRepairService
     {
         return ($before['country_id'] ?? null) !== ($after['country_id'] ?? null)
             || ($before['region_id'] ?? null) !== ($after['region_id'] ?? null)
+            || ($before['country_name'] ?? null) !== ($after['country_name'] ?? null)
             || ($before['country_confidence'] ?? null) !== ($after['country_confidence'] ?? null)
             || ($before['standardization']['country'] ?? null) !== ($after['standardization']['country'] ?? null);
     }

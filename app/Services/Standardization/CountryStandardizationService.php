@@ -185,7 +185,7 @@ class CountryStandardizationService
             ],
             'match_type' => 'region_only',
             'reason' => sprintf(
-                'Regional tender (%s) — specify a GCC country (e.g. Saudi Arabia, UAE, Oman) for materialization',
+                'Regional tender (%s) — no country entity mapped; assign a country or add a dedicated market',
                 $region->name
             ),
             'review_required' => true,

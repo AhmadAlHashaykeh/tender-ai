@@ -195,21 +195,22 @@ return [
         'الكويت' => 'kuwait',
         'قطر' => 'qatar',
         'البحرين' => 'bahrain',
+        'gcc' => 'gcc',
+        'ghc' => 'gcc',
+        'gulf' => 'gcc',
+        'gulf cooperation council' => 'gcc',
+        'gulf health council' => 'gcc',
+        'cooperation council' => 'gcc',
+        'مجلس التعاون الخليجي' => 'gcc',
+        'الخليج' => 'gcc',
+        'gcc countries' => 'gcc',
+        'gcc region' => 'gcc',
     ],
 
     /**
-     * Regional tender labels (GCC, etc.) — resolve to region_id, not a fake country.
+     * Regional tender labels that are not mapped to a dedicated country entity.
      */
     'country_region_aliases' => [
-        'gcc' => 'GCC',
-        'ghc' => 'GCC',
-        'gulf' => 'GCC',
-        'gulf cooperation council' => 'GCC',
-        'cooperation council' => 'GCC',
-        'مجلس التعاون الخليجي' => 'GCC',
-        'الخليج' => 'GCC',
-        'gcc countries' => 'GCC',
-        'gcc region' => 'GCC',
     ],
 
     /**

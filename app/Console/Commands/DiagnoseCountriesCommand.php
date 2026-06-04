@@ -53,7 +53,7 @@ class DiagnoseCountriesCommand extends Command
 
         if ($report['region_only_raw_values'] !== []) {
             $this->newLine();
-            $this->line('Regional-only values (GCC — need specific country for bid records):');
+            $this->line('Regional-only values (no country entity — repair or map to a country):');
             foreach ($report['region_only_raw_values'] as $raw => $count) {
                 $this->line("  {$raw}: {$count}");
             }

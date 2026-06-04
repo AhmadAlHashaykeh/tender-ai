@@ -18,6 +18,14 @@ class CountrySeeder extends Seeder
         $currencyByCode = Currency::pluck('id', 'code');
 
         $countries = [
+            [
+                'name' => 'GCC',
+                'code' => 'GCC',
+                'iso_code_2' => null,
+                'iso_code_3' => null,
+                'region' => $gcc,
+                'currency' => 'USD',
+            ],
             ['name' => 'Saudi Arabia', 'code' => 'SA', 'iso_code_2' => 'SA', 'iso_code_3' => 'SAU', 'region' => $gcc, 'currency' => 'SAR'],
             ['name' => 'United Arab Emirates', 'code' => 'AE', 'iso_code_2' => 'AE', 'iso_code_3' => 'ARE', 'region' => $gcc, 'currency' => 'AED'],
             ['name' => 'Kuwait', 'code' => 'KW', 'iso_code_2' => 'KW', 'iso_code_3' => 'KWT', 'region' => $gcc, 'currency' => 'KWD'],

@@ -8,11 +8,13 @@ use App\Models\BidRecord;
 use App\Models\Country;
 use App\Models\ImportBatch;
 use App\Models\ImportRow;
+use App\Models\PricingStatistic;
 use App\Models\Region;
 use App\Models\StandardizedDrug;
 use App\Services\Import\ImportCountryRepairService;
 use App\Services\Materialization\ImportMaterializationService;
 use App\Services\Materialization\MaterializationEligibilityService;
+use App\Services\Statistics\PricingStatisticsService;
 use App\Services\Standardization\CountryStandardizationService;
 use App\Services\Standardization\ImportRowStandardizationService;
 use Database\Seeders\CountrySeeder;
@@ -72,35 +74,104 @@ class CountryStandardizationTest extends TestCase
         $this->assertEquals($uae->id, $result['country_id']);
     }
 
-    public function test_gcc_maps_to_region_without_fake_country(): void
+    public function test_gcc_maps_to_dedicated_gcc_country_entity(): void
     {
-        $gcc = Region::where('code', 'GCC')->firstOrFail();
+        $gccCountry = Country::where('code', 'GCC')->firstOrFail();
+        $gccRegion = Region::where('code', 'GCC')->firstOrFail();
         $result = $this->standardizeRawCountry('GCC');
 
-        $this->assertNull($result['country_id']);
-        $this->assertEquals($gcc->id, $result['region_id']);
-        $this->assertSame('region_only', $result['match_type']);
-        $this->assertTrue($result['review_required']);
+        $this->assertEquals($gccCountry->id, $result['country_id']);
+        $this->assertEquals($gccRegion->id, $result['region_id']);
+        $this->assertSame('exact_name', $result['match_type']);
+        $this->assertFalse($result['review_required']);
     }
 
-    public function test_ghc_maps_to_gcc_region(): void
+    public function test_ghc_maps_to_gcc_country_entity(): void
     {
-        $gcc = Region::where('code', 'GCC')->firstOrFail();
+        $gccCountry = Country::where('code', 'GCC')->firstOrFail();
         $result = $this->standardizeRawCountry('GHC');
 
-        $this->assertNull($result['country_id']);
-        $this->assertEquals($gcc->id, $result['region_id']);
+        $this->assertEquals($gccCountry->id, $result['country_id']);
+        $this->assertGreaterThanOrEqual(95.0, $result['confidence']);
     }
 
-    public function test_gcc_materialization_requires_specific_country(): void
+    public function test_arabic_khaleej_maps_to_gcc_country_entity(): void
     {
+        $gccCountry = Country::where('code', 'GCC')->firstOrFail();
+        $result = $this->standardizeRawCountry('الخليج');
+
+        $this->assertEquals($gccCountry->id, $result['country_id']);
+    }
+
+    public function test_gcc_materialization_eligible_after_country_id_assigned(): void
+    {
+        $gccCountry = Country::where('code', 'GCC')->firstOrFail();
         $row = $this->makeApprovedRowWithoutCountry('GCC', [
-            'region_id' => Region::where('code', 'GCC')->value('id'),
+            'country_id' => $gccCountry->id,
+            'region_id' => $gccCountry->region_id,
+            'country_name' => 'GCC',
         ]);
 
-        $this->assertSame(
-            MaterializationEligibilityService::REASON_REGION_REQUIRES_COUNTRY,
+        $this->assertNull(
             app(MaterializationEligibilityService::class)->ineligibilityReason($row),
+        );
+    }
+
+    public function test_repair_command_fixes_gcc_region_only_rows(): void
+    {
+        $gccCountry = Country::where('code', 'GCC')->firstOrFail();
+        $drug = StandardizedDrug::where('code', 'D001')->firstOrFail();
+        $row = $this->makeApprovedRowWithoutCountry('GCC', [
+            'region_id' => Region::where('code', 'GCC')->value('id'),
+            'materialization_skip_reason' => MaterializationEligibilityService::REASON_REGION_REQUIRES_COUNTRY,
+            'materialization_status' => 'skipped',
+        ]);
+        $row->update(['standardized_drug_id' => $drug->id]);
+
+        $summary = app(ImportCountryRepairService::class)->repairBatch($row->importBatch);
+        $row->refresh();
+
+        $this->assertGreaterThanOrEqual(1, $summary['country_mapped']);
+        $this->assertGreaterThanOrEqual(1, $summary['skip_cleared']);
+        $this->assertEquals($gccCountry->id, $row->normalized_data['country_id']);
+        $this->assertSame('GCC', $row->normalized_data['country_name']);
+        $this->assertArrayNotHasKey('materialization_skip_reason', $row->normalized_data ?? []);
+    }
+
+    public function test_materialization_creates_bid_records_for_gcc_rows(): void
+    {
+        $row = $this->makeApprovedRowWithoutCountry('GHC');
+        $batch = $row->importBatch;
+
+        app(ImportCountryRepairService::class)->repairBatch($batch);
+        $row->refresh();
+
+        $outcome = app(ImportMaterializationService::class)->materializeRow($row->fresh());
+        $this->assertSame('materialized', $outcome['bucket']);
+        $row->refresh();
+        $this->assertNotNull($row->bid_record_id);
+
+        $bid = BidRecord::query()->find($row->bid_record_id);
+        $this->assertEquals(Country::where('code', 'GCC')->value('id'), $bid->country_id);
+    }
+
+    public function test_pricing_statistics_includes_gcc_drug_country_groups(): void
+    {
+        $gccCountry = Country::where('code', 'GCC')->firstOrFail();
+        $drug = StandardizedDrug::where('code', 'D001')->firstOrFail();
+        $row = $this->makeApprovedRowWithoutCountry('GCC');
+        $row->update(['standardized_drug_id' => $drug->id]);
+
+        app(ImportCountryRepairService::class)->repairBatch($row->importBatch);
+        app(ImportMaterializationService::class)->materializeRow($row->fresh());
+
+        app(PricingStatisticsService::class)->calculateForDrugCountry($drug->id, $gccCountry->id);
+
+        $this->assertTrue(
+            PricingStatistic::query()
+                ->where('standardized_drug_id', $drug->id)
+                ->where('country_id', $gccCountry->id)
+                ->exists(),
         );
     }
 

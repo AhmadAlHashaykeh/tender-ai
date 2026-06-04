@@ -117,7 +117,7 @@
                             <span class="font-medium">{{ implode(', ', array_slice($topUnmapped, 0, 8)) }}</span>.
                         @endif
                         @if (! empty($countryDiag['region_only_values']))
-                            Regional-only (need a specific GCC country):
+                            Regional-only (no country entity yet):
                             <span class="font-medium">{{ implode(', ', array_slice($countryDiag['region_only_values'], 0, 5)) }}</span>.
                         @endif
                     </p>
