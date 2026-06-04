@@ -20,6 +20,7 @@ class ImportPipelineDiagnosticsService
         protected ImportBatchStatsService $batchStats,
         protected ImportMaterializationService $materializationService,
         protected ImportPipelineReadinessService $readiness,
+        protected ImportCountryDiagnosticsService $countryDiagnostics,
     ) {}
 
     /**
@@ -119,6 +120,7 @@ class ImportPipelineDiagnosticsService
             'queue_pending_total' => $this->usesDatabaseQueue()
                 ? (int) DB::table('jobs')->count()
                 : 0,
+            'country_mapping' => $this->countryDiagnostics->summaryForBatch($batch),
         ];
     }
 

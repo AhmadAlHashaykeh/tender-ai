@@ -73,6 +73,14 @@
                             </button>
                         </form>
                     @endif
+                    @if ($canRepairCountries ?? false)
+                        <form method="POST" action="{{ route('imports.countries.repair', $batch) }}">
+                            @csrf
+                            <button type="submit" class="h-8 px-3 rounded-lg border border-amber-300 bg-amber-50 text-xs font-semibold text-amber-900 hover:bg-amber-100">
+                                Repair Country Mapping
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
 
@@ -94,6 +102,27 @@
                 <div><dt class="text-muted-foreground">Failed jobs (this upload)</dt><dd class="font-semibold text-foreground">{{ number_format($pipelineDiagnostics['failed_jobs']) }}</dd></div>
                 <div><dt class="text-muted-foreground">Pipeline ready</dt><dd class="font-semibold text-foreground">{{ $pipelineDiagnostics['pipeline_ready'] ? 'Yes' : 'No' }}</dd></div>
             </dl>
+
+            @php
+                $countryDiag = $countryMapping ?? ($pipelineDiagnostics['country_mapping'] ?? []);
+                $topUnmapped = $countryDiag['top_unmapped'] ?? [];
+            @endphp
+            @if (($countryDiag['missing_country_id'] ?? 0) > 0 || ($countryDiag['materialization_skipped_for_country'] ?? 0) > 0)
+                <div class="mt-4 p-3 rounded-lg bg-amber-50 border border-amber-100 text-xs text-amber-900">
+                    <p class="font-semibold">Country mapping required</p>
+                    <p class="mt-1 text-amber-800">
+                        {{ number_format($countryDiag['missing_country_id'] ?? 0) }} row(s) lack a resolved country.
+                        @if (! empty($topUnmapped))
+                            Top unmapped values:
+                            <span class="font-medium">{{ implode(', ', array_slice($topUnmapped, 0, 8)) }}</span>.
+                        @endif
+                        @if (! empty($countryDiag['region_only_values']))
+                            Regional-only (need a specific GCC country):
+                            <span class="font-medium">{{ implode(', ', array_slice($countryDiag['region_only_values'], 0, 5)) }}</span>.
+                        @endif
+                    </p>
+                </div>
+            @endif
 
             @if (! empty($pipelineDiagnostics['last_error']))
                 <p class="mt-4 text-xs text-red-700"><strong>Last error:</strong> {{ $pipelineDiagnostics['last_error'] }}</p>

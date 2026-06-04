@@ -403,6 +403,7 @@ class ImportRowStandardizationService
             ],
             'country_confidence' => $country['confidence'],
             'country_id' => $country['country_id'],
+            'region_id' => $country['region_id'] ?? null,
             'drug_confidence_breakdown' => $drug['confidence_breakdown'] ?? null,
         ]);
 

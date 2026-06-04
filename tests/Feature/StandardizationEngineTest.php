@@ -50,6 +50,16 @@ class StandardizationEngineTest extends TestCase
         $this->assertEquals('United Arab Emirates', $result['normalized']['canonical_name']);
     }
 
+    public function test_country_alias_ksa_maps_to_saudi_arabia(): void
+    {
+        $saudi = Country::where('code', 'SA')->first();
+        $row = $this->makeRow(['raw_country' => 'KSA']);
+
+        $result = app(CountryStandardizationService::class)->standardize($row);
+
+        $this->assertEquals($saudi->id, $result['country_id']);
+    }
+
     public function test_company_exact_alias_matching(): void
     {
         $company = Company::where('name', 'PharmaCorp International')->first();

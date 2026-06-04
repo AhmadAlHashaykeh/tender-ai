@@ -21,6 +21,8 @@ class MaterializationEligibilityService
 
     public const REASON_MISSING_COUNTRY = 'missing_country';
 
+    public const REASON_REGION_REQUIRES_COUNTRY = 'region_requires_country';
+
     public const REASON_MISSING_DRUG_IDENTITY = 'missing_drug_identity';
 
     public const REASON_MISSING_COMPANY = 'missing_company';
@@ -38,6 +40,7 @@ class MaterializationEligibilityService
             self::REASON_ALREADY_MATERIALIZED => 'Already materialized',
             self::REASON_INVALID_PRICE_USD => 'Invalid or missing price USD',
             self::REASON_MISSING_COUNTRY => 'Missing country',
+            self::REASON_REGION_REQUIRES_COUNTRY => 'Regional tender — country required',
             self::REASON_MISSING_DRUG_IDENTITY => 'Missing drug identity',
             self::REASON_MISSING_COMPANY => 'Missing company or winner',
             self::REASON_MISSING_TENDER_NUMBER => 'Missing tender number',
@@ -75,6 +78,10 @@ class MaterializationEligibilityService
         }
 
         if ($this->resolveCountryId($row) === null) {
+            if ($this->resolveRegionId($row) !== null) {
+                return self::REASON_REGION_REQUIRES_COUNTRY;
+            }
+
             return self::REASON_MISSING_COUNTRY;
         }
 
@@ -124,6 +131,19 @@ class MaterializationEligibilityService
         }
 
         return (int) $countryId;
+    }
+
+    public function resolveRegionId(ImportRow $row): ?int
+    {
+        $regionId = $row->normalized_data['region_id']
+            ?? $row->normalized_data['standardization']['country']['region_id']
+            ?? null;
+
+        if ($regionId === null || $regionId === '') {
+            return null;
+        }
+
+        return (int) $regionId;
     }
 
     public function resolveTenderNumber(ImportRow $row): ?string

@@ -10,6 +10,7 @@ use App\Services\Import\ColumnMappingService;
 use App\Services\Import\ImportBatchService;
 use App\Services\Import\ImportBatchStatsService;
 use App\Services\Import\ImportBatchPipelineAdvanceService;
+use App\Services\Import\ImportCountryRepairService;
 use App\Services\Import\ImportPipelineDiagnosticsService;
 use App\Services\Import\ImportPipelineOrchestratorService;
 use App\Services\Import\ImportPipelineReadinessService;
@@ -63,6 +64,10 @@ class ImportBatchController extends Controller
 
         $canRetryStatistics = ($import->metadata['materialization_status'] ?? '') === 'completed';
         $canRunPendingProcessing = ! in_array($import->status, ['queued', 'processing', 'parsing', 'validating'], true);
+        $countryMapping = $pipelineDiagnostics['country_mapping'] ?? [];
+        $canRepairCountries = ($countryMapping['can_repair'] ?? false)
+            && (($countryMapping['missing_country_id'] ?? 0) > 0
+                || ($countryMapping['materialization_skipped_for_country'] ?? 0) > 0);
 
         return view('imports.show', [
             'batch' => $import,
@@ -76,6 +81,8 @@ class ImportBatchController extends Controller
             'pipelineDiagnostics' => $pipelineDiagnostics,
             'canRetryStatistics' => $canRetryStatistics,
             'canRunPendingProcessing' => $canRunPendingProcessing,
+            'canRepairCountries' => $canRepairCountries,
+            'countryMapping' => $countryMapping,
             'pricingStatsSummary' => $pricingStatsSummary,
             'qualityScore' => $quality['score'],
             'qualityRating' => $quality['rating'],
@@ -263,6 +270,24 @@ class ImportBatchController extends Controller
         return redirect()
             ->route('imports.show', $import)
             ->with('success', $result['message']);
+    }
+
+    public function repairCountries(
+        ImportBatch $import,
+        ImportCountryRepairService $repair,
+    ): RedirectResponse {
+        $summary = $repair->repairBatch($import);
+
+        return redirect()
+            ->route('imports.show', $import)
+            ->with('success', sprintf(
+                'Country mapping repaired for %s row(s): %s mapped to a country, %s regional-only (GCC), %s still unmapped, %s materialization skip(s) cleared.',
+                number_format($summary['processed']),
+                number_format($summary['country_mapped']),
+                number_format($summary['region_only']),
+                number_format($summary['still_unmapped']),
+                number_format($summary['skip_cleared']),
+            ));
     }
 
     public function destroy(ImportBatch $import, ImportBatchService $importBatchService): RedirectResponse

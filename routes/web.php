@@ -44,6 +44,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('imports.statistics.retry');
     Route::post('/imports/{import}/pipeline/run-pending', [ImportBatchController::class, 'runPendingProcessing'])
         ->name('imports.pipeline.run-pending');
+    Route::post('/imports/{import}/countries/repair', [ImportBatchController::class, 'repairCountries'])
+        ->name('imports.countries.repair');
     Route::get('/management', [ManagementController::class, 'index'])->name('management.index');
     Route::get('/management/bid-records/{bidRecord}', [ManagementController::class, 'show'])->name('management.bid-records.show');
     Route::get('/management/bid-records/{bidRecord}/edit', [ManagementController::class, 'edit'])->name('management.bid-records.edit');

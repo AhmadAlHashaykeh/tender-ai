@@ -17,6 +17,9 @@ class CurrencySeeder extends Seeder
             ['code' => 'IQD', 'name' => 'Iraqi Dinar', 'symbol' => 'IQD', 'is_default' => false],
             ['code' => 'JOD', 'name' => 'Jordanian Dinar', 'symbol' => 'JD', 'is_default' => false],
             ['code' => 'KWD', 'name' => 'Kuwaiti Dinar', 'symbol' => 'KD', 'is_default' => false],
+            ['code' => 'OMR', 'name' => 'Omani Rial', 'symbol' => 'OMR', 'is_default' => false],
+            ['code' => 'QAR', 'name' => 'Qatari Riyal', 'symbol' => 'QAR', 'is_default' => false],
+            ['code' => 'BHD', 'name' => 'Bahraini Dinar', 'symbol' => 'BHD', 'is_default' => false],
         ];
 
         foreach ($currencies as $currency) {
