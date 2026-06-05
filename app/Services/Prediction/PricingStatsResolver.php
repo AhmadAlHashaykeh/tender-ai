@@ -5,14 +5,42 @@ namespace App\Services\Prediction;
 use App\Enums\PredictionFallbackLevel;
 use App\Models\Country;
 use App\Models\PricingStatistic;
+use App\Services\Statistics\PricingStatisticsService;
+use App\Services\Tender\TenderGroupService;
 
 class PricingStatsResolver
 {
+    public function __construct(
+        protected PricingStatisticsService $pricingStatisticsService,
+        protected TenderGroupService $tenderGroupService,
+    ) {}
+
     /**
      * @return array{statistic: ?PricingStatistic, fallback_level: PredictionFallbackLevel}
      */
-    public function resolve(int $standardizedDrugId, int $countryId): array
-    {
+    public function resolve(
+        int $standardizedDrugId,
+        int $countryId,
+        ?string $tenderGroupKey = null,
+    ): array {
+        if (filled($tenderGroupKey)) {
+            $tenderIds = $this->tenderGroupService->tenderIdsForGroup($tenderGroupKey);
+            $groupResult = $this->pricingStatisticsService->calculateForDrugTenderGroup(
+                $standardizedDrugId,
+                $tenderIds,
+            );
+
+            if (
+                $groupResult['statistic'] !== null
+                && $this->hasUsablePrices($groupResult['statistic'])
+            ) {
+                return [
+                    'statistic' => $groupResult['statistic'],
+                    'fallback_level' => PredictionFallbackLevel::TenderGroup,
+                ];
+            }
+        }
+
         $countryStat = PricingStatistic::query()
             ->where('standardized_drug_id', $standardizedDrugId)
             ->where('country_id', $countryId)

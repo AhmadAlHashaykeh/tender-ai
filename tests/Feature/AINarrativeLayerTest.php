@@ -348,20 +348,16 @@ class AINarrativeLayerTest extends TestCase
 
     protected function seedStats(): void
     {
+        $this->ensureDrugExistsInTestTenderGroup();
+
+        $testItem = TenderItem::query()->where('tender_id', $this->testTender->id)
+            ->where('standardized_drug_id', $this->drug->id)
+            ->firstOrFail();
+
         foreach (range(1, 6) as $i) {
-            $tender = Tender::query()->create([
-                'tender_number' => 'AI-T-'.$i,
-                'country_id' => $this->country->id,
-                'year' => 2020 + $i,
-                'status' => 'active',
-            ]);
-            $item = TenderItem::query()->create([
-                'tender_id' => $tender->id,
-                'standardized_drug_id' => $this->drug->id,
-            ]);
             BidRecord::query()->create([
-                'tender_item_id' => $item->id,
-                'tender_id' => $tender->id,
+                'tender_item_id' => $testItem->id,
+                'tender_id' => $this->testTender->id,
                 'standardized_drug_id' => $this->drug->id,
                 'country_id' => $this->country->id,
                 'company_id' => $this->company->id,
@@ -371,7 +367,7 @@ class AINarrativeLayerTest extends TestCase
                 'row_type' => 'winning_bid',
                 'price_usd' => 10 + $i,
                 'quantity' => 1000 * $i,
-                'award_year' => 2020 + $i,
+                'award_year' => 2019 + $i,
                 'is_analytics_ready' => true,
                 'excluded_from_stats' => false,
             ]);

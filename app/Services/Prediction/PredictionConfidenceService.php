@@ -21,7 +21,9 @@ class PredictionConfidenceService
         $recencyPoints = $this->scoreRecency($statistic->last_award_date);
         $stabilityPoints = $this->scoreMarketStability($statistic);
         $variationPoints = $this->scorePriceVariation($statistic, $outlierCount);
-        $geoPoints = $fallbackLevel === PredictionFallbackLevel::Country ? 10 : 0;
+        $geoPoints = in_array($fallbackLevel, [PredictionFallbackLevel::TenderGroup, PredictionFallbackLevel::Country], true)
+            ? 10
+            : 0;
         $quantityPoints = ($requestedQuantity !== null && $requestedQuantity > 0) ? 5 : 0;
         $diversityPoints = $this->scoreSupplierDiversity((int) $statistic->distinct_winners_count);
 
@@ -48,7 +50,9 @@ class PredictionConfidenceService
             ],
             [
                 'key' => 'country_level_data',
-                'label' => 'Country-Level Data',
+                'label' => $fallbackLevel === PredictionFallbackLevel::TenderGroup
+                    ? 'Tender Program Data'
+                    : 'Country-Level Data',
                 'points' => $geoPoints,
             ],
             [

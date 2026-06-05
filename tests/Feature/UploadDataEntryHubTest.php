@@ -181,7 +181,7 @@ class UploadDataEntryHubTest extends TestCase
         $this->assertGreaterThan(0, $tender->tenderItems()->count());
     }
 
-    public function test_upcoming_tender_appears_in_ai_recommendation_dropdown(): void
+    public function test_upcoming_tender_appears_in_ai_recommendation_program_dropdown(): void
     {
         $user = User::factory()->create();
 
@@ -197,7 +197,7 @@ class UploadDataEntryHubTest extends TestCase
         $this->actingAs($user)
             ->get(route('ai.recommendations.create'))
             ->assertOk()
-            ->assertSee('Unique Upcoming Tender XYZ', false)
-            ->assertSee('[Upcoming]', false);
+            ->assertSee('Unique Upcoming', false)
+            ->assertSee('Select tender program...', false);
     }
 }

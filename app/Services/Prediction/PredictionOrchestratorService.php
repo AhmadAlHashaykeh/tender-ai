@@ -10,6 +10,7 @@ use App\Models\PredictionScenario;
 use App\Models\StandardizedDrug;
 use App\Models\User;
 use App\Services\AI\PredictionNarrativeService;
+use App\Services\Tender\TenderGroupService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -23,23 +24,31 @@ class PredictionOrchestratorService
         protected PredictionScenarioService $scenarioService,
         protected PredictionNarrativeService $narrativeService,
         protected TenderRecommendationContextService $tenderContext,
+        protected TenderGroupService $tenderGroupService,
     ) {}
 
     /**
-     * @param  array{standardized_drug_id: int, country_id: int, quantity: float, quantity_unit?: ?string, tender_id: int, discount_percentage?: float|int|string}  $input
+     * @param  array{standardized_drug_id: int, country_id: int, quantity: float, quantity_unit?: ?string, tender_id?: ?int, tender_group_key: string, discount_percentage?: float|int|string}  $input
      */
     public function run(User $user, array $input): Prediction
     {
         $this->validateInput($input);
 
         $discountPercentage = (float) ($input['discount_percentage'] ?? 0);
+        $tenderGroupKey = strtoupper((string) $input['tender_group_key']);
+        $tenderId = $input['tender_id']
+            ?? $this->tenderGroupService->resolveRepresentativeTenderId($tenderGroupKey);
 
-        $countryId = (int) ($input['country_id'] ?? $this->tenderContext->resolveCountryId((int) $input['tender_id']));
+        $countryId = (int) (
+            $input['country_id']
+            ?? $this->tenderGroupService->resolveCountryId($tenderGroupKey)
+            ?? ($tenderId !== null ? $this->tenderContext->resolveCountryId((int) $tenderId) : 0)
+        );
 
         $prediction = Prediction::query()->create([
             'uuid' => (string) Str::uuid(),
             'user_id' => $user->id,
-            'tender_id' => $input['tender_id'],
+            'tender_id' => $tenderId,
             'standardized_drug_id' => $input['standardized_drug_id'],
             'quantity' => $input['quantity'],
             'quantity_unit' => $input['quantity_unit'] ?? null,
@@ -53,13 +62,14 @@ class PredictionOrchestratorService
         $startedAt = microtime(true);
 
         try {
-            $completedPrediction = DB::transaction(function () use ($prediction, $input, $countryId, $startedAt, $discountPercentage) {
+            $completedPrediction = DB::transaction(function () use ($prediction, $input, $countryId, $startedAt, $discountPercentage, $tenderGroupKey, $tenderId) {
                 $result = $this->calculationService->calculate(
                     $input['standardized_drug_id'],
                     $countryId,
                     (float) $input['quantity'],
-                    (int) $input['tender_id'],
+                    $tenderId !== null ? (int) $tenderId : null,
                     $discountPercentage,
+                    $tenderGroupKey,
                 );
 
                 if (! ($result['success'] ?? false)) {
@@ -90,7 +100,8 @@ class PredictionOrchestratorService
                     $countryId,
                     $result,
                     (float) $input['quantity'],
-                    (int) $input['tender_id'],
+                    $tenderId !== null ? (int) $tenderId : null,
+                    $tenderGroupKey,
                 );
 
                 PredictionCalculation::query()->create(array_merge(
@@ -169,8 +180,8 @@ class PredictionOrchestratorService
      */
     protected function validateInput(array $input): void
     {
-        if (empty($input['tender_id'])) {
-            throw new InvalidArgumentException('A tender must be selected to generate a recommendation.');
+        if (empty($input['tender_group_key'])) {
+            throw new InvalidArgumentException('A tender program must be selected to generate a recommendation.');
         }
 
         if (! isset($input['quantity']) || ! is_numeric($input['quantity']) || (float) $input['quantity'] <= 0) {
@@ -205,7 +216,9 @@ class PredictionOrchestratorService
         $marketPrice = number_format((float) $result['market_calculated_price'], 2);
         $discount = number_format((float) $result['discount_percentage'], 2);
         $finalPrice = number_format((float) $result['final_recommended_price'], 2);
-        $tenderLabel = $snapshot['tender_context']['title']
+        $tenderGroupLabel = $snapshot['tender_group_context']['display_name'] ?? null;
+        $tenderLabel = $tenderGroupLabel
+            ?? $snapshot['tender_context']['title']
             ?? $snapshot['tender_context']['tender_number']
             ?? null;
 
@@ -219,7 +232,9 @@ class PredictionOrchestratorService
             $lines[] = "No bid discount was applied. Final recommended bid price is \${$finalPrice} per unit.";
         }
 
-        if ($tenderLabel) {
+        if ($tenderGroupLabel) {
+            $lines[] = "Prepared for tender program: {$tenderGroupLabel}.";
+        } elseif ($tenderLabel) {
             $lines[] = "Prepared for tender: {$tenderLabel}.";
         }
 
@@ -231,7 +246,7 @@ class PredictionOrchestratorService
             $lines[] = 'Note: '.$snapshot['outlier_summary']['count'].' outlier price(s) flagged in historical data.';
         }
 
-        if ($result['fallback_level']->value !== 'country') {
+        if ($result['fallback_level']->value !== 'tender_group') {
             $lines[] = $result['fallback_level']->description();
         }
 

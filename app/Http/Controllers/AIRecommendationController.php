@@ -6,23 +6,23 @@ use App\Http\Requests\StorePredictionRequest;
 use App\Models\Country;
 use App\Models\Prediction;
 use App\Models\PricingStatistic;
-use App\Models\StandardizedDrug;
-use App\Models\Tender;
 use App\Services\AI\PredictionNarrativeService;
 use App\Services\Import\ImportPipelineReadinessService;
 use App\Services\Settings\SettingsService;
 use App\Services\Prediction\PredictionOrchestratorService;
+use App\Services\Tender\TenderGroupService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class AIRecommendationController extends Controller
 {
-    public function create(SettingsService $settings, ImportPipelineReadinessService $readiness): View
-    {
-        $drugs = StandardizedDrug::query()
-            ->where('is_active', true)
-            ->orderBy('display_name')
-            ->get(['id', 'display_name', 'inn', 'code', 'category']);
+    public function create(
+        SettingsService $settings,
+        ImportPipelineReadinessService $readiness,
+        TenderGroupService $tenderGroupService,
+    ): View {
+        $tenderGroups = $tenderGroupService->listGroups();
 
         $countries = Country::query()
             ->where('is_active', true)
@@ -35,25 +35,14 @@ class AIRecommendationController extends Controller
         $aiInsightsEnabled = (bool) $settings->getBoolean('ai.enable_narrative', false);
         $canGenerateInsights = $aiHasKey && $aiInsightsEnabled;
 
-        $tenders = Tender::query()
-            ->with(['country:id,name,code,region_id', 'country.region:id,name'])
-            ->whereIn('status', ['active', 'upcoming'])
-            ->orderByRaw("CASE WHEN status = 'upcoming' THEN 0 ELSE 1 END")
-            ->orderByDesc('year')
-            ->orderByDesc('id')
-            ->limit(100)
-            ->get(['id', 'tender_number', 'title', 'country_id', 'year', 'status']);
-
-        $hasDrugs = $drugs->isNotEmpty();
         $hasCountries = $countries->isNotEmpty();
-        $hasTenders = $tenders->isNotEmpty();
+        $hasTenderGroups = $tenderGroups->isNotEmpty();
         $availability = $readiness->recommendationAvailabilityContext();
-        $canSubmit = $hasDrugs && $hasCountries && $hasTenders && $pricingStatsCount > 0;
+        $canSubmit = $hasCountries && $hasTenderGroups && $pricingStatsCount > 0;
 
         return view('ai.recommendations.create', [
-            'drugs' => $drugs,
+            'tenderGroups' => $tenderGroups,
             'countries' => $countries,
-            'tenders' => $tenders,
             'recentPredictions' => Prediction::query()
                 ->with(['standardizedDrug:id,display_name'])
                 ->where('user_id', auth()->id())
@@ -61,7 +50,7 @@ class AIRecommendationController extends Controller
                 ->limit(5)
                 ->get(),
             'counts' => [
-                'drugs' => $drugs->count(),
+                'tender_programs' => $tenderGroups->count(),
                 'countries' => $countries->count(),
                 'pricing_statistics' => $pricingStatsCount,
                 'recent_predictions' => Prediction::query()->where('user_id', auth()->id())->count(),
@@ -71,15 +60,28 @@ class AIRecommendationController extends Controller
                 'enable_narrative' => $aiInsightsEnabled,
                 'can_generate_insights' => $canGenerateInsights,
             ],
-            'hasDrugs' => $hasDrugs,
             'hasCountries' => $hasCountries,
-            'hasTenders' => $hasTenders,
+            'hasTenderGroups' => $hasTenderGroups,
             'canSubmit' => $canSubmit,
             'canGenerateInsights' => $canGenerateInsights,
             'pricingStatsCount' => $pricingStatsCount,
             'lastStatsRefresh' => $lastStatsRefresh,
             'availability' => $availability,
             'quantityUnits' => ['units', 'tablets', 'capsules', 'vials', 'boxes', 'ampoules'],
+        ]);
+    }
+
+    public function tenderGroupDrugs(string $groupKey, TenderGroupService $tenderGroupService): JsonResponse
+    {
+        $group = $tenderGroupService->findGroup($groupKey);
+
+        if ($group === null) {
+            return response()->json(['message' => 'Tender program not found.'], 404);
+        }
+
+        return response()->json([
+            'group' => $group,
+            'drugs' => $tenderGroupService->drugsForGroup($groupKey)->values(),
         ]);
     }
 

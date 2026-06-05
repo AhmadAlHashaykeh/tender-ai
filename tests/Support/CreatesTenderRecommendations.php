@@ -3,6 +3,8 @@
 namespace Tests\Support;
 
 use App\Models\Tender;
+use App\Models\TenderItem;
+use App\Services\Tender\TenderGroupKeyService;
 
 trait CreatesTenderRecommendations
 {
@@ -29,7 +31,12 @@ trait CreatesTenderRecommendations
             $this->testTender = $this->createTestTender();
         }
 
+        $this->ensureDrugExistsInTestTenderGroup();
+
+        $groupKey = app(TenderGroupKeyService::class)->deriveFromTender($this->testTender);
+
         return array_merge([
+            'tender_group_key' => $groupKey,
             'tender_id' => $this->testTender->id,
             'standardized_drug_id' => $this->drug->id,
             'country_id' => $this->country->id,
@@ -38,5 +45,26 @@ trait CreatesTenderRecommendations
             'discount_percentage' => 0,
             'recommendation_mode' => 'calculation',
         ], $overrides);
+    }
+
+    protected function ensureDrugExistsInTestTenderGroup(): void
+    {
+        if (! isset($this->drug, $this->testTender)) {
+            return;
+        }
+
+        $hasItem = TenderItem::query()
+            ->where('tender_id', $this->testTender->id)
+            ->where('standardized_drug_id', $this->drug->id)
+            ->exists();
+
+        if ($hasItem) {
+            return;
+        }
+
+        TenderItem::query()->create([
+            'tender_id' => $this->testTender->id,
+            'standardized_drug_id' => $this->drug->id,
+        ]);
     }
 }

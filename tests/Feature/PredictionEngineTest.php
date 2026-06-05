@@ -333,7 +333,10 @@ class PredictionEngineTest extends TestCase
 
         $this->assertFalse($prediction->openai_called);
         $this->assertNull($prediction->ai_model);
-        $this->assertNull($prediction->ai_response_raw);
+        $this->assertTrue(
+            $prediction->ai_response_raw === null
+            || ($prediction->ai_response_raw['insights_status'] ?? null) === 'skipped',
+        );
 
         foreach (glob(app_path('Services/Prediction/*.php')) as $file) {
             $contents = strtolower(file_get_contents($file));
@@ -344,7 +347,23 @@ class PredictionEngineTest extends TestCase
 
     public function test_prediction_fails_gracefully_without_stats(): void
     {
-        $prediction = app(PredictionOrchestratorService::class)->run($this->user, $this->recommendationPayload());
+        $emptyTender = Tender::query()->create([
+            'tender_number' => 'EMPTY-2024',
+            'title' => 'Empty Program 2024',
+            'country_id' => $this->country->id,
+            'year' => 2024,
+            'status' => 'active',
+        ]);
+
+        $prediction = app(PredictionOrchestratorService::class)->run($this->user, [
+            'tender_group_key' => app(\App\Services\Tender\TenderGroupKeyService::class)->deriveFromTender($emptyTender),
+            'tender_id' => $emptyTender->id,
+            'standardized_drug_id' => $this->drug->id,
+            'country_id' => $this->country->id,
+            'quantity' => 1000,
+            'quantity_unit' => 'units',
+            'discount_percentage' => 0,
+        ]);
 
         $this->assertEquals('failed', $prediction->status);
         $this->assertEquals(0, PredictionCalculation::query()->count());

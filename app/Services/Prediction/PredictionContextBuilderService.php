@@ -29,18 +29,26 @@ class PredictionContextBuilderService
         array $calculationResult,
         ?float $quantity,
         ?int $tenderId = null,
+        ?string $tenderGroupKey = null,
     ): array {
         $tenderId = $tenderId ?? $prediction->tender_id;
+        $tenderGroupKey = $tenderGroupKey
+            ?? ($calculationResult['calculation_details']['tender_group_key'] ?? null);
         $tenderSnapshot = $this->tenderContext->buildTenderSnapshot($tenderId);
-        $tenderSpecificAwards = $tenderId !== null
-            ? $this->tenderContext->tenderSpecificAwards($tenderId, $prediction->standardized_drug_id)
-            : [];
+        $tenderGroupSnapshot = $this->tenderContext->buildTenderGroupSnapshot($tenderGroupKey);
+        $tenderSpecificAwards = filled($tenderGroupKey)
+            ? $this->tenderContext->tenderGroupAwards($tenderGroupKey, $prediction->standardized_drug_id)
+            : ($tenderId !== null
+                ? $this->tenderContext->tenderSpecificAwards($tenderId, $prediction->standardized_drug_id)
+                : []);
         $tenderStatsHook = $tenderId !== null
             ? $this->tenderContext->tenderStatsAvailability($tenderId, $prediction->standardized_drug_id)
             : null;
 
         $snapshot = [
             'tender_context' => $tenderSnapshot,
+            'tender_group_context' => $tenderGroupSnapshot,
+            'tender_group_key' => $tenderGroupKey,
             'tender_specific_awards' => $tenderSpecificAwards,
             'tender_stats_availability' => $tenderStatsHook,
             'selected_stats_row' => $this->statisticSummary($statistic),

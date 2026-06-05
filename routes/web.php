@@ -86,6 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('standardization.search-companies');
 
     Route::get('/ai/recommendations/create', [AIRecommendationController::class, 'create'])->name('ai.recommendations.create');
+    Route::get('/ai/recommendations/tender-groups/{groupKey}/drugs', [AIRecommendationController::class, 'tenderGroupDrugs'])->name('ai.recommendations.tender-groups.drugs');
     Route::post('/ai/recommendations', [AIRecommendationController::class, 'store'])->name('ai.recommendations.store');
     Route::get('/ai/recommendations/{prediction}', [AIRecommendationController::class, 'show'])->name('ai.recommendations.show');
     Route::post('/ai/recommendations/{prediction}/regenerate-insights', [AIRecommendationController::class, 'regenerateInsights'])->name('ai.recommendations.regenerate-insights');

@@ -4,9 +4,13 @@ namespace App\Services\Prediction;
 
 use App\Models\BidRecord;
 use App\Models\Tender;
+use App\Services\Tender\TenderGroupService;
 
 class TenderRecommendationContextService
 {
+    public function __construct(
+        protected TenderGroupService $tenderGroupService,
+    ) {}
     /**
      * Build tender metadata for context snapshots and result pages.
      *
@@ -46,6 +50,66 @@ class TenderRecommendationContextService
     public function resolveCountryId(int $tenderId): ?int
     {
         return Tender::query()->whereKey($tenderId)->value('country_id');
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function buildTenderGroupSnapshot(?string $groupKey): ?array
+    {
+        if (! filled($groupKey)) {
+            return null;
+        }
+
+        $group = $this->tenderGroupService->findGroup($groupKey);
+
+        if ($group === null) {
+            return null;
+        }
+
+        return [
+            'group_key' => $group['group_key'],
+            'display_name' => $group['display_name'],
+            'country_id' => $group['country_id'],
+            'country_name' => $group['country_name'],
+            'region_name' => $group['region_name'],
+            'tender_count' => $group['tender_count'],
+            'years' => $group['years'],
+            'years_label' => $group['years_label'],
+            'product_count' => $group['product_count'],
+            'representative_tender_id' => $group['representative_tender_id'],
+        ];
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public function tenderGroupAwards(string $groupKey, int $standardizedDrugId, int $limit = 10): array
+    {
+        $tenderIds = $this->tenderGroupService->tenderIdsForGroup($groupKey);
+
+        if ($tenderIds === []) {
+            return [];
+        }
+
+        return BidRecord::query()
+            ->analyticsEligible()
+            ->with('company:id,name')
+            ->whereIn('tender_id', $tenderIds)
+            ->where('standardized_drug_id', $standardizedDrugId)
+            ->orderByDesc('award_year')
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get()
+            ->map(fn (BidRecord $record) => [
+                'id' => $record->id,
+                'price_usd' => $record->price_usd,
+                'quantity' => $record->quantity,
+                'award_year' => $record->award_year,
+                'company' => $record->company?->name,
+                'tender_id' => $record->tender_id,
+            ])
+            ->all();
     }
 
     /**

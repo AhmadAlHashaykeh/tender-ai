@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Tender;
+use App\Services\Tender\TenderGroupService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -14,11 +14,21 @@ class StorePredictionRequest extends FormRequest
             'quantity_unit' => filled($this->input('quantity_unit')) ? $this->input('quantity_unit') : 'units',
         ];
 
-        $tenderId = $this->input('tender_id');
-        if (filled($tenderId)) {
-            $countryId = Tender::query()->whereKey((int) $tenderId)->value('country_id');
+        $groupKey = $this->input('tender_group_key');
+        if (filled($groupKey)) {
+            $merge['tender_group_key'] = strtoupper((string) $groupKey);
+
+            $groupService = app(TenderGroupService::class);
+            $countryId = $groupService->resolveCountryId($merge['tender_group_key']);
             if ($countryId !== null) {
                 $merge['country_id'] = $countryId;
+            }
+
+            if (! filled($this->input('tender_id'))) {
+                $representativeTenderId = $groupService->resolveRepresentativeTenderId($merge['tender_group_key']);
+                if ($representativeTenderId !== null) {
+                    $merge['tender_id'] = $representativeTenderId;
+                }
             }
         }
 
@@ -36,7 +46,8 @@ class StorePredictionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tender_id' => ['required', 'integer', 'exists:tenders,id'],
+            'tender_group_key' => ['required', 'string', 'max:120'],
+            'tender_id' => ['nullable', 'integer', 'exists:tenders,id'],
             'standardized_drug_id' => ['required', 'integer', 'exists:standardized_drugs,id'],
             'country_id' => ['required', 'integer', 'exists:countries,id'],
             'quantity' => ['required', 'numeric', 'gt:0'],
@@ -51,10 +62,9 @@ class StorePredictionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'tender_id.required' => 'Please select the tender this recommendation is for.',
-            'tender_id.exists' => 'The selected tender could not be found. Choose a valid tender from the list.',
-            'standardized_drug_id.required' => 'Please select the drug or product for this tender.',
-            'country_id.required' => 'Country could not be determined from the selected tender. Choose a tender with a valid country.',
+            'tender_group_key.required' => 'Please select the tender program this recommendation is for.',
+            'standardized_drug_id.required' => 'Please select the drug or product for this tender program.',
+            'country_id.required' => 'Country could not be determined from the selected tender program. Choose a program with a valid market.',
             'quantity.required' => 'Please enter the required tender quantity.',
             'quantity.numeric' => 'Tender quantity must be a valid number.',
             'quantity.gt' => 'Tender quantity must be greater than zero.',
@@ -69,19 +79,28 @@ class StorePredictionRequest extends FormRequest
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
-            $tenderId = $this->input('tender_id');
-            $countryId = $this->input('country_id');
+            $groupKey = $this->input('tender_group_key');
+            $drugId = $this->input('standardized_drug_id');
 
-            if (! filled($tenderId) || ! filled($countryId)) {
+            if (! filled($groupKey)) {
                 return;
             }
 
-            $tenderCountryId = Tender::query()->whereKey((int) $tenderId)->value('country_id');
+            $groupService = app(TenderGroupService::class);
 
-            if ($tenderCountryId !== null && (int) $countryId !== (int) $tenderCountryId) {
+            if (! $groupService->groupExists((string) $groupKey)) {
                 $validator->errors()->add(
-                    'country_id',
-                    'Country must match the selected tender. The tender defines the market geography.',
+                    'tender_group_key',
+                    'The selected tender program could not be found. Choose a valid program from the list.',
+                );
+
+                return;
+            }
+
+            if (filled($drugId) && ! $groupService->isDrugInGroup((string) $groupKey, (int) $drugId)) {
+                $validator->errors()->add(
+                    'standardized_drug_id',
+                    'The selected product is not available in the chosen tender program.',
                 );
             }
         });

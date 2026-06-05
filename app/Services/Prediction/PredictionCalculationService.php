@@ -32,8 +32,9 @@ class PredictionCalculationService
         ?float $quantity = null,
         ?int $tenderId = null,
         float $discountPercentage = 0.0,
+        ?string $tenderGroupKey = null,
     ): array {
-        $resolved = $this->statsResolver->resolve($standardizedDrugId, $countryId);
+        $resolved = $this->statsResolver->resolve($standardizedDrugId, $countryId, $tenderGroupKey);
 
         if ($resolved['statistic'] === null) {
             return [
@@ -98,6 +99,7 @@ class PredictionCalculationService
             'fallback_level' => $fallbackLevel->value,
             'market_data_scope' => $fallbackLevel->label(),
             'tender_id' => $tenderId,
+            'tender_group_key' => $tenderGroupKey,
             'confidence_breakdown' => $confidenceResult['breakdown'],
             'risk_breakdown' => $riskResult['breakdown'],
         ];

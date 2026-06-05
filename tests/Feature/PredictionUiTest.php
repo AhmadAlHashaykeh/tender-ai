@@ -78,11 +78,12 @@ class PredictionUiTest extends TestCase
         $response = $this->actingAs($this->user)->get(route('ai.recommendations.create'));
 
         $response->assertOk();
-        $response->assertSee('UI Test Drug');
         $response->assertSee('Saudi Arabia');
-        $response->assertSee('Select tender...');
+        $response->assertSee('Select tender program...');
+        $response->assertSee('Tender / Program');
         $response->assertSee('Bid Discount Percentage');
-        $response->assertSee('Market geography (from tender)');
+        $response->assertSee('Selected Tender Program');
+        $response->assertSee('Select a tender program first');
     }
 
     public function test_create_page_shows_readiness_checklist(): void
@@ -91,21 +92,21 @@ class PredictionUiTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Data Readiness');
-        $response->assertSee('Products');
+        $response->assertSee('Tender programs');
         $response->assertSee('Market statistics');
         $response->assertSee('AI insights');
         $response->assertDontSee('Analysis Method');
         $response->assertDontSee('AI-Assisted Analysis');
     }
 
-    public function test_create_page_shows_empty_state_when_no_drugs(): void
+    public function test_create_page_shows_empty_state_when_no_tender_programs(): void
     {
-        StandardizedDrug::query()->delete();
+        Tender::query()->delete();
 
         $response = $this->actingAs($this->user)->get(route('ai.recommendations.create'));
 
         $response->assertOk();
-        $response->assertSee('No products available yet');
+        $response->assertSee('No tender programs available yet');
     }
 
     public function test_create_page_warns_when_no_pricing_statistics(): void
@@ -116,7 +117,7 @@ class PredictionUiTest extends TestCase
         $response->assertSee('No market statistics yet');
     }
 
-    public function test_form_validation_requires_tender(): void
+    public function test_form_validation_requires_tender_program(): void
     {
         $response = $this->actingAs($this->user)->post(route('ai.recommendations.store'), [
             'standardized_drug_id' => $this->drug->id,
@@ -126,7 +127,7 @@ class PredictionUiTest extends TestCase
             'discount_percentage' => 0,
         ]);
 
-        $response->assertSessionHasErrors('tender_id');
+        $response->assertSessionHasErrors('tender_group_key');
         $this->assertSame(0, Prediction::query()->count());
     }
 
@@ -139,17 +140,14 @@ class PredictionUiTest extends TestCase
         $response->assertSessionHasErrors(['quantity' => 'Tender quantity must be greater than zero.']);
     }
 
-    public function test_country_is_derived_from_tender_on_store(): void
+    public function test_country_is_derived_from_tender_program_on_store(): void
     {
         $this->seedStats();
 
-        $response = $this->actingAs($this->user)->post(route('ai.recommendations.store'), [
-            'tender_id' => $this->testTender->id,
-            'standardized_drug_id' => $this->drug->id,
+        $response = $this->actingAs($this->user)->post(route('ai.recommendations.store'), $this->recommendationPayload([
             'quantity' => 5000,
-            'quantity_unit' => 'units',
             'discount_percentage' => 0,
-        ]);
+        ]));
 
         $prediction = Prediction::query()->with('tender')->first();
         $response->assertRedirect(route('ai.recommendations.show', $prediction));
@@ -199,9 +197,26 @@ class PredictionUiTest extends TestCase
 
     public function test_store_handles_missing_stats_gracefully(): void
     {
-        $response = $this->actingAs($this->user)->post(route('ai.recommendations.store'), $this->recommendationPayload([
+        $emptyTender = Tender::query()->create([
+            'tender_number' => 'EMPTY-UI-2024',
+            'title' => 'Empty UI Program 2024',
+            'country_id' => $this->country->id,
+            'year' => 2024,
+            'status' => 'active',
+        ]);
+
+        TenderItem::query()->create([
+            'tender_id' => $emptyTender->id,
+            'standardized_drug_id' => $this->drug->id,
+        ]);
+
+        $response = $this->actingAs($this->user)->post(route('ai.recommendations.store'), [
+            'tender_group_key' => app(\App\Services\Tender\TenderGroupKeyService::class)->deriveFromTender($emptyTender),
+            'standardized_drug_id' => $this->drug->id,
             'quantity' => 1000,
-        ]));
+            'quantity_unit' => 'units',
+            'discount_percentage' => 0,
+        ]);
 
         $response->assertRedirect(route('ai.recommendations.create'));
         $response->assertSessionHas('error');
@@ -319,7 +334,7 @@ class PredictionUiTest extends TestCase
         $show->assertSee('Historical Data');
         $show->assertSee('Recent Market Data');
         $show->assertSee('Market Stability');
-        $show->assertSee('Country-Level Data');
+        $show->assertSee('Tender Program Data');
         $show->assertDontSee('Detailed explanation is available for new recommendations only.', false);
         $show->assertSee('Why this risk level?');
         $show->assertSee('competitive position');
@@ -491,20 +506,15 @@ class PredictionUiTest extends TestCase
 
     protected function seedStats(): void
     {
-        foreach (range(1, 5) as $i) {
-            $tender = Tender::query()->create([
-                'tender_number' => 'T-'.$i,
-                'country_id' => $this->country->id,
-                'year' => 2020 + $i,
-                'status' => 'active',
-            ]);
-            $item = TenderItem::query()->create([
-                'tender_id' => $tender->id,
-                'standardized_drug_id' => $this->drug->id,
-            ]);
+        $testItem = TenderItem::query()->firstOrCreate([
+            'tender_id' => $this->testTender->id,
+            'standardized_drug_id' => $this->drug->id,
+        ]);
+
+        foreach (range(1, 6) as $i) {
             BidRecord::query()->create([
-                'tender_item_id' => $item->id,
-                'tender_id' => $tender->id,
+                'tender_item_id' => $testItem->id,
+                'tender_id' => $this->testTender->id,
                 'standardized_drug_id' => $this->drug->id,
                 'country_id' => $this->country->id,
                 'company_id' => $this->company->id,
@@ -514,7 +524,7 @@ class PredictionUiTest extends TestCase
                 'row_type' => 'winning_bid',
                 'price_usd' => 10 + $i,
                 'quantity' => 1000,
-                'award_year' => 2020 + $i,
+                'award_year' => 2019 + $i,
                 'is_analytics_ready' => true,
                 'excluded_from_stats' => false,
             ]);

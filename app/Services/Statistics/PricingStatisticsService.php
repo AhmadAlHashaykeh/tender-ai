@@ -98,6 +98,41 @@ class PricingStatisticsService
     }
 
     /**
+     * @param  list<int>  $tenderIds
+     * @return array{created: bool, skipped: bool, statistic: ?PricingStatistic}
+     */
+    public function calculateForDrugTenderGroup(
+        int $standardizedDrugId,
+        array $tenderIds,
+        bool $persist = false,
+    ): array {
+        if ($tenderIds === []) {
+            return ['created' => false, 'skipped' => true, 'statistic' => null];
+        }
+
+        $records = $this->eligibleRecordsQuery()
+            ->where('standardized_drug_id', $standardizedDrugId)
+            ->whereIn('tender_id', $tenderIds)
+            ->get();
+
+        if ($records->isEmpty()) {
+            return ['created' => false, 'skipped' => true, 'statistic' => null];
+        }
+
+        $attributes = $this->buildAttributes($records, PricingStatisticScope::DrugTenderGroup, [
+            'standardized_drug_id' => $standardizedDrugId,
+            'country_id' => null,
+            'region_id' => null,
+        ]);
+
+        return [
+            'created' => false,
+            'skipped' => false,
+            'statistic' => new PricingStatistic($attributes),
+        ];
+    }
+
+    /**
      * @return array{created: bool, skipped: bool, statistic: ?PricingStatistic}
      */
     public function calculateForDrugGlobal(int $standardizedDrugId, bool $persist = true): array
