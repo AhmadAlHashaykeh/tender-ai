@@ -13,11 +13,13 @@ use App\Http\Controllers\PricingStatisticsController;
 use App\Http\Controllers\StandardizationController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\InternalDocumentationController;
+use App\Http\Controllers\PublicDocumentationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'landing'])->name('landing');
+Route::get('/documentation', PublicDocumentationController::class)->name('public.documentation');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');

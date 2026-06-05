@@ -1,0 +1,552 @@
+/* =====================================================
+   Public Business Documentation
+   Namespace: pubdoc-*
+   ===================================================== */
+
+.pubdoc-page {
+    font-family: 'Inter', sans-serif;
+    color: #0f172a;
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+/* ---------- Top navigation ---------- */
+.pubdoc-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pubdoc-nav-inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0.875rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.pubdoc-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+}
+
+.pubdoc-brand-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.625rem;
+    background: linear-gradient(135deg, #0D85E6, #7C3AED);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.pubdoc-brand-text {
+    font-size: 1.125rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #0D85E6, #7C3AED);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.pubdoc-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.pubdoc-nav-link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.pubdoc-nav-link:hover {
+    color: #0f172a;
+}
+
+.pubdoc-btn-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    border-radius: 9999px;
+    background: linear-gradient(to right, #0D85E6, #7C3AED);
+    box-shadow: 0 4px 14px rgba(13, 133, 230, 0.25);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.pubdoc-btn-login:hover {
+    box-shadow: 0 6px 20px rgba(13, 133, 230, 0.35);
+    transform: translateY(-1px);
+}
+
+/* ---------- Hero ---------- */
+.pubdoc-hero {
+    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f5f3ff 100%);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 3rem 1.5rem 2.5rem;
+}
+
+.pubdoc-hero-inner {
+    max-width: 48rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.pubdoc-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #0D85E6;
+    background: rgba(13, 133, 230, 0.08);
+    border: 1px solid rgba(13, 133, 230, 0.2);
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+}
+
+.pubdoc-hero-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 0 0 0.75rem;
+    color: #0f172a;
+}
+
+.pubdoc-hero-subtitle {
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ---------- Layout ---------- */
+.pubdoc-layout {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .pubdoc-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Table of contents ---------- */
+.pubdoc-toc {
+    position: sticky;
+    top: 4.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.875rem;
+    padding: 1rem;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+    .pubdoc-toc {
+        position: static;
+        max-height: none;
+    }
+}
+
+.pubdoc-toc-title {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+    margin: 0 0 0.625rem;
+}
+
+.pubdoc-toc-link {
+    display: block;
+    padding: 0.3125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    line-height: 1.4;
+    transition: background 0.15s, color 0.15s;
+}
+
+.pubdoc-toc-link:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* ---------- Content ---------- */
+.pubdoc-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.pubdoc-section {
+    scroll-margin-top: 5rem;
+}
+
+.pubdoc-section-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.pubdoc-section-num {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: #0D85E6;
+    background: rgba(13, 133, 230, 0.08);
+    padding: 0.1875rem 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.pubdoc-section-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    margin: 0 0 1rem;
+    line-height: 1.3;
+}
+
+.pubdoc-section p {
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: #334155;
+    margin: 0 0 1rem;
+}
+
+.pubdoc-section p:last-child {
+    margin-bottom: 0;
+}
+
+.pubdoc-section ul,
+.pubdoc-section ol {
+    margin: 0.5rem 0 1rem;
+    padding-left: 1.375rem;
+}
+
+.pubdoc-section li {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+.pubdoc-section strong {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.pubdoc-lead {
+    font-size: 1.0625rem !important;
+    color: #475569 !important;
+    line-height: 1.8 !important;
+}
+
+/* ---------- Subheadings ---------- */
+.pubdoc-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 1.5rem 0 0.625rem;
+}
+
+.pubdoc-subtitle:first-of-type {
+    margin-top: 0;
+}
+
+/* ---------- Highlight cards ---------- */
+.pubdoc-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: 0.875rem;
+    margin: 1.25rem 0;
+}
+
+.pubdoc-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.125rem;
+}
+
+.pubdoc-card-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.375rem;
+}
+
+.pubdoc-card-text {
+    font-size: 0.8125rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ---------- Workflow pipeline ---------- */
+.pubdoc-flow {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.pubdoc-flow-step {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    align-items: start;
+}
+
+.pubdoc-flow-step:last-child {
+    border-bottom: none;
+}
+
+.pubdoc-flow-step:nth-child(even) {
+    background: #fafbfc;
+}
+
+.pubdoc-flow-num {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #0D85E6, #7C3AED);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pubdoc-flow-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.25rem;
+}
+
+.pubdoc-flow-desc {
+    font-size: 0.8125rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ---------- Fallback tiers ---------- */
+.pubdoc-tier {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    margin-bottom: 0.625rem;
+    background: #fafbfc;
+    align-items: flex-start;
+}
+
+.pubdoc-tier-rank {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    background: #0D85E6;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pubdoc-tier-body h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.25rem;
+}
+
+.pubdoc-tier-body p {
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ---------- Example scenario ---------- */
+.pubdoc-scenario {
+    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+    border: 1px solid rgba(13, 133, 230, 0.2);
+    border-radius: 0.875rem;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+}
+
+.pubdoc-scenario-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0D85E6;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ---------- Metrics table ---------- */
+.pubdoc-table-wrap {
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+}
+
+.pubdoc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.pubdoc-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    font-weight: 600;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pubdoc-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: top;
+    line-height: 1.55;
+}
+
+.pubdoc-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ---------- Callout boxes ---------- */
+.pubdoc-callout {
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 0.875rem;
+    line-height: 1.65;
+}
+
+.pubdoc-callout--info {
+    background: rgba(13, 133, 230, 0.06);
+    border: 1px solid rgba(13, 133, 230, 0.2);
+    color: #1e40af;
+}
+
+.pubdoc-callout--important {
+    background: rgba(124, 58, 237, 0.06);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    color: #5b21b6;
+}
+
+.pubdoc-callout--neutral {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+}
+
+/* ---------- Status badges ---------- */
+.pubdoc-status-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.pubdoc-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #475569;
+}
+
+.pubdoc-badge--primary {
+    background: rgba(13, 133, 230, 0.08);
+    color: #0D85E6;
+    border-color: rgba(13, 133, 230, 0.2);
+}
+
+.pubdoc-badge--success {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+/* ---------- Footer ---------- */
+.pubdoc-footer {
+    border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+
+.pubdoc-footer p {
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.pubdoc-footer a {
+    color: #0D85E6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.pubdoc-footer a:hover {
+    text-decoration: underline;
+}
