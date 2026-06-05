@@ -1,29 +1,48 @@
 /* =====================================================
-   Public Business Documentation
+   Public Business Documentation — v2
    Namespace: pubdoc-*
    ===================================================== */
 
 .pubdoc-page {
-    font-family: 'Inter', sans-serif;
-    color: #0f172a;
-    background: #ffffff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #1e293b;
+    background: #fafbfc;
     min-height: 100vh;
+    line-height: 1.6;
 }
 
-/* ---------- Top navigation ---------- */
+/* ---------- Reading progress ---------- */
+.pubdoc-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 60;
+    background: transparent;
+}
+
+.pubdoc-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #0D85E6;
+    transition: width 0.1s linear;
+}
+
+/* ---------- Top bar ---------- */
 .pubdoc-nav {
     position: sticky;
-    top: 0;
+    top: 3px;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
     border-bottom: 1px solid #e2e8f0;
 }
 
 .pubdoc-nav-inner {
-    max-width: 72rem;
+    max-width: 80rem;
     margin: 0 auto;
-    padding: 0.875rem 1.5rem;
+    padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -33,15 +52,15 @@
 .pubdoc-brand {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.5rem;
     text-decoration: none;
 }
 
 .pubdoc-brand-icon {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 0.625rem;
-    background: linear-gradient(135deg, #0D85E6, #7C3AED);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: #0D85E6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,12 +68,9 @@
 }
 
 .pubdoc-brand-text {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 700;
-    background: linear-gradient(to right, #0D85E6, #7C3AED);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #0f172a;
 }
 
 .pubdoc-nav-actions {
@@ -68,63 +84,67 @@
     font-weight: 500;
     color: #64748b;
     text-decoration: none;
-    transition: color 0.15s;
 }
 
-.pubdoc-nav-link:hover {
-    color: #0f172a;
-}
+.pubdoc-nav-link:hover { color: #0f172a; }
 
 .pubdoc-btn-login {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    padding: 0.5rem 1rem;
+    padding: 0.4375rem 0.875rem;
     font-size: 0.8125rem;
     font-weight: 600;
     color: white;
     text-decoration: none;
-    border-radius: 9999px;
-    background: linear-gradient(to right, #0D85E6, #7C3AED);
-    box-shadow: 0 4px 14px rgba(13, 133, 230, 0.25);
-    transition: box-shadow 0.2s, transform 0.2s;
+    border-radius: 0.5rem;
+    background: #0D85E6;
 }
 
-.pubdoc-btn-login:hover {
-    box-shadow: 0 6px 20px rgba(13, 133, 230, 0.35);
-    transform: translateY(-1px);
+.pubdoc-btn-login:hover { background: #0b6fc4; }
+
+.pubdoc-mobile-toc-btn {
+    display: none;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    .pubdoc-mobile-toc-btn { display: inline-flex; }
 }
 
 /* ---------- Hero ---------- */
 .pubdoc-hero {
-    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 50%, #f5f3ff 100%);
+    background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
-    padding: 3rem 1.5rem 2.5rem;
+    padding: 2.5rem 1.5rem 2rem;
 }
 
 .pubdoc-hero-inner {
-    max-width: 48rem;
+    max-width: 42rem;
     margin: 0 auto;
-    text-align: center;
 }
 
-.pubdoc-hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.6875rem;
+.pubdoc-hero-eyebrow {
+    font-size: 0.75rem;
     font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: #0D85E6;
-    background: rgba(13, 133, 230, 0.08);
-    border: 1px solid rgba(13, 133, 230, 0.2);
-    border-radius: 9999px;
-    margin-bottom: 1rem;
+    margin: 0 0 0.75rem;
 }
 
 .pubdoc-hero-title {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 800;
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.2;
     margin: 0 0 0.75rem;
@@ -132,152 +152,223 @@
 }
 
 .pubdoc-hero-subtitle {
-    font-size: 1rem;
+    font-size: 1.0625rem;
     color: #64748b;
-    line-height: 1.65;
+    line-height: 1.7;
     margin: 0;
-    max-width: 40rem;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-/* ---------- Layout ---------- */
-.pubdoc-layout {
-    max-width: 72rem;
+.pubdoc-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+}
+
+/* ---------- Shell layout ---------- */
+.pubdoc-shell {
+    max-width: 80rem;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
     display: grid;
-    grid-template-columns: 15rem 1fr;
-    gap: 2.5rem;
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    gap: 3rem;
     align-items: start;
 }
 
 @media (max-width: 1024px) {
-    .pubdoc-layout {
+    .pubdoc-shell {
         grid-template-columns: 1fr;
+        gap: 0;
+        padding-top: 1rem;
     }
 }
 
-/* ---------- Table of contents ---------- */
-.pubdoc-toc {
+/* ---------- Sidebar navigator ---------- */
+.pubdoc-sidebar {
     position: sticky;
     top: 4.5rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.875rem;
-    padding: 1rem;
-    max-height: calc(100vh - 6rem);
+    max-height: calc(100vh - 5.5rem);
     overflow-y: auto;
+    padding-right: 0.25rem;
 }
 
 @media (max-width: 1024px) {
-    .pubdoc-toc {
-        position: static;
+    .pubdoc-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(18rem, 85vw);
+        z-index: 70;
+        background: #ffffff;
+        border-right: 1px solid #e2e8f0;
+        padding: 1rem;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
         max-height: none;
+        box-shadow: 4px 0 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .pubdoc-sidebar.pubdoc-sidebar--open {
+        transform: translateX(0);
+    }
+
+    .pubdoc-sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.4);
+        z-index: 65;
+    }
+
+    .pubdoc-sidebar-backdrop.pubdoc-sidebar-backdrop--open {
+        display: block;
     }
 }
 
-.pubdoc-toc-title {
+.pubdoc-sidebar-label {
     font-size: 0.6875rem;
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #64748b;
-    margin: 0 0 0.625rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin: 1rem 0 0.375rem;
+    padding: 0 0.5rem;
 }
 
-.pubdoc-toc-link {
+.pubdoc-sidebar-label:first-child { margin-top: 0; }
+
+.pubdoc-sidebar-link {
     display: block;
-    padding: 0.3125rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 450;
     color: #64748b;
     text-decoration: none;
     border-radius: 0.375rem;
+    border-left: 2px solid transparent;
     line-height: 1.4;
-    transition: background 0.15s, color 0.15s;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
 }
 
-.pubdoc-toc-link:hover {
-    background: #e2e8f0;
+.pubdoc-sidebar-link:hover {
     color: #0f172a;
+    background: #f1f5f9;
 }
 
-/* ---------- Content ---------- */
-.pubdoc-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+.pubdoc-sidebar-link.pubdoc-sidebar-link--active {
+    color: #0D85E6;
+    background: rgba(13, 133, 230, 0.06);
+    border-left-color: #0D85E6;
+    font-weight: 600;
 }
 
-.pubdoc-section {
-    scroll-margin-top: 5rem;
+/* ---------- Main content ---------- */
+.pubdoc-main {
+    min-width: 0;
+    max-width: 46rem;
 }
 
-.pubdoc-section-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 1rem;
-    padding: 2rem;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+.pubdoc-main > .pubdoc-block {
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-.pubdoc-section-num {
+.pubdoc-main > .pubdoc-block.pubdoc-block--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---------- Section header pattern ---------- */
+.pubdoc-block-header {
+    margin-bottom: 1.5rem;
+}
+
+.pubdoc-academic-label {
     display: inline-block;
     font-size: 0.6875rem;
     font-weight: 700;
-    color: #0D85E6;
-    background: rgba(13, 133, 230, 0.08);
-    padding: 0.1875rem 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #7C3AED;
+    background: rgba(124, 58, 237, 0.08);
+    padding: 0.2rem 0.5rem;
     border-radius: 0.25rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.625rem;
 }
 
-.pubdoc-section-title {
-    font-size: 1.375rem;
+.pubdoc-block-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+}
+
+.pubdoc-block-icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.625rem;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0D85E6;
+}
+
+.pubdoc-block-title {
+    font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     color: #0f172a;
-    margin: 0 0 1rem;
+    margin: 0;
     line-height: 1.3;
 }
 
-.pubdoc-section p {
+.pubdoc-block-summary {
+    font-size: 1.0625rem;
+    color: #475569;
+    line-height: 1.75;
+    margin: 0.75rem 0 0;
+}
+
+/* ---------- Content card (single column reading) ---------- */
+.pubdoc-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.75rem;
+}
+
+.pubdoc-panel + .pubdoc-panel { margin-top: 1rem; }
+
+.pubdoc-panel p {
     font-size: 0.9375rem;
     line-height: 1.75;
     color: #334155;
     margin: 0 0 1rem;
 }
 
-.pubdoc-section p:last-child {
-    margin-bottom: 0;
-}
+.pubdoc-panel p:last-child { margin-bottom: 0; }
 
-.pubdoc-section ul,
-.pubdoc-section ol {
+.pubdoc-panel ul,
+.pubdoc-panel ol {
     margin: 0.5rem 0 1rem;
     padding-left: 1.375rem;
 }
 
-.pubdoc-section li {
+.pubdoc-panel li {
     font-size: 0.9375rem;
     line-height: 1.7;
     color: #334155;
     margin-bottom: 0.5rem;
 }
 
-.pubdoc-section strong {
-    color: #0f172a;
-    font-weight: 600;
-}
+.pubdoc-panel strong { color: #0f172a; font-weight: 600; }
 
-.pubdoc-lead {
-    font-size: 1.0625rem !important;
-    color: #475569 !important;
-    line-height: 1.8 !important;
-}
-
-/* ---------- Subheadings ---------- */
 .pubdoc-subtitle {
     font-size: 1rem;
     font-weight: 600;
@@ -285,74 +376,289 @@
     margin: 1.5rem 0 0.625rem;
 }
 
-.pubdoc-subtitle:first-of-type {
-    margin-top: 0;
-}
-
-/* ---------- Highlight cards ---------- */
+/* ---------- Cards grid ---------- */
 .pubdoc-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-    gap: 0.875rem;
+    grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
+    gap: 0.75rem;
     margin: 1.25rem 0;
 }
 
 .pubdoc-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
-    padding: 1.125rem;
+    border-radius: 0.625rem;
+    padding: 1rem;
+}
+
+.pubdoc-card-icon {
+    color: #0D85E6;
+    margin-bottom: 0.5rem;
 }
 
 .pubdoc-card-title {
     font-size: 0.875rem;
     font-weight: 600;
     color: #0f172a;
-    margin: 0 0 0.375rem;
+    margin: 0 0 0.25rem;
 }
 
 .pubdoc-card-text {
     font-size: 0.8125rem;
     color: #64748b;
-    line-height: 1.6;
+    line-height: 1.55;
     margin: 0;
 }
 
-/* ---------- Workflow pipeline ---------- */
-.pubdoc-flow {
+/* ---------- Why TenderAI — comparison ---------- */
+.pubdoc-compare {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.25rem 0;
+}
+
+@media (max-width: 768px) {
+    .pubdoc-compare { grid-template-columns: 1fr; }
+}
+
+.pubdoc-compare-col {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    background: #ffffff;
+}
+
+.pubdoc-compare-col--before { border-top: 3px solid #94a3b8; }
+.pubdoc-compare-col--process { border-top: 3px solid #0D85E6; }
+.pubdoc-compare-col--after { border-top: 3px solid #22c55e; }
+
+.pubdoc-compare-heading {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+    color: #64748b;
+}
+
+.pubdoc-compare-col--process .pubdoc-compare-heading { color: #0D85E6; }
+.pubdoc-compare-col--after .pubdoc-compare-heading { color: #15803d; }
+
+.pubdoc-compare-col ul {
+    margin: 0;
+    padding-left: 1.125rem;
+}
+
+.pubdoc-compare-col li {
+    font-size: 0.8125rem;
+    color: #475569;
+    margin-bottom: 0.375rem;
+    line-height: 1.5;
+}
+
+/* ---------- Pipeline diagram ---------- */
+.pubdoc-pipeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
     margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+}
+
+.pubdoc-pipeline-node {
+    width: 100%;
+    max-width: 22rem;
+    text-align: center;
+    padding: 0.875rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.625rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.pubdoc-pipeline-node-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+}
+
+.pubdoc-pipeline-node-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0.25rem 0 0;
+}
+
+.pubdoc-pipeline-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.375rem 0;
+    color: #94a3b8;
+}
+
+/* Horizontal pipeline on desktop */
+@media (min-width: 900px) {
+    .pubdoc-pipeline--horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1.75rem;
+    }
+
+    .pubdoc-pipeline--horizontal .pubdoc-pipeline-node {
+        width: auto;
+        flex: 0 1 auto;
+        max-width: 9.5rem;
+        padding: 0.75rem 0.875rem;
+    }
+
+    .pubdoc-pipeline--horizontal .pubdoc-pipeline-arrow {
+        flex-direction: row;
+        padding: 0 0.25rem;
+    }
+}
+
+/* ---------- User guide timeline ---------- */
+.pubdoc-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.pubdoc-guide-step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.25rem;
+    position: relative;
+}
+
+@media (max-width: 640px) {
+    .pubdoc-guide-step { grid-template-columns: 1fr; }
+}
+
+.pubdoc-guide-num {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    background: #0D85E6;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pubdoc-guide-body {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.pubdoc-guide-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.5rem;
+}
+
+.pubdoc-guide-desc {
+    font-size: 0.9375rem;
+    color: #475569;
+    line-height: 1.65;
+    margin: 0 0 1rem;
+}
+
+.pubdoc-guide-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.pubdoc-guide-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #334155;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+}
+
+.pubdoc-guide-chip--highlight {
+    background: rgba(13, 133, 230, 0.08);
+    border-color: rgba(13, 133, 230, 0.25);
+    color: #0D85E6;
+    font-weight: 600;
+}
+
+.pubdoc-guide-arrow {
+    color: #94a3b8;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.pubdoc-guide-actions {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.pubdoc-guide-actions li {
+    font-size: 0.875rem;
+    color: #475569;
+    margin-bottom: 0.375rem;
+}
+
+/* ---------- Workflow steps (numbered list) ---------- */
+.pubdoc-steps {
     display: flex;
     flex-direction: column;
     gap: 0;
     border: 1px solid #e2e8f0;
     border-radius: 0.75rem;
     overflow: hidden;
+    margin: 1.25rem 0;
 }
 
-.pubdoc-flow-step {
+.pubdoc-step {
     display: grid;
-    grid-template-columns: 2.5rem 1fr;
-    gap: 1rem;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0.875rem;
     padding: 1rem 1.25rem;
-    background: white;
+    background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
-    align-items: start;
 }
 
-.pubdoc-flow-step:last-child {
-    border-bottom: none;
-}
+.pubdoc-step:last-child { border-bottom: none; }
+.pubdoc-step:nth-child(even) { background: #fafbfc; }
 
-.pubdoc-flow-step:nth-child(even) {
-    background: #fafbfc;
-}
-
-.pubdoc-flow-num {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9999px;
-    background: linear-gradient(135deg, #0D85E6, #7C3AED);
-    color: white;
+.pubdoc-step-num {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    background: #f1f5f9;
+    color: #475569;
     font-size: 0.75rem;
     font-weight: 700;
     display: flex;
@@ -360,36 +666,35 @@
     justify-content: center;
 }
 
-.pubdoc-flow-name {
-    font-size: 0.9375rem;
+.pubdoc-step-name {
+    font-size: 0.875rem;
     font-weight: 600;
     color: #0f172a;
-    margin: 0 0 0.25rem;
+    margin: 0 0 0.2rem;
 }
 
-.pubdoc-flow-desc {
+.pubdoc-step-desc {
     font-size: 0.8125rem;
     color: #64748b;
-    line-height: 1.6;
     margin: 0;
+    line-height: 1.55;
 }
 
-/* ---------- Fallback tiers ---------- */
+/* ---------- Tiers, tables, callouts ---------- */
 .pubdoc-tier {
     display: flex;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
+    gap: 0.875rem;
+    padding: 1rem;
     border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
-    margin-bottom: 0.625rem;
+    border-radius: 0.625rem;
+    margin-bottom: 0.5rem;
     background: #fafbfc;
-    align-items: flex-start;
 }
 
 .pubdoc-tier-rank {
     flex-shrink: 0;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 1.625rem;
+    height: 1.625rem;
     border-radius: 0.375rem;
     background: #0D85E6;
     color: white;
@@ -404,40 +709,21 @@
     font-size: 0.9375rem;
     font-weight: 600;
     color: #0f172a;
-    margin: 0 0 0.25rem;
+    margin: 0 0 0.2rem;
 }
 
 .pubdoc-tier-body p {
     font-size: 0.8125rem;
     color: #64748b;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.55;
 }
 
-/* ---------- Example scenario ---------- */
-.pubdoc-scenario {
-    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
-    border: 1px solid rgba(13, 133, 230, 0.2);
-    border-radius: 0.875rem;
-    padding: 1.5rem;
-    margin: 1.25rem 0;
-}
-
-.pubdoc-scenario-title {
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: #0D85E6;
-    margin: 0 0 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-/* ---------- Metrics table ---------- */
 .pubdoc-table-wrap {
     overflow-x: auto;
     margin: 1.25rem 0;
     border: 1px solid #e2e8f0;
-    border-radius: 0.75rem;
+    border-radius: 0.625rem;
 }
 
 .pubdoc-table {
@@ -463,28 +749,25 @@
     line-height: 1.55;
 }
 
-.pubdoc-table tr:last-child td {
-    border-bottom: none;
-}
+.pubdoc-table tr:last-child td { border-bottom: none; }
 
-/* ---------- Callout boxes ---------- */
 .pubdoc-callout {
-    border-radius: 0.75rem;
-    padding: 1rem 1.25rem;
+    border-radius: 0.625rem;
+    padding: 1rem 1.125rem;
     margin: 1.25rem 0;
     font-size: 0.875rem;
     line-height: 1.65;
 }
 
 .pubdoc-callout--info {
-    background: rgba(13, 133, 230, 0.06);
-    border: 1px solid rgba(13, 133, 230, 0.2);
+    background: rgba(13, 133, 230, 0.05);
+    border: 1px solid rgba(13, 133, 230, 0.15);
     color: #1e40af;
 }
 
 .pubdoc-callout--important {
-    background: rgba(124, 58, 237, 0.06);
-    border: 1px solid rgba(124, 58, 237, 0.2);
+    background: rgba(124, 58, 237, 0.05);
+    border: 1px solid rgba(124, 58, 237, 0.15);
     color: #5b21b6;
 }
 
@@ -494,17 +777,27 @@
     color: #475569;
 }
 
-/* ---------- Status badges ---------- */
-.pubdoc-status-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
+.pubdoc-scenario {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #0D85E6;
+    border-radius: 0.625rem;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
 }
 
+.pubdoc-scenario-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #0D85E6;
+    margin: 0 0 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* ---------- Badges & status ---------- */
 .pubdoc-badge {
     display: inline-flex;
-    align-items: center;
     padding: 0.25rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 600;
@@ -526,10 +819,44 @@
     border-color: #bbf7d0;
 }
 
+.pubdoc-status-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* ---------- Result cards (user guide step 5) ---------- */
+.pubdoc-result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: 0.625rem;
+}
+
+.pubdoc-result-item {
+    text-align: center;
+    padding: 0.875rem 0.5rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+}
+
+.pubdoc-result-item i {
+    color: #0D85E6;
+    margin-bottom: 0.375rem;
+}
+
+.pubdoc-result-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
+}
+
 /* ---------- Footer ---------- */
 .pubdoc-footer {
     border-top: 1px solid #e2e8f0;
-    background: #f8fafc;
+    background: #ffffff;
     padding: 2rem 1.5rem;
     text-align: center;
 }
@@ -547,6 +874,34 @@
     font-weight: 500;
 }
 
-.pubdoc-footer a:hover {
-    text-decoration: underline;
+.pubdoc-footer a:hover { text-decoration: underline; }
+
+/* ---------- Metric highlight row ---------- */
+.pubdoc-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+}
+
+.pubdoc-metric {
+    padding: 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.625rem;
+    text-align: center;
+}
+
+.pubdoc-metric-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.25rem;
+}
+
+.pubdoc-metric-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.45;
 }

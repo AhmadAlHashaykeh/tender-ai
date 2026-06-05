@@ -29,6 +29,9 @@ class PublicDocumentationTest extends TestCase
             ->assertSee('Problem Statement')
             ->assertSee('Tender Program Logic')
             ->assertSee('Graduation Project Relevance')
+            ->assertSee('How to Use TenderAI')
+            ->assertSee('Why TenderAI Exists')
+            ->assertSee('System Pipeline')
             ->assertSee('Conclusion')
             ->assertDontSee('DB_PASSWORD')
             ->assertDontSee('sk_live_');
@@ -52,7 +55,8 @@ class PublicDocumentationTest extends TestCase
         $content = $response->getContent();
 
         $this->assertStringContainsString('pubdoc-page', $content);
+        $this->assertStringContainsString('pubdoc-sidebar', $content);
         $this->assertStringNotContainsString('app-layout', $content);
-        $this->assertStringNotContainsString('sidebar', $content);
+        $this->assertStringNotContainsString('partials.sidebar', $content);
     }
 }
