@@ -43,10 +43,13 @@
 @endphp
 
 <nav class="pubdoc-sidebar" id="pubdoc-sidebar" aria-label="Documentation sections">
-    @foreach ($navGroups as $group => $links)
-        <p class="pubdoc-sidebar-label">{{ $group }}</p>
-        @foreach ($links as $link)
-            <a href="#{{ $link['id'] }}" class="pubdoc-sidebar-link" data-section="{{ $link['id'] }}">{{ $link['label'] }}</a>
+    <div class="pubdoc-sidebar-inner">
+        <p class="pubdoc-sidebar-heading">On this page</p>
+        @foreach ($navGroups as $group => $links)
+            <p class="pubdoc-sidebar-label">{{ $group }}</p>
+            @foreach ($links as $link)
+                <a href="#{{ $link['id'] }}" class="pubdoc-sidebar-link" data-section="{{ $link['id'] }}">{{ $link['label'] }}</a>
+            @endforeach
         @endforeach
-    @endforeach
+    </div>
 </nav>

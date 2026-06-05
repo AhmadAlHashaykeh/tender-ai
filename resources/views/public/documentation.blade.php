@@ -105,10 +105,26 @@
                     <p>TenderAI addresses this gap by ingesting historical tender records, standardizing them into a unified knowledge base, generating market statistics at product and country levels, and supporting price recommendations grounded in real award evidence.</p>
                 </div>
                 <div class="pubdoc-card-grid">
-                    <div class="pubdoc-card"><span class="pubdoc-card-icon"><i data-lucide="history" style="width:1.125rem;"></i></span><p class="pubdoc-card-title">Historical Analysis</p><p class="pubdoc-card-text">Structured review of past tender awards, winners, and unit prices across programs and markets.</p></div>
-                    <div class="pubdoc-card"><span class="pubdoc-card-icon"><i data-lucide="bar-chart-3" style="width:1.125rem;"></i></span><p class="pubdoc-card-title">Market Intelligence</p><p class="pubdoc-card-text">Aggregated statistics revealing how products have been priced in specific countries and tender programs.</p></div>
-                    <div class="pubdoc-card"><span class="pubdoc-card-icon"><i data-lucide="trending-up" style="width:1.125rem;"></i></span><p class="pubdoc-card-title">Prediction Support</p><p class="pubdoc-card-text">Evidence-based price recommendations with layered fallback from program-specific to global data.</p></div>
-                    <div class="pubdoc-card"><span class="pubdoc-card-icon"><i data-lucide="brain" style="width:1.125rem;"></i></span><p class="pubdoc-card-title">AI Interpretation</p><p class="pubdoc-card-text">Strategic commentary on competitiveness, discount risk, and market context — without replacing the calculation engine.</p></div>
+                    <div class="pubdoc-card">
+                        <div class="pubdoc-card-icon-wrap"><i data-lucide="history" style="width:1.125rem;height:1.125rem;"></i></div>
+                        <p class="pubdoc-card-title">Historical Analysis</p>
+                        <p class="pubdoc-card-text">Structured review of past tender awards, winners, and unit prices across programs and markets.</p>
+                    </div>
+                    <div class="pubdoc-card">
+                        <div class="pubdoc-card-icon-wrap"><i data-lucide="bar-chart-3" style="width:1.125rem;height:1.125rem;"></i></div>
+                        <p class="pubdoc-card-title">Market Intelligence</p>
+                        <p class="pubdoc-card-text">Aggregated statistics revealing how products have been priced in specific countries and tender programs.</p>
+                    </div>
+                    <div class="pubdoc-card">
+                        <div class="pubdoc-card-icon-wrap"><i data-lucide="trending-up" style="width:1.125rem;height:1.125rem;"></i></div>
+                        <p class="pubdoc-card-title">Prediction Support</p>
+                        <p class="pubdoc-card-text">Evidence-based price recommendations with layered fallback from program-specific to global data.</p>
+                    </div>
+                    <div class="pubdoc-card">
+                        <div class="pubdoc-card-icon-wrap"><i data-lucide="brain" style="width:1.125rem;height:1.125rem;"></i></div>
+                        <p class="pubdoc-card-title">AI Interpretation</p>
+                        <p class="pubdoc-card-text">Strategic commentary on competitiveness, discount risk, and market context — without replacing the calculation engine.</p>
+                    </div>
                 </div>
             </article>
 
@@ -268,16 +284,16 @@
                     <p class="pubdoc-block-summary">A step-by-step visual guide for tender teams — from uploading historical data to understanding price recommendations.</p>
                 </header>
 
-                <div class="pubdoc-guide">
+                <div class="pubdoc-guide-timeline">
                     <div class="pubdoc-guide-step" id="user-guide-step-1">
-                        <span class="pubdoc-guide-num">1</span>
-                        <div class="pubdoc-guide-body">
+                        <div class="pubdoc-guide-step-marker"><span class="pubdoc-guide-step-badge">01</span></div>
+                        <div class="pubdoc-guide-step-card">
                             <h3 class="pubdoc-guide-title">Upload Historical Tender Data</h3>
                             <p class="pubdoc-guide-desc">The user uploads historical pharmaceutical tender spreadsheets. TenderAI converts raw Excel rows into structured import data ready for processing.</p>
-                            <div class="pubdoc-guide-visual">
-                                <span class="pubdoc-guide-chip"><i data-lucide="file-spreadsheet" style="width:0.875rem;"></i> Excel File</span>
-                                <span class="pubdoc-guide-arrow">→</span>
-                                <span class="pubdoc-guide-chip pubdoc-guide-chip--highlight"><i data-lucide="upload" style="width:0.875rem;"></i> TenderAI Upload</span>
+                            <div class="pubdoc-guide-flow">
+                                <span class="pubdoc-guide-chip"><i data-lucide="file-spreadsheet" style="width:0.875rem;height:0.875rem;"></i> Excel File</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">→</span>
+                                <span class="pubdoc-guide-chip pubdoc-guide-chip--highlight"><i data-lucide="upload" style="width:0.875rem;height:0.875rem;"></i> TenderAI Upload</span>
                             </div>
                             <ol class="pubdoc-guide-actions">
                                 <li>Open the <strong>Upload Data</strong> page in the dashboard</li>
@@ -289,15 +305,15 @@
                     </div>
 
                     <div class="pubdoc-guide-step" id="user-guide-step-2">
-                        <span class="pubdoc-guide-num">2</span>
-                        <div class="pubdoc-guide-body">
+                        <div class="pubdoc-guide-step-marker"><span class="pubdoc-guide-step-badge">02</span></div>
+                        <div class="pubdoc-guide-step-card">
                             <h3 class="pubdoc-guide-title">Review Product Matching</h3>
                             <p class="pubdoc-guide-desc">TenderAI detects similar products and suggests standardized matches. Users confirm or correct matches to protect prediction accuracy.</p>
-                            <div class="pubdoc-guide-visual">
+                            <div class="pubdoc-guide-flow">
                                 <span class="pubdoc-guide-chip">Raw Product Name</span>
-                                <span class="pubdoc-guide-arrow">→</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">→</span>
                                 <span class="pubdoc-guide-chip">System Suggestion</span>
-                                <span class="pubdoc-guide-arrow">→</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">→</span>
                                 <span class="pubdoc-guide-chip pubdoc-guide-chip--highlight">Approved Product</span>
                             </div>
                             <ol class="pubdoc-guide-actions">
@@ -310,37 +326,37 @@
                     </div>
 
                     <div class="pubdoc-guide-step" id="user-guide-step-3">
-                        <span class="pubdoc-guide-num">3</span>
-                        <div class="pubdoc-guide-body">
+                        <div class="pubdoc-guide-step-marker"><span class="pubdoc-guide-step-badge">03</span></div>
+                        <div class="pubdoc-guide-step-card">
                             <h3 class="pubdoc-guide-title">Generate Market Intelligence</h3>
                             <p class="pubdoc-guide-desc">Once bid records are created, the statistics engine aggregates historical awards into actionable market intelligence.</p>
-                            <div class="pubdoc-guide-visual">
+                            <div class="pubdoc-guide-flow pubdoc-guide-flow--stack">
                                 <span class="pubdoc-guide-chip">Historical Records</span>
-                                <span class="pubdoc-guide-arrow">↓</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">↓</span>
                                 <span class="pubdoc-guide-chip pubdoc-guide-chip--highlight">Statistics Engine</span>
                             </div>
-                            <div class="pubdoc-result-grid">
-                                <div class="pubdoc-result-item"><i data-lucide="calculator" style="width:1.125rem;"></i><p class="pubdoc-result-label">Average Price</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="scale" style="width:1.125rem;"></i><p class="pubdoc-result-label">Weighted Avg</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="minus" style="width:1.125rem;"></i><p class="pubdoc-result-label">Median</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="clock" style="width:1.125rem;"></i><p class="pubdoc-result-label">Last Price</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="trending-up" style="width:1.125rem;"></i><p class="pubdoc-result-label">Market Trend</p></div>
+                            <div class="pubdoc-metric-grid">
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="calculator" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Average Price</p><p class="pubdoc-metric-card-hint">Typical award level</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="scale" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Weighted Avg</p><p class="pubdoc-metric-card-hint">Volume-sensitive price</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="minus" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Median</p><p class="pubdoc-metric-card-hint">Outlier-resistant center</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="clock" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Last Price</p><p class="pubdoc-metric-card-hint">Most recent award</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="trending-up" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Market Trend</p><p class="pubdoc-metric-card-hint">Direction over time</p></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="pubdoc-guide-step" id="user-guide-step-4">
-                        <span class="pubdoc-guide-num">4</span>
-                        <div class="pubdoc-guide-body">
+                        <div class="pubdoc-guide-step-marker"><span class="pubdoc-guide-step-badge">04</span></div>
+                        <div class="pubdoc-guide-step-card">
                             <h3 class="pubdoc-guide-title">Create Price Recommendation</h3>
                             <p class="pubdoc-guide-desc">Select a tender program, choose a product from that program's history, enter quantity and discount, then generate a recommendation.</p>
-                            <div class="pubdoc-guide-visual">
+                            <div class="pubdoc-guide-flow pubdoc-guide-flow--stack">
                                 <span class="pubdoc-guide-chip pubdoc-guide-chip--highlight">Tender Program</span>
-                                <span class="pubdoc-guide-arrow">↓</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">↓</span>
                                 <span class="pubdoc-guide-chip">Select Product</span>
-                                <span class="pubdoc-guide-arrow">↓</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">↓</span>
                                 <span class="pubdoc-guide-chip">Enter Quantity</span>
-                                <span class="pubdoc-guide-arrow">↓</span>
+                                <span class="pubdoc-guide-flow-arrow" aria-hidden="true">↓</span>
                                 <span class="pubdoc-guide-chip pubdoc-guide-chip--highlight">Generate</span>
                             </div>
                             <ol class="pubdoc-guide-actions">
@@ -353,19 +369,19 @@
                         </div>
                     </div>
 
-                    <div class="pubdoc-guide-step" id="user-guide-step-5">
-                        <span class="pubdoc-guide-num">5</span>
-                        <div class="pubdoc-guide-body">
+                    <div class="pubdoc-guide-step pubdoc-guide-step--last" id="user-guide-step-5">
+                        <div class="pubdoc-guide-step-marker"><span class="pubdoc-guide-step-badge">05</span></div>
+                        <div class="pubdoc-guide-step-card">
                             <h3 class="pubdoc-guide-title">Understand Results</h3>
                             <p class="pubdoc-guide-desc">The recommendation screen presents calculated price, confidence indicators, risk level, market evidence, and AI strategic commentary.</p>
-                            <div class="pubdoc-result-grid">
-                                <div class="pubdoc-result-item"><i data-lucide="dollar-sign" style="width:1.125rem;"></i><p class="pubdoc-result-label">Prediction Price</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="shield-check" style="width:1.125rem;"></i><p class="pubdoc-result-label">Confidence</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="alert-triangle" style="width:1.125rem;"></i><p class="pubdoc-result-label">Risk Level</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="database" style="width:1.125rem;"></i><p class="pubdoc-result-label">Market Evidence</p></div>
-                                <div class="pubdoc-result-item"><i data-lucide="sparkles" style="width:1.125rem;"></i><p class="pubdoc-result-label">AI Insight</p></div>
+                            <div class="pubdoc-metric-grid">
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="dollar-sign" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Prediction Price</p><p class="pubdoc-metric-card-hint">Calculated recommendation</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="shield-check" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Confidence</p><p class="pubdoc-metric-card-hint">Data reliability indicator</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="alert-triangle" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Risk Level</p><p class="pubdoc-metric-card-hint">Competition warning</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="database" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">Market Evidence</p><p class="pubdoc-metric-card-hint">Historical basis used</p></div>
+                                <div class="pubdoc-metric-card"><div class="pubdoc-metric-card-icon"><i data-lucide="sparkles" style="width:1rem;height:1rem;"></i></div><p class="pubdoc-metric-card-title">AI Insight</p><p class="pubdoc-metric-card-hint">Strategic commentary</p></div>
                             </div>
-                            <p style="margin-top:1rem;font-size:0.875rem;color:#64748b;">Review the evidence tier used (program, country, region, or global), adjust discount if needed, and present to decision-makers before tender submission.</p>
+                            <p class="pubdoc-guide-footnote">Review the evidence tier used (program, country, region, or global), adjust discount if needed, and present to decision-makers before tender submission.</p>
                         </div>
                     </div>
                 </div>
