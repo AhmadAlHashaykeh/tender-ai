@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PricingStatisticsController;
 use App\Http\Controllers\StandardizationController;
 use App\Http\Controllers\GlobalSearchController;
+use App\Http\Controllers\InternalDocumentationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/statistics/pricing', [PricingStatisticsController::class, 'index'])
         ->name('statistics.pricing.index');
+
+    Route::get('/internal/documentation', InternalDocumentationController::class)
+        ->name('internal.documentation');
 
     Route::get('/standardization', [StandardizationController::class, 'index'])->name('standardization.index');
     Route::post('/standardization/batches/{batch}/run', [StandardizationController::class, 'runBatch'])
