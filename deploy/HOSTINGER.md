@@ -31,9 +31,22 @@ chmod +x deploy/hostinger-deploy.sh
 
 ## Cron (hPanel → Cron Jobs)
 
+Use **PHP 8.2** CLI (not default 8.1):
+
 ```
-* * * * * /usr/bin/php /home/u319040066/domains/ahmadalhashaykeh.com/public_html/tenderai/artisan schedule:run >> /dev/null 2>&1
+* * * * * /opt/alt/php82/usr/bin/php /home/u319040066/domains/ahmadalhashaykeh.com/public_html/tenderai/artisan schedule:run >> /dev/null 2>&1
 ```
+
+## Release deploy (commit f978629+)
+
+After `git pull`, run the automated release script on the server:
+
+```bash
+cd /home/u319040066/domains/ahmadalhashaykeh.com/public_html/tenderai
+bash deploy/hostinger-production-release.sh f978629
+```
+
+Or run the same steps manually (always `/opt/alt/php82/usr/bin/php` for artisan/composer).
 
 ## Document root
 

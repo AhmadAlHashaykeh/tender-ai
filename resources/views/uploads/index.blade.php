@@ -55,7 +55,7 @@
                 <div class="rounded-xl border border-border/40 bg-slate-50/50 p-3">
                     <p class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-2">Required column headers</p>
                     <div class="flex flex-wrap gap-1.5">
-                        @foreach ($expectedHeaders as $header)
+                        @foreach (['Code', 'INN', 'Product', 'Country', 'Tender #', 'Awarded', 'USD', 'Winner', 'Company', 'Ver', 'Year', 'Qty', 'Value'] as $header)
                             <span class="inline-flex px-2 py-0.5 rounded-md text-[10px] font-mono font-medium border bg-white border-border/50 text-foreground/80">{{ $header }}</span>
                         @endforeach
                     </div>
